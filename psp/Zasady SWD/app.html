@@ -883,6 +883,278 @@ body.dark .scenario-card:hover { background: #1a2a4a; }
 body.dark .scenario-card.active-scenario { background: #1a2a4a; }
 body.dark .timeline-item { background: var(--card); }
 body.dark .quiz-answer:hover:not(.disabled) { background: #1e2d4a; }
+body.dark .notepad-field textarea,
+body.dark .notepad-field input,
+body.dark .notepad-field select { background: #1a1a2e; color: var(--text); }
+body.dark .global-search-results { background: var(--card); }
+body.dark .global-search-result:hover { background: #1e2d4a; }
+
+/* TIMER */
+.timer-bar {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.timer-display {
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--psp-blue);
+  min-width: 160px;
+  text-align: center;
+}
+
+.timer-display.warning { color: var(--warning); }
+.timer-display.danger { color: var(--danger); animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.timer-label {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  flex: 1;
+  min-width: 200px;
+}
+
+.timer-label strong { color: var(--text); }
+
+.timer-progress {
+  width: 100%;
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.timer-progress-bar {
+  height: 100%;
+  background: var(--success);
+  border-radius: 3px;
+  transition: width 1s linear;
+}
+
+.timer-progress-bar.warning { background: var(--warning); }
+.timer-progress-bar.danger { background: var(--danger); }
+
+/* NOTEPAD */
+.notepad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.notepad-field {
+  margin-bottom: 8px;
+}
+
+.notepad-field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--psp-blue);
+  margin-bottom: 4px;
+}
+
+.notepad-field label .field-num {
+  display: inline-block;
+  background: var(--psp-red);
+  color: white;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.72rem;
+  margin-right: 4px;
+}
+
+.notepad-field input,
+.notepad-field select,
+.notepad-field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.notepad-field input:focus,
+.notepad-field select:focus,
+.notepad-field textarea:focus {
+  outline: none;
+  border-color: var(--psp-red);
+}
+
+.notepad-field textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.notepad-section {
+  margin-bottom: 24px;
+}
+
+.notepad-section h3 {
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--psp-gold);
+}
+
+.notepad-export {
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  max-height: 400px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+/* GLOBAL SEARCH */
+.global-search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: none;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.global-search-overlay.active {
+  display: flex;
+}
+
+.global-search-box {
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.global-search-box input {
+  width: 100%;
+  padding: 18px 24px;
+  border: none;
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-size: 1.1rem;
+  font-family: inherit;
+  outline: none;
+  background: var(--card);
+  color: var(--text);
+}
+
+.global-search-results {
+  background: var(--card);
+  border-radius: 0 0 var(--radius) var(--radius);
+  max-height: 60vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.global-search-result {
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.global-search-result:hover {
+  background: #f0f3f8;
+}
+
+.global-search-result .gsr-type {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.global-search-result .gsr-title {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.global-search-result .gsr-desc {
+  font-size: 0.82rem;
+  color: var(--text-light);
+}
+
+.gsr-type-podrodz { color: var(--danger); }
+.gsr-type-flag { color: var(--success); }
+.gsr-type-def { color: var(--info); }
+.gsr-type-faq { color: var(--warning); }
+.gsr-type-code { color: #7c3aed; }
+.gsr-type-cause { color: #e91e63; }
+
+/* CAUSE CODES TABLE */
+.cause-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .cause-cols { grid-template-columns: 1fr; }
+}
+
+/* ACTION TYPES CHECKGRID */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 6px;
+}
+
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.action-item:hover {
+  background: #f0f3f8;
+  border-color: var(--border);
+}
+
+.action-num {
+  font-weight: 800;
+  color: var(--psp-red);
+  min-width: 24px;
+}
+
+/* KEYBOARD HINT */
+.kbd {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: monospace;
+  background: #f8f9fa;
+  color: var(--text-light);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -1047,6 +1319,9 @@ footer {
     <button data-tab="notify">Powiadomienia</button>
     <button data-tab="procedures">Procedury</button>
     <button data-tab="scenarios">Scenariusze</button>
+    <button data-tab="actions">Działania</button>
+    <button data-tab="causes">Przyczyny</button>
+    <button data-tab="notepad">Notatnik</button>
     <button data-tab="glossary">Slownik</button>
     <button data-tab="checklist">Checklista</button>
     <button data-tab="faq">FAQ</button>
@@ -1054,10 +1329,41 @@ footer {
   </nav>
 </header>
 
+<!-- GLOBAL SEARCH OVERLAY -->
+<div class="global-search-overlay" id="globalSearchOverlay" onclick="if(event.target===this)closeGlobalSearch()">
+  <div class="global-search-box">
+    <input type="text" id="globalSearchInput" placeholder="Szukaj we wszystkich danych (Ctrl+K)..." oninput="doGlobalSearch()" autofocus>
+    <div class="global-search-results" id="globalSearchResults"></div>
+  </div>
+</div>
+
 <main>
+
+<!-- TIMER BAR (sticky below header) -->
+<div class="timer-bar" id="timerBar" style="display:none;">
+  <div>
+    <div class="timer-display" id="timerDisplay">04:00:00</div>
+  </div>
+  <div class="timer-label">
+    <strong>Odliczanie do wstępnej IzZ</strong><br>
+    Maksymalnie 4 godziny od rozpoczęcia działań (pkt. 2 Zasad)
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn btn-sm btn-primary" id="timerStartBtn" onclick="toggleTimer()">Start</button>
+    <button class="btn btn-sm btn-outline" onclick="resetTimer()">Reset</button>
+    <button class="btn btn-sm btn-outline" onclick="hideTimer()">Ukryj</button>
+  </div>
+  <div class="timer-progress" style="width:100%;">
+    <div class="timer-progress-bar" id="timerProgressBar" style="width:100%;"></div>
+  </div>
+</div>
 
 <!-- ===== DASHBOARD ===== -->
 <div id="dashboard" class="tab-content active">
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+    <button class="btn btn-secondary" onclick="openGlobalSearch()">Wyszukaj wszędzie <span class="kbd" style="margin-left:6px;">Ctrl+K</span></button>
+    <button class="btn btn-outline" onclick="showTimer()">Timer 4h IzZ</button>
+  </div>
   <div class="stats-grid">
     <div class="stat-card" onclick="switchTab('catalog')">
       <div class="stat-number">12</div>
@@ -1082,6 +1388,14 @@ footer {
     <div class="stat-card" onclick="switchTab('scenarios')">
       <div class="stat-number">10</div>
       <div class="stat-label">Scenariuszy</div>
+    </div>
+    <div class="stat-card" onclick="switchTab('actions')">
+      <div class="stat-number">44</div>
+      <div class="stat-label">Rodzajów działań</div>
+    </div>
+    <div class="stat-card" onclick="switchTab('causes')">
+      <div class="stat-number">75</div>
+      <div class="stat-label">Kodów przyczyn</div>
     </div>
   </div>
 
@@ -1112,6 +1426,14 @@ footer {
       <div class="wizard-option" onclick="switchTab('procedures')">
         <h4>Procedury i osie czasu</h4>
         <p>Schemat obsługi zdarzenia krok po kroku</p>
+      </div>
+      <div class="wizard-option" onclick="switchTab('notepad')">
+        <h4>Notatnik zdarzenia</h4>
+        <p>Szkicuj dane IzZ, zapisuj lokalnie, eksportuj</p>
+      </div>
+      <div class="wizard-option" onclick="switchTab('actions')">
+        <h4>Działania i sprzęt</h4>
+        <p>Pkt. 16, 17, 18 — pełne katalogi czynności ratowniczych</p>
       </div>
     </div>
   </div>
@@ -1699,6 +2021,206 @@ footer {
   </div>
 </div>
 
+<!-- ===== ACTIONS (pkt. 16, 17, 18) ===== -->
+<div id="actions" class="tab-content">
+  <div class="card">
+    <h2>Rodzaj prowadzonych działań ratowniczych (pkt. 16)</h2>
+    <div class="search-box">
+      <input type="text" id="actionsSearch" placeholder="Szukaj działania..." oninput="filterActions()">
+    </div>
+    <div class="action-grid" id="actionsList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Sprzęt użyty w działaniach ratowniczych (pkt. 17)</h2>
+    <div class="action-grid" id="equipmentList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Miejsce prowadzenia działań ratowniczych (pkt. 18)</h2>
+    <div class="action-grid" id="locationsList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Podkategorie MZ wg rodzaju zagrożenia</h2>
+    <p style="color:var(--text-light);margin-bottom:12px;">MZ dodatkowo dzieli się na kategorie (a-n):</p>
+    <div class="action-grid" id="mzSubcatList"></div>
+  </div>
+</div>
+
+<!-- ===== CAUSES (pkt. 29) ===== -->
+<div id="causes" class="tab-content">
+  <div class="card">
+    <h2>Kody przyczyn powstania zdarzeń (pkt. 29)</h2>
+    <div class="search-box">
+      <input type="text" id="causesSearch" placeholder="Szukaj przyczyny..." oninput="filterCauses()">
+    </div>
+
+    <div class="cause-cols">
+      <div>
+        <h3><span class="tag tag-fire">P</span> Przyczyny pożarów</h3>
+        <div style="overflow-x:auto;">
+        <table id="tableCausesP">
+          <thead><tr><th style="width:50px">Kod</th><th>Przyczyna</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        </div>
+      </div>
+      <div>
+        <h3><span class="tag tag-mz">MZ</span> Przyczyny miejscowych zagrożeń</h3>
+        <div style="overflow-x:auto;">
+        <table id="tableCausesMZ">
+          <thead><tr><th style="width:50px">Kod</th><th>Przyczyna</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NOTEPAD ===== -->
+<div id="notepad" class="tab-content">
+  <div class="card">
+    <h2>Notatnik zdarzenia</h2>
+    <p style="color:var(--text-light);margin-bottom:16px;">Szkicuj dane IzZ przed wprowadzeniem do systemu. Dane zapisują się automatycznie w przeglądarce.</p>
+
+    <div class="notepad-section">
+      <h3>Dane podstawowe</h3>
+      <div class="notepad-grid">
+        <div class="notepad-field">
+          <label><span class="field-num">4</span> Rodzaj zdarzenia</label>
+          <select id="np-rodzaj" onchange="saveNotepad()">
+            <option value="">— wybierz —</option>
+            <option value="P">P — Pożar</option>
+            <option value="MZ">MZ — Miejscowe zagrożenie</option>
+            <option value="AF">AF — Alarm fałszywy</option>
+          </select>
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">4</span> Wielkość</label>
+          <input type="text" id="np-wielkosc" placeholder="np. P/M, MZ/L..." oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label>Podrodzaj</label>
+          <input type="text" id="np-podrodzaj" placeholder="np. MZ – Wypadek" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label>Flagi</label>
+          <input type="text" id="np-flagi" placeholder="np. Osoba ranna, Tlenek węgla" oninput="saveNotepad()">
+        </div>
+      </div>
+    </div>
+
+    <div class="notepad-section">
+      <h3>Lokalizacja</h3>
+      <div class="notepad-grid">
+        <div class="notepad-field">
+          <label><span class="field-num">5</span> Województwo / Powiat / Gmina</label>
+          <input type="text" id="np-lokalizacja" placeholder="np. mazowieckie / Warszawa / Mokotów" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">5</span> Miejscowość / Ulica / Nr</label>
+          <input type="text" id="np-adres" placeholder="np. Warszawa, ul. Puławska 15" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label>Numer drogi / Pikietaż</label>
+          <input type="text" id="np-droga" placeholder="np. S7 km 234" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">6</span> Obiekt + słowa-klucze</label>
+          <input type="text" id="np-obiekt" placeholder="np. Budynek wielorodzinny — TLENEK WĘGLA" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">7</span> Właściciel / Użytkownik</label>
+          <input type="text" id="np-wlasciciel" placeholder="np. Jan Kowalski" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">8/9</span> Kod obiektu / Kod właściciela</label>
+          <input type="text" id="np-kody" placeholder="np. 202 / 310" oninput="saveNotepad()">
+        </div>
+      </div>
+    </div>
+
+    <div class="notepad-section">
+      <h3>Czasy</h3>
+      <div class="notepad-grid">
+        <div class="notepad-field">
+          <label><span class="field-num">10</span> Zauważenie</label>
+          <input type="datetime-local" id="np-czas-zauwazenie" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">10</span> Lokalizacja pożaru/MZ</label>
+          <input type="datetime-local" id="np-czas-lokalizacja" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">10</span> Zakończenie działań</label>
+          <input type="datetime-local" id="np-czas-koniec" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">11</span> Przybycie 1. podmiotu</label>
+          <input type="datetime-local" id="np-czas-przybycie" oninput="saveNotepad()">
+        </div>
+      </div>
+    </div>
+
+    <div class="notepad-section">
+      <h3>Siły i poszkodowani</h3>
+      <div class="notepad-grid">
+        <div class="notepad-field">
+          <label><span class="field-num">14</span> Liczba zastępów JOP</label>
+          <input type="number" id="np-zastepy" min="0" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">22</span> MDR na terenie akcji</label>
+          <input type="number" id="np-mdr" min="0" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">23</span> Ofiary śmiertelne</label>
+          <input type="number" id="np-ofiary" min="0" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">23</span> Osoby ranne</label>
+          <input type="number" id="np-ranni" min="0" oninput="saveNotepad()">
+        </div>
+      </div>
+    </div>
+
+    <div class="notepad-section">
+      <h3>Kierowanie i opis</h3>
+      <div class="notepad-grid" style="grid-template-columns:1fr;">
+        <div class="notepad-field">
+          <label><span class="field-num">31</span> Kierujący działaniami</label>
+          <input type="text" id="np-kdr" placeholder="Stopień, nazwisko i imię, stanowisko" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">29</span> Przypuszczalna przyczyna</label>
+          <input type="text" id="np-przyczyna" placeholder="Opis przyczyny + kod" oninput="saveNotepad()">
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">33</span> Opis przebiegu działań</label>
+          <textarea id="np-opis" rows="5" placeholder="Zastana sytuacja, podjęte działania, zagrożenia, utrudnienia..." oninput="saveNotepad()"></textarea>
+        </div>
+        <div class="notepad-field">
+          <label><span class="field-num">33.6</span> Inne uwagi</label>
+          <textarea id="np-uwagi" rows="3" placeholder="Dodatkowe uwagi i uzupełnienia..." oninput="saveNotepad()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="exportNotepad()">Eksportuj podgląd</button>
+      <button class="btn btn-secondary" onclick="copyNotepad()">Kopiuj do schowka</button>
+      <button class="btn btn-outline" onclick="clearNotepad()">Wyczyść notatnik</button>
+    </div>
+
+    <div id="notepadPreview" style="margin-top:16px;display:none;">
+      <h3>Podgląd eksportu</h3>
+      <div class="notepad-export" id="notepadExportText"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== GLOSSARY ===== -->
 <div id="glossary" class="tab-content">
   <div class="card">
@@ -2278,6 +2800,204 @@ const quizBank = [
   {q:"W pożarach oznaczamy CO (tlenek węgla) w Nr ONZ?", answers:["Tak","Nie, tylko w MZ","Tak, zawsze","Tylko jeśli > 50 ppm"], correct:1, cat:"ewidencja"},
   {q:"Pożar teren lasu 15 ha — wielkość:", answers:["P/M","P/Ś","P/D","P/BD"], correct:2, cat:"wielkosci"},
   {q:"Karta manipulacyjna obowiązkowa gdy:", answers:["Zawsze","Ofiary śmiertelne / analiza / >1 powiat","Tylko przy P/BD","Tylko na polecenie KG"], correct:1, cat:"terminy"},
+];
+
+// ACTION TYPES (pkt. 16)
+const actionTypes = [
+  [1,"Podawanie prądów gaśniczych (woda/piana)"],
+  [2,"Podawanie środków gaśniczych (proszek/CO2/inne)"],
+  [3,"Podawanie neutralizatorów"],
+  [4,"Uszczelnianie zbiorników/cystern/rurociągów"],
+  [5,"Zamykanie zaworów"],
+  [6,"Pompowanie wody"],
+  [7,"Wypompowywanie substancji niebezpiecznych"],
+  [8,"Zbieranie substancji niebezpiecznych"],
+  [9,"Sorbowanie substancji ropopochodnych"],
+  [10,"Stawianie zapór na ciekach wodnych"],
+  [11,"Budowanie grobli/wałów"],
+  [12,"Umacnianie wałów przeciwpowodziowych"],
+  [13,"Wykonywanie przejść/przewiertów/podkopów"],
+  [14,"Zabezpieczanie terenu/obiektu"],
+  [15,"Gasenie bez podawania środków gaśniczych"],
+  [16,"Oddymianie/wentylacja"],
+  [17,"Odcinanie dopływu gazu/prądu"],
+  [18,"Ewakuacja ludzi"],
+  [19,"Ewakuacja zwierząt"],
+  [20,"Ewakuacja mienia"],
+  [21,"Ratownictwo na wysokości"],
+  [22,"Ratownictwo z głębokości"],
+  [23,"Ratownictwo lodowe"],
+  [24,"Ratownictwo wodne/nurkowe"],
+  [25,"Ratownictwo techniczne — stabilizacja"],
+  [26,"Ratownictwo techniczne — odblokowanie/cięcie"],
+  [27,"Ratownictwo techniczne — podnoszenie/przesuwanie"],
+  [28,"Oznakowanie/zabezpieczenie terenu"],
+  [29,"Rozpoznanie chemiczne/pomiary"],
+  [30,"Dekontaminacja (odskażanie)"],
+  [31,"Rozbiórka elementów budowlanych"],
+  [32,"Usuwanie drzew/konarów/gałęzi"],
+  [33,"Usuwanie skutków wichur"],
+  [34,"Usuwanie oblodzeń/sopli/nawisów"],
+  [35,"Oświetlanie terenu działań"],
+  [36,"Kierowanie ruchem/zabezpieczenie drogi"],
+  [37,"Udzielanie kwalifikowanej pierwszej pomocy"],
+  [38,"Zabezpieczenie lądowiska dla śmigłowca"],
+  [39,"Dostarczanie wody pitnej"],
+  [40,"Asysta/pomoc innym służbom"],
+  [41,"Poszukiwanie z użyciem psów/BSP"],
+  [42,"Prowadzenie rozpoznania"],
+  [43,"Przemieszczanie owadów lub zwierząt"],
+  [44,"Poszukiwanie osób zaginionych"],
+];
+
+// EQUIPMENT (pkt. 17)
+const equipmentTypes = [
+  [1,"Podręczny sprzęt gaśniczy (gaśnice)"],
+  [2,"Prądownice/działka wodne"],
+  [3,"Prądownice/wytwornice pianowe"],
+  [4,"Autopompy/motopompy"],
+  [5,"Drabiny mechaniczne/podnośniki"],
+  [6,"Sprzęt oświetleniowy"],
+  [7,"Pilarki łańcuchowe/tarczowe"],
+  [8,"Sprzęt hydrauliczny (rozpieraki/nożyce)"],
+  [9,"Sprzęt pneumatyczny (poduszki)"],
+  [10,"Sprzęt do ratownictwa na wysokości"],
+  [11,"Sprzęt do ratownictwa wodnego"],
+  [12,"Aparaty ODO (ochrony dróg oddechowych)"],
+  [13,"Ubrania specjalne (gazoszczelne/kwasoodporne)"],
+  [14,"Przyrządy pomiarowe (eksplozymetry/detektory)"],
+  [15,"Przyrządy do pomiaru promieniowania"],
+  [16,"Zestawy do uszczelniania"],
+  [17,"Sorbenty"],
+  [18,"Zapory na ciekach"],
+  [19,"Agregaty prądotwórcze"],
+  [20,"Pompy do wody/substancji"],
+  [21,"Sprzęt burzący (młoty, tarany)"],
+  [22,"Worki na piasek"],
+  [23,"Sprzęt do dekontaminacji"],
+  [24,"Kamery termowizyjne"],
+  [25,"Bezzałogowe statki powietrzne (BSP/drony)"],
+  [26,"Łodzie/pontony"],
+  [27,"Sprzęt do nurkowania"],
+  [28,"Psy ratownicze"],
+  [29,"Defibrylator (AED)"],
+  [30,"Zestaw PSP-R1 / torba medyczna"],
+  [31,"Respirator/worek samorozprężalny"],
+];
+
+// ACTION LOCATIONS (pkt. 18)
+const actionLocations = [
+  [1,"Wewnątrz obiektów — w piwnicach"],
+  [2,"Wewnątrz obiektów — na parterze"],
+  [3,"Wewnątrz obiektów — na piętrach 1-3"],
+  [4,"Wewnątrz obiektów — na piętrach 4-7"],
+  [5,"Wewnątrz obiektów — na piętrach powyżej 7"],
+  [6,"Na dachach, poddaszach"],
+  [7,"Wewnątrz szybów, kominów, wind"],
+  [8,"Pod wodą / pod lodem"],
+  [9,"Pod ziemią, wewn. studni, tuneli, jaskiń"],
+  [10,"W wykopach, na osuwiskach, zawałach"],
+  [11,"Na wysokości"],
+];
+
+// MZ subcategories (a-n)
+const mzSubcategories = [
+  ["a","Silne wiatry"],
+  ["b","Przybory wód"],
+  ["c","Opady śniegu"],
+  ["d","Opady deszczu"],
+  ["e","Infrastruktury komunalnej"],
+  ["f","Chemiczne"],
+  ["g","Ekologiczne"],
+  ["h","Radiologiczne"],
+  ["i","Budowlane"],
+  ["j","Medyczne"],
+  ["k","W transporcie drogowym"],
+  ["l","W transporcie kolejowym"],
+  ["m","W transporcie lotniczym"],
+  ["n","Na obszarach wodnych"],
+];
+
+// CAUSE CODES
+const causesP = [
+  ["01","Podpalenie (umyślne)"],
+  ["02","Podpalenie (nieumyślne)"],
+  ["03","Nieostrożność osób dorosłych przy posługiwaniu się ogniem otwartym"],
+  ["04","Nieostrożność osób małoletnich przy posługiwaniu się ogniem otwartym"],
+  ["05","Wady i nieprawidłowa eksploatacja urządzeń ogrzewczych na paliwo stałe"],
+  ["06","Wady i nieprawidłowa eksploatacja urządzeń ogrzewczych na paliwo ciekłe"],
+  ["07","Wady i nieprawidłowa eksploatacja urządzeń ogrzewczych na paliwo gazowe"],
+  ["08","Wady i nieprawidłowa eksploatacja urządzeń mechanicznych (iskrzenie, tarcie)"],
+  ["09","Wady i nieprawidłowa eksploatacja urządzeń elektrycznych i instalacji elektr."],
+  ["10","Nieprawidłowa eksploatacja instalacji gazowej"],
+  ["11","Samozapalenie"],
+  ["12","Samozapłon"],
+  ["13","Wyładowania atmosferyczne (piorun)"],
+  ["14","Wady środków transportu"],
+  ["15","Wybuch"],
+  ["16","Przyczyny związane z prowadzeniem procesów technologicznych"],
+  ["17","Nieustalone"],
+  ["18","Wady i nieprawidłowa eksploatacja przewodów kominowych, wentylacyjnych"],
+  ["19","Reakcja chemiczna"],
+  ["20","Inne przyczyny"],
+  ["21","Pożar jako następstwo MZ"],
+  ["22","Wypalanie traw"],
+  ["23","Nieostrożne posługiwanie się materiałami pirotechnicznymi"],
+  ["24","Wady i nieprawidłowa eksploatacja urządzeń ogrzewczych — elektrycznych"],
+  ["25","Zaprószenie ognia przez osoby bezdomne"],
+  ["26","Podpalenie — akt terroru"],
+  ["27","Wypalanie odpadów (śmieci)"],
+  ["28","Nieostrożność przy wypalaniu roślinności"],
+  ["29","Spalanie odpadów w urządzeniu grzewczym"],
+  ["30","Wady i nieprawidłowa eksploatacja instalacji fotowoltaicznej"],
+  ["31","Wady i nieprawidłowa eksploatacja pojazdów elektrycznych/hybrydowych"],
+  ["32","Nieostrożność przy grillowaniu"],
+  ["33","Nieostrożność przy rozpalaniu ogniska"],
+  ["34","Pozostawienie potraw na kuchence/palniku"],
+  ["35","Nieprawidłowe składowanie materiałów łatwopalnych"],
+  ["36","Porzucenie niedopałka papierosa"],
+  ["37","Wady instalacji wiatrowej"],
+];
+
+const causesMZ = [
+  ["01","Silne wiatry / huragan / trąba powietrzna"],
+  ["02","Intensywne opady deszczu"],
+  ["03","Intensywne opady śniegu"],
+  ["04","Oblodzenie / gołoledź / szadź"],
+  ["05","Powódź / przybór wód"],
+  ["06","Osunięcie gruntu / osuwisko"],
+  ["07","Susza"],
+  ["08","Wyładowania atmosferyczne"],
+  ["09","Grad"],
+  ["10","Awaria instalacji wodociągowej"],
+  ["11","Awaria instalacji kanalizacyjnej"],
+  ["12","Awaria instalacji gazowej"],
+  ["13","Awaria instalacji elektrycznej"],
+  ["14","Awaria instalacji ciepłowniczej"],
+  ["15","Awaria urządzenia / maszyny"],
+  ["16","Wady konstrukcji budowlanej"],
+  ["17","Niewłaściwy stan techniczny obiektu"],
+  ["18","Nieprzestrzeganie przepisów ruchu drogowego"],
+  ["19","Nadmierna prędkość"],
+  ["20","Nietrzeźwość / stan po użyciu środków"],
+  ["21","Niewłaściwy stan techniczny pojazdu"],
+  ["22","Niewłaściwy stan nawierzchni drogi"],
+  ["23","Wtargnięcie zwierzęcia na drogę"],
+  ["24","Uwolnienie substancji niebezpiecznej — wypadek transportowy"],
+  ["25","Uwolnienie substancji niebezpiecznej — awaria instalacji"],
+  ["26","Uwolnienie substancji niebezpiecznej — niewłaściwe magazynowanie"],
+  ["27","Działanie osoby — zamiar samobójczy"],
+  ["28","Działanie osoby — zagrożenie dla innych"],
+  ["29","Znalezienie przedmiotu niebezpiecznego / niewypału"],
+  ["30","Terroryzm / podłożenie ładunku"],
+  ["31","Epidemia / zagrożenie biologiczne"],
+  ["32","Zagrożenie radiologiczne"],
+  ["33","Utonięcie / topienie się"],
+  ["34","Uwięzienie w windzie / pomieszczeniu"],
+  ["35","Upadek z wysokości"],
+  ["36","Zagrożenie ze strony zwierząt"],
+  ["37","Inne przyczyny"],
+  ["38","Nieustalone"],
 ];
 
 // ============================================================
@@ -2925,6 +3645,397 @@ function handleHash() {
 
 window.addEventListener('hashchange', handleHash);
 handleHash();
+
+// ============================================================
+//  ACTIONS, EQUIPMENT, LOCATIONS (pkt. 16, 17, 18)
+// ============================================================
+
+function buildActionList(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = data.map(([num, desc]) =>
+    `<div class="action-item" data-search="${desc.toLowerCase()}">
+      <span class="action-num">${num}.</span>
+      <span>${desc}</span>
+    </div>`
+  ).join('');
+}
+
+buildActionList('actionsList', actionTypes);
+buildActionList('equipmentList', equipmentTypes);
+buildActionList('locationsList', actionLocations);
+
+// MZ subcategories
+(function buildMzSubcats() {
+  const container = document.getElementById('mzSubcatList');
+  if (!container) return;
+  container.innerHTML = mzSubcategories.map(([letter, name]) =>
+    `<div class="action-item">
+      <span class="action-num">${letter})</span>
+      <span>${name}</span>
+    </div>`
+  ).join('');
+})();
+
+function filterActions() {
+  const q = document.getElementById('actionsSearch').value.toLowerCase().trim();
+  document.querySelectorAll('#actionsList .action-item, #equipmentList .action-item').forEach(el => {
+    el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+  });
+}
+
+// ============================================================
+//  CAUSE CODES (pkt. 29)
+// ============================================================
+
+function buildCauseTable(tableId, data) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  if (!tbody) return;
+  tbody.innerHTML = data.map(([code, desc]) =>
+    `<tr><td><strong>${code}</strong></td><td>${desc}</td></tr>`
+  ).join('');
+}
+
+buildCauseTable('tableCausesP', causesP);
+buildCauseTable('tableCausesMZ', causesMZ);
+
+function filterCauses() {
+  const q = document.getElementById('causesSearch').value.toLowerCase().trim();
+  ['tableCausesP','tableCausesMZ'].forEach(tableId => {
+    document.querySelectorAll(`#${tableId} tbody tr`).forEach(tr => {
+      tr.classList.toggle('hidden', q && !tr.textContent.toLowerCase().includes(q));
+    });
+  });
+}
+
+// ============================================================
+//  NOTEPAD
+// ============================================================
+
+const notepadFields = [
+  'np-rodzaj','np-wielkosc','np-podrodzaj','np-flagi',
+  'np-lokalizacja','np-adres','np-droga','np-obiekt','np-wlasciciel','np-kody',
+  'np-czas-zauwazenie','np-czas-lokalizacja','np-czas-koniec','np-czas-przybycie',
+  'np-zastepy','np-mdr','np-ofiary','np-ranni',
+  'np-kdr','np-przyczyna','np-opis','np-uwagi'
+];
+
+function saveNotepad() {
+  const data = {};
+  notepadFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data[id] = el.value;
+  });
+  try { localStorage.setItem('swd_notepad', JSON.stringify(data)); } catch(e) {}
+}
+
+function loadNotepad() {
+  try {
+    const data = JSON.parse(localStorage.getItem('swd_notepad') || '{}');
+    notepadFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id]) el.value = data[id];
+    });
+  } catch(e) {}
+}
+
+loadNotepad();
+
+function clearNotepad() {
+  if (!confirm('Wyczyścić cały notatnik?')) return;
+  notepadFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  try { localStorage.removeItem('swd_notepad'); } catch(e) {}
+  document.getElementById('notepadPreview').style.display = 'none';
+}
+
+function generateNotepadText() {
+  const g = id => (document.getElementById(id) || {}).value || '';
+  const lines = [];
+  lines.push('========================================');
+  lines.push('  SZKIC INFORMACJI ZE ZDARZENIA (IzZ)');
+  lines.push('========================================');
+  lines.push('');
+  if (g('np-rodzaj')) lines.push(`Rodzaj zdarzenia:  ${g('np-rodzaj')}`);
+  if (g('np-wielkosc')) lines.push(`Wielkość:          ${g('np-wielkosc')}`);
+  if (g('np-podrodzaj')) lines.push(`Podrodzaj:         ${g('np-podrodzaj')}`);
+  if (g('np-flagi')) lines.push(`Flagi:             ${g('np-flagi')}`);
+  lines.push('');
+  lines.push('--- LOKALIZACJA ---');
+  if (g('np-lokalizacja')) lines.push(`Woj/Pow/Gm:       ${g('np-lokalizacja')}`);
+  if (g('np-adres')) lines.push(`Adres:             ${g('np-adres')}`);
+  if (g('np-droga')) lines.push(`Droga/pikietaż:    ${g('np-droga')}`);
+  if (g('np-obiekt')) lines.push(`Obiekt:            ${g('np-obiekt')}`);
+  if (g('np-wlasciciel')) lines.push(`Właściciel:        ${g('np-wlasciciel')}`);
+  if (g('np-kody')) lines.push(`Kody obj/właśc:    ${g('np-kody')}`);
+  lines.push('');
+  lines.push('--- CZASY ---');
+  if (g('np-czas-zauwazenie')) lines.push(`Zauważenie:        ${g('np-czas-zauwazenie').replace('T',' ')}`);
+  if (g('np-czas-lokalizacja')) lines.push(`Lokalizacja P/MZ:  ${g('np-czas-lokalizacja').replace('T',' ')}`);
+  if (g('np-czas-koniec')) lines.push(`Zakończenie:       ${g('np-czas-koniec').replace('T',' ')}`);
+  if (g('np-czas-przybycie')) lines.push(`Przybycie 1. JOP:  ${g('np-czas-przybycie').replace('T',' ')}`);
+  lines.push('');
+  lines.push('--- SIŁY I POSZKODOWANI ---');
+  if (g('np-zastepy')) lines.push(`Zastępów JOP:      ${g('np-zastepy')}`);
+  if (g('np-mdr')) lines.push(`MDR na terenie:    ${g('np-mdr')}`);
+  if (g('np-ofiary')) lines.push(`Ofiary śmiertelne: ${g('np-ofiary')}`);
+  if (g('np-ranni')) lines.push(`Osoby ranne:       ${g('np-ranni')}`);
+  lines.push('');
+  lines.push('--- KIEROWANIE ---');
+  if (g('np-kdr')) lines.push(`KDR: ${g('np-kdr')}`);
+  if (g('np-przyczyna')) lines.push(`Przyczyna: ${g('np-przyczyna')}`);
+  if (g('np-opis')) { lines.push(''); lines.push('OPIS DZIAŁAŃ:'); lines.push(g('np-opis')); }
+  if (g('np-uwagi')) { lines.push(''); lines.push('UWAGI:'); lines.push(g('np-uwagi')); }
+  lines.push('');
+  lines.push('========================================');
+  lines.push(`Wygenerowano: ${new Date().toLocaleString('pl-PL')}`);
+  return lines.join('\n');
+}
+
+function exportNotepad() {
+  const text = generateNotepadText();
+  document.getElementById('notepadExportText').textContent = text;
+  document.getElementById('notepadPreview').style.display = 'block';
+}
+
+function copyNotepad() {
+  const text = generateNotepadText();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = 'Skopiowano!';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  }).catch(() => {
+    exportNotepad();
+    alert('Nie udało się skopiować automatycznie. Zaznacz tekst poniżej i skopiuj ręcznie.');
+  });
+}
+
+// ============================================================
+//  TIMER (4h for IzZ)
+// ============================================================
+
+let timerInterval = null;
+let timerEndTime = null;
+let timerRunning = false;
+const TIMER_TOTAL = 4 * 60 * 60; // 4 hours in seconds
+
+function showTimer() {
+  document.getElementById('timerBar').style.display = 'flex';
+}
+
+function hideTimer() {
+  stopTimerInterval();
+  document.getElementById('timerBar').style.display = 'none';
+}
+
+function toggleTimer() {
+  if (timerRunning) {
+    pauseTimer();
+  } else {
+    startTimer();
+  }
+}
+
+function startTimer() {
+  if (!timerEndTime) {
+    timerEndTime = Date.now() + TIMER_TOTAL * 1000;
+  }
+  timerRunning = true;
+  document.getElementById('timerStartBtn').textContent = 'Pauza';
+  timerInterval = setInterval(updateTimerDisplay, 200);
+  updateTimerDisplay();
+}
+
+function pauseTimer() {
+  timerRunning = false;
+  document.getElementById('timerStartBtn').textContent = 'Wznów';
+  // Save remaining time
+  const remaining = Math.max(0, timerEndTime - Date.now());
+  stopTimerInterval();
+  timerEndTime = Date.now() + remaining;
+}
+
+function resetTimer() {
+  stopTimerInterval();
+  timerRunning = false;
+  timerEndTime = null;
+  document.getElementById('timerStartBtn').textContent = 'Start';
+  document.getElementById('timerDisplay').textContent = '04:00:00';
+  document.getElementById('timerDisplay').className = 'timer-display';
+  const bar = document.getElementById('timerProgressBar');
+  bar.style.width = '100%';
+  bar.className = 'timer-progress-bar';
+}
+
+function stopTimerInterval() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function updateTimerDisplay() {
+  if (!timerEndTime) return;
+  const remaining = Math.max(0, Math.floor((timerEndTime - Date.now()) / 1000));
+  const h = Math.floor(remaining / 3600);
+  const m = Math.floor((remaining % 3600) / 60);
+  const s = remaining % 60;
+  const display = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+  const el = document.getElementById('timerDisplay');
+  el.textContent = display;
+
+  const pct = (remaining / TIMER_TOTAL) * 100;
+  const bar = document.getElementById('timerProgressBar');
+  bar.style.width = pct + '%';
+
+  if (remaining <= 0) {
+    stopTimerInterval();
+    timerRunning = false;
+    el.textContent = '00:00:00';
+    el.className = 'timer-display danger';
+    bar.className = 'timer-progress-bar danger';
+    document.getElementById('timerStartBtn').textContent = 'Start';
+    try { if (Notification.permission === 'granted') new Notification('SWD PSP', {body:'Czas na wstępną IzZ upłynął!'}); } catch(e) {}
+  } else if (remaining <= 1800) {
+    el.className = 'timer-display danger';
+    bar.className = 'timer-progress-bar danger';
+  } else if (remaining <= 3600) {
+    el.className = 'timer-display warning';
+    bar.className = 'timer-progress-bar warning';
+  } else {
+    el.className = 'timer-display';
+    bar.className = 'timer-progress-bar';
+  }
+}
+
+// ============================================================
+//  GLOBAL SEARCH
+// ============================================================
+
+function openGlobalSearch() {
+  document.getElementById('globalSearchOverlay').classList.add('active');
+  const input = document.getElementById('globalSearchInput');
+  input.value = '';
+  input.focus();
+  document.getElementById('globalSearchResults').innerHTML = '<div style="padding:16px;color:var(--text-light);text-align:center;">Zacznij pisać, aby wyszukać...</div>';
+}
+
+function closeGlobalSearch() {
+  document.getElementById('globalSearchOverlay').classList.remove('active');
+}
+
+// Ctrl+K shortcut
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    if (document.getElementById('globalSearchOverlay').classList.contains('active')) {
+      closeGlobalSearch();
+    } else {
+      openGlobalSearch();
+    }
+  }
+  if (e.key === 'Escape') {
+    closeGlobalSearch();
+  }
+});
+
+function doGlobalSearch() {
+  const q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+  const results = document.getElementById('globalSearchResults');
+  if (!q || q.length < 2) {
+    results.innerHTML = '<div style="padding:16px;color:var(--text-light);text-align:center;">Min. 2 znaki...</div>';
+    return;
+  }
+
+  let hits = [];
+
+  // Search podrodzaje P
+  podrodzajeP.forEach(r => {
+    if ((r[1]+' '+r[2]).toLowerCase().includes(q)) {
+      hits.push({type:'podrodz', typeLabel:'Podrodzaj P', title:r[1], desc:r[2], tab:'catalog'});
+    }
+  });
+
+  // Search podrodzaje MZ
+  podrodzajeMZ.forEach(r => {
+    if ((r[1]+' '+r[2]).toLowerCase().includes(q)) {
+      hits.push({type:'podrodz', typeLabel:'Podrodzaj MZ', title:r[1], desc:r[2], tab:'catalog'});
+    }
+  });
+
+  // Search flags
+  flags.forEach(r => {
+    if ((r[1]+' '+r[2]).toLowerCase().includes(q)) {
+      hits.push({type:'flag', typeLabel:'Flaga', title:r[1], desc:r[2], tab:'catalog'});
+    }
+  });
+
+  // Search glossary
+  glossaryData.forEach(([term, def]) => {
+    if ((term+' '+def).toLowerCase().includes(q)) {
+      hits.push({type:'def', typeLabel:'Definicja', title:term, desc:def.substring(0,120), tab:'glossary'});
+    }
+  });
+
+  // Search FAQ
+  faqData.forEach(item => {
+    if ((item.q+' '+item.a).toLowerCase().includes(q)) {
+      hits.push({type:'faq', typeLabel:'FAQ', title:item.q, desc:item.a.substring(0,120), tab:'faq'});
+    }
+  });
+
+  // Search object codes
+  objectCodes.forEach(g => {
+    g.codes.forEach(([code, name]) => {
+      if ((code+' '+name).toLowerCase().includes(q)) {
+        hits.push({type:'code', typeLabel:'Kod obiektu', title:`${code} — ${name}`, desc:g.group, tab:'codes'});
+      }
+    });
+  });
+
+  // Search causes
+  causesP.forEach(([code, desc]) => {
+    if ((code+' '+desc).toLowerCase().includes(q)) {
+      hits.push({type:'cause', typeLabel:'Przyczyna P', title:`${code} — ${desc}`, desc:'Kod przyczyny pożaru', tab:'causes'});
+    }
+  });
+  causesMZ.forEach(([code, desc]) => {
+    if ((code+' '+desc).toLowerCase().includes(q)) {
+      hits.push({type:'cause', typeLabel:'Przyczyna MZ', title:`${code} — ${desc}`, desc:'Kod przyczyny MZ', tab:'causes'});
+    }
+  });
+
+  // Search action types
+  actionTypes.forEach(([num, desc]) => {
+    if (desc.toLowerCase().includes(q)) {
+      hits.push({type:'code', typeLabel:'Działanie pkt.16', title:`${num}. ${desc}`, desc:'Rodzaj działań ratowniczych', tab:'actions'});
+    }
+  });
+
+  // Search equipment
+  equipmentTypes.forEach(([num, desc]) => {
+    if (desc.toLowerCase().includes(q)) {
+      hits.push({type:'code', typeLabel:'Sprzęt pkt.17', title:`${num}. ${desc}`, desc:'Sprzęt użyty w działaniach', tab:'actions'});
+    }
+  });
+
+  if (hits.length === 0) {
+    results.innerHTML = '<div style="padding:16px;color:var(--text-light);text-align:center;">Brak wyników.</div>';
+    return;
+  }
+
+  results.innerHTML = hits.slice(0, 30).map(h =>
+    `<div class="global-search-result" onclick="closeGlobalSearch();switchTab('${h.tab}');">
+      <div class="gsr-type gsr-type-${h.type}">${h.typeLabel}</div>
+      <div class="gsr-title">${h.title}</div>
+      <div class="gsr-desc">${h.desc}</div>
+    </div>`
+  ).join('') + (hits.length > 30 ? `<div style="padding:12px;text-align:center;color:var(--text-light);">...i ${hits.length-30} więcej wyników</div>` : '');
+}
+
+// Request notification permission for timer
+try { if (Notification.permission === 'default') Notification.requestPermission(); } catch(e) {}
 
 </script>
 </body>
