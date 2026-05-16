@@ -1473,6 +1473,19 @@ body.dark .global-search-result:hover { background: #1e2d4a; }
   .print-header { display: block; }
 }
 
+/* MATRIX */
+.matrix-container{overflow-x:auto}.matrix-btn{padding:6px 10px;margin:3px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;cursor:pointer;background:var(--card);font-family:inherit;transition:all .15s}.matrix-btn:hover{border-color:var(--psp-red);background:#fef5f4}.matrix-btn.matrix-active{background:var(--psp-red);color:#fff;border-color:var(--psp-red)}.matrix-result{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}.matrix-chip{padding:5px 12px;border-radius:16px;font-size:.8rem;font-weight:600}.matrix-chip-flag{background:#eafaf1;color:var(--success)}.matrix-chip-podrodz{background:#e8f4fd;color:var(--info)}
+/* ORG CHART */
+.org-chart{display:flex;flex-direction:column;align-items:center;gap:0;padding:20px 0}.org-node{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:14px 28px;text-align:center;min-width:200px;transition:all .2s}.org-node:hover{border-color:var(--psp-red);box-shadow:0 4px 12px rgba(192,57,43,.15)}.org-node.org-kg{background:var(--psp-red);color:#fff;border-color:var(--psp-red-dark);font-size:1.1rem}.org-node.org-kw{background:var(--psp-blue);color:#fff;border-color:#1a252f}.org-node.org-kp{background:var(--info);color:#fff;border-color:#1f6f9f}.org-node.org-jrg{background:var(--psp-gold);color:var(--psp-blue);border-color:#d68910}.org-node h4{margin-bottom:2px}.org-node p{font-size:.78rem;opacity:.85}.org-connector{width:3px;height:24px;background:var(--border);margin:0 auto}.org-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}.org-branch{display:flex;flex-direction:column;align-items:center;gap:0}
+/* PRESENTATION */
+.pres-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#111;z-index:500;display:none;flex-direction:column}.pres-overlay.active{display:flex}.pres-slide{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;color:#fff}.pres-slide-inner{max-width:900px;width:100%;text-align:center}.pres-slide h2{font-size:2.5rem;margin-bottom:24px;color:var(--psp-gold)}.pres-slide h3{font-size:1.4rem;margin:16px 0 8px;color:var(--psp-gold)}.pres-slide p,.pres-slide li{font-size:1.15rem;line-height:1.8}.pres-slide ul{text-align:left;margin:0 auto;max-width:700px}.pres-slide table{margin:16px auto;border-collapse:collapse}.pres-slide th{background:var(--psp-red);padding:10px 18px;color:#fff}.pres-slide td{padding:10px 18px;border:1px solid #444}.pres-controls{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:rgba(0,0,0,.8)}.pres-controls button{background:rgba(255,255,255,.15);border:none;color:#fff;padding:10px 24px;border-radius:8px;font-size:1rem;cursor:pointer;font-family:inherit}.pres-controls button:hover{background:rgba(255,255,255,.3)}.pres-counter{color:rgba(255,255,255,.6);font-size:.9rem}
+/* SIMULATOR */
+.sim-step{display:none;animation:fadeIn .3s ease}.sim-step.active{display:block}.sim-prompt{font-size:1rem;font-weight:600;color:var(--psp-blue);margin-bottom:12px}.sim-feedback{padding:12px 16px;border-radius:8px;margin-top:12px;font-size:.9rem}.sim-feedback.correct{background:#eafaf1;border:1px solid var(--success);color:var(--success)}.sim-feedback.wrong{background:#fdecea;border:1px solid var(--danger);color:var(--danger)}.sim-score-final{text-align:center;padding:24px;background:linear-gradient(135deg,var(--psp-blue),var(--psp-blue-light));color:#fff;border-radius:var(--radius)}.sim-score-final .score-number{font-size:3rem;font-weight:800}
+/* WEATHER */
+.weather-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}.weather-field label{display:block;font-size:.82rem;font-weight:600;color:var(--text-light);margin-bottom:4px}.weather-field input,.weather-field select{width:100%;padding:8px 12px;border:2px solid var(--border);border-radius:8px;font-size:.9rem;font-family:inherit}.weather-output{margin-top:16px;padding:16px;background:#f8f9fa;border-radius:var(--radius);border:1px solid var(--border);font-family:'Courier New',monospace;font-size:.88rem;white-space:pre-wrap}
+/* PRINT FORM */
+.print-form table{width:100%;border-collapse:collapse;margin-bottom:12px}.print-form th,.print-form td{border:1px solid #333;padding:6px 10px;text-align:left;font-size:.82rem}.print-form th{background:#eee}.print-form .field-blank{min-height:24px;border-bottom:1px dotted #999}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .header-top h1 { font-size: 1.05rem; }
@@ -1642,6 +1655,12 @@ footer {
     <button data-tab="validator">Walidator</button>
     <button data-tab="generator">Generator</button>
     <button data-tab="compare">Porównanie</button>
+    <button data-tab="matrix">Matryca</button>
+    <button data-tab="orgchart">Struktura</button>
+    <button data-tab="simulator">Symulator</button>
+    <button data-tab="printform">Formularz IzZ</button>
+    <button data-tab="weather">Pogoda</button>
+    <button data-tab="changelog">Zmiany</button>
     <button data-tab="notepad">Notatnik</button>
     <button data-tab="flashcards">Fiszki</button>
     <button data-tab="glossary">Slownik</button>
@@ -1685,6 +1704,7 @@ footer {
   <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
     <button class="btn btn-secondary" onclick="openGlobalSearch()">Wyszukaj wszędzie <span class="kbd" style="margin-left:6px;">Ctrl+K</span></button>
     <button class="btn btn-outline" onclick="showTimer()">Timer 4h IzZ</button>
+    <button class="btn btn-secondary" onclick="startPresentation()">Tryb prezentacji</button>
   </div>
   <div class="stats-grid">
     <div class="stat-card" onclick="switchTab('catalog')">
@@ -2787,6 +2807,183 @@ footer {
       <button class="btn btn-secondary" onclick="shuffleFlashcards()">Tasuj</button>
       <button class="btn btn-outline" onclick="nextFlashcard()">Następna &#8594;</button>
     </div>
+  </div>
+</div>
+
+<!-- ===== MATRIX ===== -->
+<div id="matrix" class="tab-content">
+  <div class="card">
+    <h2>Matryca podrodzaj &harr; flagi</h2>
+    <p style="color:var(--text-light);margin-bottom:16px;">Kliknij podrodzaj lub flagę, aby zobaczyć powiązane elementy.</p>
+    <div class="inner-tabs">
+      <button class="inner-tab active" onclick="showInnerTab(this,'matrix-p2f')">Podrodzaj &rarr; Flagi</button>
+      <button class="inner-tab" onclick="showInnerTab(this,'matrix-f2p')">Flaga &rarr; Podrodzaje</button>
+    </div>
+    <div class="inner-panel active" id="matrix-p2f">
+      <h3 style="margin-top:0">Wybierz podrodzaj:</h3>
+      <div id="matrixPodrodzButtons"></div>
+      <div class="matrix-result" id="matrixPodrodzResult"></div>
+    </div>
+    <div class="inner-panel" id="matrix-f2p">
+      <h3 style="margin-top:0">Wybierz flagę:</h3>
+      <div id="matrixFlagButtons"></div>
+      <div class="matrix-result" id="matrixFlagResult"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ORG CHART ===== -->
+<div id="orgchart" class="tab-content">
+  <div class="card">
+    <h2>Struktura organizacyjna PSP — przepływ informacji</h2>
+    <div class="org-chart">
+      <div class="org-node org-kg"><h4>SK KG PSP</h4><p>Stanowisko Kierowania Komendanta Głównego</p></div>
+      <div class="org-connector"></div>
+      <div style="text-align:center;font-size:.78rem;color:var(--text-light);">&uarr; informacja o zdarzeniach z pkt. 2 &darr; wytyczne, polecenia</div>
+      <div class="org-connector"></div>
+      <div class="org-row">
+        <div class="org-branch">
+          <div class="org-node org-kw"><h4>SK KW PSP</h4><p>Stanowisko Kierowania Komendanta Wojewódzkiego</p></div>
+          <div class="org-connector"></div>
+          <div style="text-align:center;font-size:.75rem;color:var(--text-light);">&uarr; wstępna info + IzZ &darr; zatwierdzenie IzZ</div>
+          <div class="org-connector"></div>
+          <div class="org-row">
+            <div class="org-branch">
+              <div class="org-node org-kp"><h4>SK KP(M) PSP</h4><p>Stanowisko Kierowania Komendanta Powiatowego</p></div>
+              <div class="org-connector"></div>
+              <div style="text-align:center;font-size:.75rem;color:var(--text-light);">&uarr; karta zdarzenia &darr; dysponowanie</div>
+              <div class="org-connector"></div>
+              <div class="org-row">
+                <div class="org-branch"><div class="org-node org-jrg"><h4>JRG</h4><p>Jednostka Ratowniczo-Gaśnicza</p></div></div>
+                <div class="org-branch"><div class="org-node org-jrg"><h4>OSP ksrg</h4><p>Ochotnicza Straż Pożarna</p></div></div>
+                <div class="org-branch"><div class="org-node org-jrg"><h4>Inne JOP</h4><p>ZSP, ZSR, inne</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Obieg dokumentacji zdarzenia</h2>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead><tr><th>Etap</th><th>Kto</th><th>Co</th><th>Termin</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>SK KP(M)</td><td>Karta zdarzenia (cz. I + II)</td><td>Bezzwłocznie</td></tr>
+        <tr><td>2</td><td>SK KP(M)</td><td>Przekazanie info do SK KW (zdarzenia z pkt. 2)</td><td>Niezwłocznie</td></tr>
+        <tr><td>3</td><td>KDR</td><td>Sporządzenie IzZ</td><td>Niezwłocznie po zakończeniu</td></tr>
+        <tr><td>4</td><td>KDR</td><td>Wstępna IzZ (zdarzenia z pkt. 2)</td><td>Max 4 godziny</td></tr>
+        <tr><td>5</td><td>KDR</td><td>Edycja IzZ</td><td>Do 7 dni</td></tr>
+        <tr><td>6</td><td>SK KP(M)</td><td>Wstępne zatwierdzenie IzZ</td><td>Po sprawdzeniu</td></tr>
+        <tr><td>7</td><td>SK KW</td><td>Końcowe zatwierdzenie IzZ</td><td>Po sprawdzeniu</td></tr>
+        <tr><td>8</td><td>SK KP(M)</td><td>Zestawienie dobowe</td><td>Do 0:30 następnego dnia</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SIMULATOR ===== -->
+<div id="simulator" class="tab-content">
+  <div class="card">
+    <h2>Symulator dyspozytora</h2>
+    <p style="color:var(--text-light);margin-bottom:16px;">Przejdź przez pełną symulację obsługi zgłoszenia. Każdy wybór jest oceniany.</p>
+    <div id="simArea">
+      <button class="btn btn-primary" onclick="startSimulator()">Rozpocznij symulację</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRINT FORM ===== -->
+<div id="printform" class="tab-content">
+  <div class="card">
+    <h2>Pusty formularz IzZ do druku</h2>
+    <p style="color:var(--text-light);margin-bottom:12px;">Kliknij przycisk, aby wydrukować czysty formularz IzZ na A4.</p>
+    <div class="btn-group" style="margin-bottom:16px;">
+      <button class="btn btn-primary" onclick="printIzZForm()">Drukuj formularz</button>
+    </div>
+    <div class="print-form" id="printFormContent">
+      <h3 style="text-align:center;margin-bottom:12px;">INFORMACJA ZE ZDARZENIA</h3>
+      <table><tr><th style="width:200px">1. Nr ewidencyjny</th><td><div class="field-blank"></div></td><th style="width:200px">ID zdarzenia</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>2. Współrzędne geogr.</th><td>N: <div class="field-blank" style="display:inline-block;width:200px"></div> E: <div class="field-blank" style="display:inline-block;width:200px"></div></td></tr></table>
+      <table><tr><th>3. Ugaszono/zlikwidowano bez JOP</th><td style="width:60px">TAK / NIE</td></tr></table>
+      <table><tr><th>4. Rodzaj zdarzenia</th><td>P / MZ / AF &nbsp; Wielkość: <div class="field-blank" style="display:inline-block;width:120px"></div></td></tr></table>
+      <table><tr><th>Podrodzaj</th><td><div class="field-blank"></div></td><th>Flagi</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>5. Województwo</th><td><div class="field-blank"></div></td><th>Powiat</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>Gmina</th><td><div class="field-blank"></div></td><th>Miejscowość</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>Ulica / Nr</th><td><div class="field-blank"></div></td><th>Nr drogi / pikietaż</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>6. Obiekt</th><td colspan="3"><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>7. Właściciel</th><td><div class="field-blank"></div></td><th>8. Kod obiektu</th><td style="width:80px"><div class="field-blank"></div></td><th>9. Kod właśc.</th><td style="width:80px"><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>10. Zauważenie</th><td><div class="field-blank"></div></td><th>Lokalizacja</th><td><div class="field-blank"></div></td><th>Zakończenie</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>11. Zgłoszenie</th><td><div class="field-blank"></div></td><th>Przybycie 1.</th><td><div class="field-blank"></div></td><th>Powrót ost.</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>11. Dojazd 1. podm.</th><td>Czas: <div class="field-blank" style="display:inline-block;width:100px"></div> km: <div class="field-blank" style="display:inline-block;width:80px"></div></td></tr></table>
+      <table><tr><th>12. Zauważone przez</th><td><div class="field-blank"></div></td><th>13. Zgłoszono</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th colspan="4">14. W działaniach udział brały — pojazdy / osoby</th></tr><tr><td colspan="4"><div class="field-blank" style="min-height:48px"></div></td></tr></table>
+      <table><tr><th colspan="4">16. Rodzaj działań ratowniczych</th></tr><tr><td colspan="4"><div class="field-blank" style="min-height:36px"></div></td></tr></table>
+      <table><tr><th colspan="4">17. Sprzęt użyty w działaniach</th></tr><tr><td colspan="4"><div class="field-blank" style="min-height:36px"></div></td></tr></table>
+      <table><tr><th>18. Miejsce działań</th><td colspan="3"><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>19. Użyte środki</th><td colspan="3"><div class="field-blank" style="min-height:36px"></div></td></tr></table>
+      <table><tr><th>20. Nr ONZ</th><td><div class="field-blank"></div></td><th>21. Wybuchy</th><td>TAK / NIE</td></tr></table>
+      <table><tr><th>22. MDR na terenie akcji</th><td><div class="field-blank"></div></td><th>W tym strażacy</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>22. Przekazano</th><td><div class="field-blank"></div></td><th>Ewakuowano</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>23. Ofiary śmiertelne</th><td>Ratownicy: ___ Inne: ___ Dzieci: ___</td><th>Ranni</th><td>Ratownicy: ___ Inne: ___ Dzieci: ___</td></tr></table>
+      <table><tr><th colspan="4">24. Dane personalne poszkodowanych</th></tr><tr><td colspan="4"><div class="field-blank" style="min-height:48px"></div></td></tr></table>
+      <table><tr><th>25. Wielkość zdarzenia</th><td><div class="field-blank"></div></td><th>26. Wielkość obiektu</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>27. Straty (tys. zł)</th><td><div class="field-blank"></div></td><th>28. Uratowane (tys. zł)</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>29. Przyczyna + kod</th><td colspan="3"><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>30. Dane o budynku</th><td colspan="3"><div class="field-blank" style="min-height:36px"></div></td></tr></table>
+      <table><tr><th>31. Kierujący działaniami</th><td colspan="3"><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>32. Koordynator MDR</th><td colspan="3"><div class="field-blank"></div></td></tr></table>
+      <table><tr><th colspan="4">33. Dane opisowe</th></tr><tr><td colspan="4"><div class="field-blank" style="min-height:120px"></div></td></tr></table>
+      <table><tr><th>34-35. JOP spoza gminy/powiatu</th><td><div class="field-blank"></div></td></tr></table>
+      <table><tr><th>36. Sporządził</th><td><div class="field-blank"></div></td><th>Wprowadził</th><td><div class="field-blank"></div></td></tr></table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WEATHER ===== -->
+<div id="weather" class="tab-content">
+  <div class="card">
+    <h2>Warunki atmosferyczne (pkt. 33.4)</h2>
+    <p style="color:var(--text-light);margin-bottom:12px;">Wypełnij dane pogodowe i skopiuj gotowy opis do IzZ.</p>
+    <div class="weather-grid">
+      <div class="weather-field"><label>Temperatura [&deg;C]</label><input type="number" id="wx-temp" placeholder="np. 15"></div>
+      <div class="weather-field"><label>Kierunek wiatru</label><select id="wx-wdir"><option value="">—</option><option>N</option><option>NE</option><option>E</option><option>SE</option><option>S</option><option>SW</option><option>W</option><option>NW</option><option>zmienny</option></select></div>
+      <div class="weather-field"><label>Prędkość wiatru [m/s]</label><input type="number" id="wx-wspd" placeholder="np. 5" min="0"></div>
+      <div class="weather-field"><label>Porywy [m/s]</label><input type="number" id="wx-gust" placeholder="np. 12" min="0"></div>
+      <div class="weather-field"><label>Opady</label><select id="wx-precip"><option value="">brak</option><option>deszcz</option><option>mżawka</option><option>śnieg</option><option>śnieg z deszczem</option><option>grad</option><option>burza</option></select></div>
+      <div class="weather-field"><label>Natężenie opadów</label><select id="wx-intensity"><option value="">—</option><option>słabe</option><option>umiarkowane</option><option>silne</option><option>bardzo silne</option></select></div>
+      <div class="weather-field"><label>Ciśnienie [hPa]</label><input type="number" id="wx-pressure" placeholder="np. 1013" min="900" max="1100"></div>
+      <div class="weather-field"><label>Widoczność</label><select id="wx-vis"><option value="">dobra</option><option>ograniczona (mgła)</option><option>ograniczona (dym)</option><option>ograniczona (opady)</option><option>bardzo słaba</option></select></div>
+      <div class="weather-field"><label>Zachmurzenie</label><select id="wx-cloud"><option value="">—</option><option>bezchmurnie</option><option>małe</option><option>umiarkowane</option><option>duże</option><option>całkowite</option></select></div>
+      <div class="weather-field"><label>Nawierzchnia</label><select id="wx-surface"><option value="">—</option><option>sucha</option><option>mokra</option><option>oblodzona</option><option>ośnieżona</option><option>błotnista</option></select></div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="generateWeather()">Generuj opis</button>
+      <button class="btn btn-secondary" onclick="copyWeather()">Kopiuj do schowka</button>
+    </div>
+    <div class="weather-output" id="wxOutput" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ===== CHANGELOG ===== -->
+<div id="changelog" class="tab-content">
+  <div class="card">
+    <h2>Zmiany w Zasadach — grudzień 2024</h2>
+    <p style="color:var(--text-light);margin-bottom:12px;">Wprowadzone zmiany w stosunku do poprzedniej wersji (st. bryg. Tomasz Jonio, 17.12.2024):</p>
+    <div id="changelogList"></div>
+  </div>
+</div>
+
+<!-- ===== PRESENTATION OVERLAY ===== -->
+<div class="pres-overlay" id="presOverlay">
+  <div class="pres-slide"><div class="pres-slide-inner" id="presSlideContent"></div></div>
+  <div class="pres-controls">
+    <button onclick="presNav(-1)">&larr; Poprzedni</button>
+    <span class="pres-counter" id="presCounter">1 / 10</span>
+    <button onclick="presNav(1)">Następny &rarr;</button>
+    <button onclick="closePresentation()" style="background:var(--danger);">Zamknij &times;</button>
   </div>
 </div>
 
@@ -4607,6 +4804,292 @@ function doGlobalSearch() {
 
 // Request notification permission for timer
 try { if (Notification.permission === 'default') Notification.requestPermission(); } catch(e) {}
+
+// ============================================================
+//  MATRIX: podrodzaj <-> flagi
+// ============================================================
+
+const matrixMap = {
+  'P \u2013 Obiekty mieszkalne':['Obiekt mieszkalny','Ofiara \u015bmiertelna','Osoba ranna'],
+  'P \u2013 \u015amietniki, wysypiska':['Wysypiska/sk\u0142adowiska odpad\u00f3w'],
+  'P \u2013 \u015arodki transportu drogowego':['Plama oleju','Osoba ranna','Ofiara \u015bmiertelna'],
+  'P \u2013 \u015arodki transportu kolejowego':['Osoba ranna','Ofiara \u015bmiertelna'],
+  'P \u2013 \u015arodki transportu lotniczego':['Udzia\u0142 \u015bmig\u0142owc\u00f3w / samolot\u00f3w'],
+  'P \u2013 Trawy, torfowiska, lasy, pola, stogi':['Po\u017car lasu','Po\u017car p\u00f3l','Po\u017car trawy'],
+  'P \u2013 Obiekty gospodarcze i inne rolnicze':['Obiekt gospodarczy'],
+  'P \u2013 Instytucje, obiekty u\u017cyteczno\u015bci publicznej':['Obiekty sakralne / Zabytki'],
+  'MZ \u2013 Atmosferyczne':['Silne wiatry','Wiatro\u0142omy','Uszkodzony dach','Zerwany dach','Przybory w\u00f3d'],
+  'MZ \u2013 Chemiczne':['Substancja chemiczna','GIO\u015a / WIO\u015a'],
+  'MZ \u2013 Wypadek':['Osoba ranna','Ofiara \u015bmiertelna','Plama oleju','Nieprzejezdno\u015b\u0107 DK/S/A'],
+  'MZ \u2013 Kolizja':['Plama oleju'],
+  'MZ \u2013 Pomoc Policji':['Pomoc Policji'],
+  'MZ \u2013 Pomoc PRM':['Pomoc PRM','IZRM','Zabezpieczenie l\u0105dowania'],
+  'MZ \u2013 Pomoc innym s\u0142u\u017cbom':['Pomoc innym s\u0142u\u017cbom'],
+  'MZ \u2013 Wodne':['Przybory w\u00f3d','Pompowanie wody','Umacnianie wa\u0142\u00f3w'],
+  'MZ \u2013 Topienie si\u0119':['Osoba ranna','Ofiara \u015bmiertelna'],
+  'MZ \u2013 Zwierz\u0119ta':['Usuwanie owad\u00f3w'],
+  'MZ \u2013 Budowlane':['Osuni\u0119cie gruntu','Uszkodzony dach','Zerwany dach'],
+  'MZ \u2013 Poszukiwanie os\u00f3b zaginionych':['Udzia\u0142 ps\u00f3w ratowniczych','Udzia\u0142 dron\u00f3w','Zdarzenia d\u0142ugotrwa\u0142e'],
+  'MZ \u2013 Drogowe':['Plama oleju','Nieprzejezdno\u015b\u0107 DK/S/A'],
+  'MZ \u2013 Pr\u00f3ba samob\u00f3jcza':['Osoba ranna','Ofiara \u015bmiertelna'],
+  'MZ \u2013 Podejrzenie pod\u0142o\u017cenia \u0142adunku':['Ewakuacja os\u00f3b'],
+  'MZ \u2013 Lotnicze':['Udzia\u0142 \u015bmig\u0142owc\u00f3w / samolot\u00f3w'],
+};
+
+// Reverse map
+const matrixReverseMap = {};
+Object.entries(matrixMap).forEach(([podrodz, fl]) => {
+  fl.forEach(f => {
+    if (!matrixReverseMap[f]) matrixReverseMap[f] = [];
+    matrixReverseMap[f].push(podrodz);
+  });
+});
+
+function buildMatrix() {
+  const allPodrodz = [...podrodzajeP.map(r=>r[1]), ...podrodzajeMZ.map(r=>r[1])];
+  const btnContainer = document.getElementById('matrixPodrodzButtons');
+  if (!btnContainer) return;
+  btnContainer.innerHTML = allPodrodz.map(p =>
+    `<button class="matrix-btn" onclick="matrixSelectPodrodz(this,'${p.replace(/'/g,"\\'")}')">${p}</button>`
+  ).join('');
+
+  const usedFlags = [...new Set(Object.values(matrixMap).flat())].sort();
+  const flagContainer = document.getElementById('matrixFlagButtons');
+  if (!flagContainer) return;
+  flagContainer.innerHTML = usedFlags.map(f =>
+    `<button class="matrix-btn" onclick="matrixSelectFlag(this,'${f.replace(/'/g,"\\'")}')">${f}</button>`
+  ).join('');
+}
+
+function matrixSelectPodrodz(btn, name) {
+  btn.parentElement.querySelectorAll('.matrix-btn').forEach(b=>b.classList.remove('matrix-active'));
+  btn.classList.add('matrix-active');
+  const fl = matrixMap[name] || [];
+  const res = document.getElementById('matrixPodrodzResult');
+  res.innerHTML = fl.length ? fl.map(f=>`<span class="matrix-chip matrix-chip-flag">${f}</span>`).join('') : '<span style="color:var(--text-light)">Brak przypisanych flag dla tego podrodzaju.</span>';
+}
+
+function matrixSelectFlag(btn, name) {
+  btn.parentElement.querySelectorAll('.matrix-btn').forEach(b=>b.classList.remove('matrix-active'));
+  btn.classList.add('matrix-active');
+  const pd = matrixReverseMap[name] || [];
+  const res = document.getElementById('matrixFlagResult');
+  res.innerHTML = pd.length ? pd.map(p=>`<span class="matrix-chip matrix-chip-podrodz">${p}</span>`).join('') : '<span style="color:var(--text-light)">Brak przypisanych podrodzaj\u00f3w.</span>';
+}
+
+buildMatrix();
+
+// ============================================================
+//  SIMULATOR
+// ============================================================
+
+const simScenarios = [
+  {
+    title: "Zg\u0142oszenie: dym z okna bloku, 3 pi\u0119tro",
+    steps: [
+      {prompt:"Jaki rodzaj zdarzenia zapiszesz w karcie?", options:["P \u2014 Po\u017car","MZ \u2014 Miejscowe zagro\u017cenie","AF \u2014 Alarm fa\u0142szywy"], correct:0, feedback:"Dym z okna = niekontrolowane spalanie = P (po\u017car)."},
+      {prompt:"Jaki podrodzaj zaznaczysz?", options:["P \u2013 Obiekty mieszkalne","P \u2013 Inne po\u017cary","MZ \u2013 Budowlane"], correct:0, feedback:"Blok = obiekt mieszkalny, kod 202-204."},
+      {prompt:"Dysponujesz 3 zast\u0119py. Po dojeździe: pożar pokoju ~25 m\u00b2, 2 pr\u0105dy ga\u015bnicze. Wielko\u015b\u0107?", options:["P/M (ma\u0142y)","P/\u015a (\u015bredni)","P/D (du\u017cy)"], correct:0, feedback:"25 m\u00b2 < 70 m\u00b2 i 2 pr\u0105dy < 4 = P/M."},
+      {prompt:"Na 3 pi\u0119trze znaleziono osob\u0119 nieprzytomn\u0105. Strażacy podjęli MDR. Jakie flagi?", options:["Ofiara \u015bmiertelna","Obiekt mieszkalny, Osoba ranna","Obiekt mieszkalny, IZRM"], correct:1, feedback:"Osoba ranna + obiekt mieszkalny. NIE IZRM \u2014 bo to dzia\u0142ania ksrg (po\u017car), nie zdarzenie PRM."},
+      {prompt:"Czy musisz powiadomi\u0107 SK KW PSP?", options:["Tak","Nie"], correct:1, feedback:"P/M, 1 ranny, 3 zast\u0119py \u2014 nie spe\u0142nia warunk\u00f3w z pkt. 2 Zasad."},
+    ]
+  },
+  {
+    title: "Zg\u0142oszenie: wypadek na S7, TIR na boku, wyciek paliwa",
+    steps: [
+      {prompt:"Rodzaj zdarzenia?", options:["P","MZ","AF"], correct:1, feedback:"Wypadek drogowy = MZ."},
+      {prompt:"Podrodzaj?", options:["MZ \u2013 Wypadek","MZ \u2013 Kolizja","MZ \u2013 Drogowe"], correct:0, feedback:"Wypadek = z poszkodowanymi. Kolizja = bez."},
+      {prompt:"6 zast\u0119p\u00f3w, 2 ofiary, 5 rannych zabranych przez ZRM. Wielko\u015b\u0107?", options:["MZ/L","MZ/\u015a","MZ/D"], correct:1, feedback:"2 ofiary (2-3) i 5 os. ZRM (4-10) i 6 zast\u0119p\u00f3w (5-12) = MZ/\u015a."},
+      {prompt:"Droga zablokowana 6h. Jakie flagi (oprócz Osoba ranna / Ofiara)?", options:["Nieprzejezdno\u015b\u0107 DK/S/A, Zdarzenia d\u0142ugotrwa\u0142e","Plama oleju","Substancja chemiczna"], correct:0, feedback:"S7 = droga ekspresowa, >5h = nieprzejezdno\u015b\u0107 DK/S/A + d\u0142ugotrwa\u0142e (>6h)."},
+      {prompt:"Czy musisz powiadomi\u0107 SK KW PSP?", options:["Tak","Nie"], correct:0, feedback:"TAK \u2014 obrażenia >3 os\u00f3b, wstrzymany ruch >5h."},
+    ]
+  },
+  {
+    title: "Alarm czujki CO w przedszkolu, pomiary negatywne",
+    steps: [
+      {prompt:"Rodzaj zdarzenia?", options:["P","MZ","AF"], correct:2, feedback:"Pomiary nie wykaza\u0142y CO = alarm fa\u0142szywy."},
+      {prompt:"Klasyfikacja AF?", options:["Z\u0142o\u015bliwy","W dobrej wierze","Z instalacji wykrywania"], correct:2, feedback:"Czujka CO = instalacja wykrywania (w tym autonomiczne czujki)."},
+      {prompt:"Pkt. 12 \u2014 zauważenie zdarzenia przez?", options:["Pracownik\u00f3w","Instalacj\u0119 wykrywania","Osoby postronne"], correct:1, feedback:"Autonomiczna czujka CO = instalacja wykrywania."},
+    ]
+  },
+];
+
+let simState = {};
+
+function startSimulator() {
+  const idx = Math.floor(Math.random() * simScenarios.length);
+  const scenario = simScenarios[idx];
+  simState = {scenario, step:0, score:0, total:scenario.steps.length};
+  renderSimStep();
+}
+
+function renderSimStep() {
+  const {scenario, step, score, total} = simState;
+  const area = document.getElementById('simArea');
+
+  if (step >= scenario.steps.length) {
+    const pct = Math.round(score/total*100);
+    const msg = pct >= 80 ? 'Doskonale!' : pct >= 60 ? 'Nie\u017ale.' : 'Powt\u00f3rz materia\u0142.';
+    area.innerHTML = `<div class="sim-score-final"><div class="score-number">${score}/${total}</div><div style="font-size:1rem;opacity:.85;">${pct}% \u2014 ${msg}</div></div>
+      <div class="btn-group" style="justify-content:center;"><button class="btn btn-primary" onclick="startSimulator()">Nowa symulacja</button></div>`;
+    return;
+  }
+
+  const s = scenario.steps[step];
+  area.innerHTML = `<div class="sim-scenario"><h4>${scenario.title}</h4><p style="font-size:.85rem;color:var(--text-light);">Krok ${step+1}/${total}</p></div>
+    <div class="sim-step active">
+      <p class="sim-prompt">${s.prompt}</p>
+      <div class="wizard-options">${s.options.map((o,i) =>
+        `<div class="wizard-option" onclick="simAnswer(${i})" id="sim-opt-${i}"><h4>${o}</h4></div>`
+      ).join('')}</div>
+      <div id="simFeedback"></div>
+    </div>`;
+}
+
+function simAnswer(idx) {
+  const s = simState.scenario.steps[simState.step];
+  const correct = idx === s.correct;
+  if (correct) simState.score++;
+
+  document.querySelectorAll('[id^=sim-opt-]').forEach((el,i) => {
+    el.style.pointerEvents = 'none';
+    if (i === s.correct) el.style.borderColor = 'var(--success)';
+    if (i === idx && !correct) el.style.borderColor = 'var(--danger)';
+  });
+
+  document.getElementById('simFeedback').innerHTML = `<div class="sim-feedback ${correct?'correct':'wrong'}">${correct?'\u2714 Dobrze!':'\u2718 \u0179le.'} ${s.feedback}</div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="simState.step++;renderSimStep()">Dalej &rarr;</button></div>`;
+}
+
+// ============================================================
+//  WEATHER WIDGET
+// ============================================================
+
+function generateWeather() {
+  const g = id => (document.getElementById(id)||{}).value||'';
+  const parts = [];
+  if (g('wx-temp')) parts.push(`Temperatura: ${g('wx-temp')}\u00b0C`);
+  const wdir = g('wx-wdir'), wspd = g('wx-wspd'), gust = g('wx-gust');
+  if (wdir || wspd) {
+    let w = 'Wiatr:';
+    if (wdir) w += ` ${wdir}`;
+    if (wspd) w += ` ${wspd} m/s`;
+    if (gust) w += `, porywy do ${gust} m/s`;
+    parts.push(w);
+  }
+  const precip = g('wx-precip'), intensity = g('wx-intensity');
+  if (precip) parts.push(`Opady: ${precip}${intensity ? ' (' + intensity + ')' : ''}`);
+  if (g('wx-pressure')) parts.push(`Ci\u015bnienie: ${g('wx-pressure')} hPa`);
+  if (g('wx-vis')) parts.push(`Widoczno\u015b\u0107: ${g('wx-vis')}`);
+  if (g('wx-cloud')) parts.push(`Zachmurzenie: ${g('wx-cloud')}`);
+  if (g('wx-surface')) parts.push(`Nawierzchnia: ${g('wx-surface')}`);
+
+  const output = parts.length ? parts.join('. ') + '.' : 'Uzupe\u0142nij dane pogodowe.';
+  const el = document.getElementById('wxOutput');
+  el.textContent = output;
+  el.style.display = 'block';
+}
+
+function copyWeather() {
+  generateWeather();
+  navigator.clipboard.writeText(document.getElementById('wxOutput').textContent).then(() => {
+    event.target.textContent = 'Skopiowano!';
+    setTimeout(() => event.target.textContent = 'Kopiuj do schowka', 2000);
+  }).catch(() => {});
+}
+
+// ============================================================
+//  CHANGELOG
+// ============================================================
+
+const changelogEntries = [
+  "Usuni\u0119to nieaktualne lub nadmiarowe wpisy w dokumencie.",
+  "Usuni\u0119to konieczno\u015b\u0107 wpisania kod\u00f3w obiekt\u00f3w 801-802 w IzZ dla podrodzaju P \u2013 \u015amietniki, wysypiska z KZ.",
+  "Doprecyzowano rodzaj \u015brodk\u00f3w transportu lotniczego dla podrodzaju MZ \u2013 Lotnicze.",
+  "Usuni\u0119to/wy\u0142\u0105czono nieaktualne flagi zdarze\u0144.",
+  "Wprowadzono now\u0105 flag\u0119 zdarze\u0144 zwi\u0105zanych z przewodnictwem RP w Radzie Europejskiej (PREZYDENCJA 2025).",
+  "Zmieniono nazw\u0119 flag: \u201eNieprzejezdno\u015b\u0107 DK/A\u201d \u2192 \u201eNieprzejezdno\u015b\u0107 DK/S/A\u201d oraz \u201ePo\u017car wysypisk \u015bmieci\u201d \u2192 \u201eWysypiska/sk\u0142adowiska odpad\u00f3w\u201d.",
+  "Doprecyzowano zasady kwalifikacji zdarze\u0144 jako MZ/M.",
+  "Doprecyzowano katalog obiekt\u00f3w kwalifikuj\u0105cych zdarzenie jako MZ w transporcie lotniczym.",
+  "Doprecyzowano zapisy kwalifikuj\u0105ce zdarzenie jako AF z instalacji wykrywania.",
+  "Doprecyzowano zapisy dla cz\u0119\u015bci s\u0142\u00f3w-kluczy.",
+  "Doprecyzowano zapisy dot. instalacji wykrywania \u2014 mi\u0119dzy innymi autonomiczne czujki dymu i CO.",
+  "Doprecyzowano zapisy dot. ewidencji grup operacyjnych na miejscu zdarzenia.",
+  "Poprawiono zapis dot. ewidencjonowania BSP bior\u0105cych udzia\u0142 w zdarzeniu.",
+  "Doprecyzowano zapisy dot. ewidencjonowania zdarze\u0144 z wy\u0142\u0105cznie pr\u0105dami piany ga\u015bniczej.",
+  "Doprecyzowano zapisy pkt. 22 \u2014 W tym przez stra\u017cak\u00f3w.",
+];
+
+function buildChangelog() {
+  const container = document.getElementById('changelogList');
+  if (!container) return;
+  container.innerHTML = changelogEntries.map((e, i) =>
+    `<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span class="action-num">${i+1}.</span>
+      <span style="font-size:.9rem;">${e}</span>
+    </div>`
+  ).join('');
+}
+
+buildChangelog();
+
+// ============================================================
+//  PRINT IzZ FORM
+// ============================================================
+
+function printIzZForm() {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('print-target'));
+  document.getElementById('printform').classList.add('print-target');
+  setTimeout(() => window.print(), 200);
+}
+
+// ============================================================
+//  PRESENTATION MODE
+// ============================================================
+
+const presSlides = [
+  {h:'Zasady SWD PSP', body:'<p>Zasady ewidencjonowania zdarze\u0144<br>w Systemie Wspomagania Decyzji PSP</p><p style="margin-top:24px;opacity:.6;">od 01.01.2025</p>'},
+  {h:'Rodzaje zdarze\u0144', body:'<table><tr><th>Kod</th><th>Rodzaj</th></tr><tr><td>P</td><td>Po\u017car</td></tr><tr><td>MZ</td><td>Miejscowe zagro\u017cenie</td></tr><tr><td>AF</td><td>Alarm fa\u0142szywy</td></tr><tr><td>CW/WG/PZR</td><td>\u0106wiczenia / Wyjazd gosp. / Zabezpieczenie</td></tr></table>'},
+  {h:'Wielko\u015b\u0107 po\u017car\u00f3w', body:'<table><tr><th>P/M</th><th>P/\u015a</th><th>P/D</th><th>P/BD</th></tr><tr><td>\u226470 m\u00b2</td><td>71-300 m\u00b2</td><td>301-1000 m\u00b2</td><td>>1000 m\u00b2</td></tr><tr><td>\u22644 pr\u0105dy</td><td>5-12</td><td>13-36</td><td>>36</td></tr><tr><td>\u22641 ha</td><td>1-10 ha</td><td>10-100 ha</td><td>>100 ha</td></tr></table>'},
+  {h:'Wielko\u015b\u0107 MZ', body:'<table><tr><th>MZ/M</th><th>MZ/L</th><th>MZ/\u015a</th><th>MZ/D</th><th>MZ/GIK</th></tr><tr><td>bez specj.</td><td>\u22641 ofiara</td><td>2-3 ofiary</td><td>>3 ofiary</td><td>batalion</td></tr><tr><td>\u2014</td><td>\u22644 zast.</td><td>5-12 zast.</td><td>>12 zast.</td><td>\u2014</td></tr></table>'},
+  {h:'Wst\u0119pna IzZ', body:'<ul><li>Sporz\u0105dzi\u0107 <strong>nie p\u00f3\u017aniej ni\u017c w 4. godzinie</strong> dzia\u0142a\u0144</li><li>Tylko dla zdarze\u0144 z pkt. 2 Zasad</li><li>Sytuacja, dzia\u0142ania, KDR, ofiary</li></ul>'},
+  {h:'Terminy', body:'<ul><li>Edycja IzZ: <strong>7 dni</strong> (potem zgoda KW)</li><li>Zestawienie dobowe: do <strong>0:30</strong></li><li>Zatwierdzenie: KP(M) \u2192 KW</li></ul>'},
+  {h:'IZRM', body:'<ul><li>Zdarzenie we w\u0142a\u015bciwo\u015bciach PRM</li><li>Brak ZRM / wyd\u0142u\u017cony czas / pro\u015bba / zauwa\u017cenie</li><li>Flaga: IZRM, Obiekt: \u2014 IZRM</li><li>NIE: dzia\u0142ania z w\u0142a\u015bciwo\u015bci ksrg</li></ul>'},
+  {h:'Alarmy fa\u0142szywe', body:'<ul><li><strong>Z\u0142o\u015bliwy</strong> \u2014 celowe wprowadzenie w b\u0142\u0105d</li><li><strong>W dobrej wierze</strong> \u2014 oznaki mog\u0105ce wskazywa\u0107</li><li><strong>Z instalacji wykrywania</strong> \u2014 wadliwe zadziałanie (w tym czujki CO/dymu)</li></ul>'},
+  {h:'S\u0142owa-klucze OBIEKT', body:'<p style="font-size:1rem;">Wpisa\u0107 WIELKIMI LITERAMI po nazwie obiektu i my\u015blniku:</p><p style="margin-top:12px;">FOTOWOLTAIKA \u2022 POJAZDY ELEKTRYCZNE \u2022 SADZE W KOMINIE \u2022 IZRM \u2022 PLAMA \u2022 POMPOWANIE WODY \u2022 SK\u0141ADOWISKO ODPAD\u00d3W \u2022 ZWIERZ\u0118TA \u2022 i inne...</p>'},
+  {h:'Dzi\u0119kuj\u0119!', body:'<p>SWD PSP \u2014 Asystent Ewidencji Zdarze\u0144 v2025.3</p><p style="margin-top:16px;opacity:.6;">Koniec prezentacji</p>'},
+];
+
+let presIndex = 0;
+
+function startPresentation() {
+  presIndex = 0;
+  renderPresSlide();
+  document.getElementById('presOverlay').classList.add('active');
+}
+
+function closePresentation() {
+  document.getElementById('presOverlay').classList.remove('active');
+}
+
+function presNav(dir) {
+  presIndex = Math.max(0, Math.min(presSlides.length - 1, presIndex + dir));
+  renderPresSlide();
+}
+
+function renderPresSlide() {
+  const s = presSlides[presIndex];
+  document.getElementById('presSlideContent').innerHTML = `<h2>${s.h}</h2>${s.body}`;
+  document.getElementById('presCounter').textContent = `${presIndex + 1} / ${presSlides.length}`;
+}
+
+// Keyboard for presentation
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('presOverlay').classList.contains('active')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); presNav(1); }
+  if (e.key === 'ArrowLeft') presNav(-1);
+  if (e.key === 'Escape') closePresentation();
+});
 
 // ============================================================
 //  IZRM DECISION TREE
