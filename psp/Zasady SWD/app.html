@@ -1156,6 +1156,323 @@ body.dark .global-search-result:hover { background: #1e2d4a; }
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
+/* IZRM DECISION TREE */
+.decision-node {
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 12px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.decision-node.question {
+  background: linear-gradient(135deg, #e8f4fd, #d6eaf8);
+  border-color: var(--info);
+}
+
+.decision-node.result-yes {
+  background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+  border-color: var(--success);
+}
+
+.decision-node.result-no {
+  background: linear-gradient(135deg, #fef9e7, #fdebd0);
+  border-color: var(--warning);
+}
+
+.decision-node p {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--psp-blue);
+}
+
+.decision-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.decision-btns button {
+  min-width: 120px;
+}
+
+.decision-path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+}
+
+.decision-path span {
+  padding: 4px 10px;
+  border-radius: 16px;
+  background: #f0f3f8;
+  color: var(--text-light);
+}
+
+.decision-path span.path-yes { background: #d5f5e3; color: var(--success); }
+.decision-path span.path-no { background: #fdebd0; color: var(--warning); }
+
+/* VALIDATOR */
+.validator-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  font-size: 0.88rem;
+}
+
+.validator-field.required {
+  background: #fdecea;
+  border-left: 4px solid var(--danger);
+}
+
+.validator-field.optional {
+  background: #f8f9fa;
+  border-left: 4px solid var(--border);
+}
+
+.validator-field.conditional {
+  background: #fef9e7;
+  border-left: 4px solid var(--warning);
+}
+
+.validator-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* COMPARISON TABLE */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.compare-table th {
+  background: var(--psp-red);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.compare-table th.mz-header { background: var(--info); }
+
+.compare-table td {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.compare-table tr:nth-child(even) td { background: #fafbfc; }
+
+.compare-highlight {
+  font-weight: 700;
+  color: var(--psp-red);
+}
+
+/* FLASHCARDS */
+.flashcard-container {
+  perspective: 1000px;
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+.flashcard {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.flashcard.flipped { transform: rotateY(180deg); }
+
+.flashcard-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  border: 2px solid var(--border);
+}
+
+.flashcard-front {
+  background: linear-gradient(135deg, var(--psp-blue), var(--psp-blue-light));
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.flashcard-back {
+  background: var(--card);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.6;
+  transform: rotateY(180deg);
+}
+
+.flashcard-progress {
+  text-align: center;
+  margin: 12px 0;
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.flashcard-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* EXAM MODE */
+.exam-timer {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--psp-red);
+  text-align: center;
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* QUIZ STATS CHART */
+.stats-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 120px;
+  padding: 0 8px;
+  border-bottom: 2px solid var(--border);
+  margin: 16px 0;
+}
+
+.stats-bar {
+  flex: 1;
+  min-width: 20px;
+  background: var(--psp-red);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: height 0.4s ease;
+  cursor: pointer;
+}
+
+.stats-bar:hover::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--psp-blue);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.stats-bar.good { background: var(--success); }
+.stats-bar.medium { background: var(--warning); }
+.stats-bar.bad { background: var(--danger); }
+
+/* TOOLTIP for cross-reference */
+.xref-tooltip {
+  position: fixed;
+  background: var(--psp-blue);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  max-width: 350px;
+  z-index: 300;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  pointer-events: none;
+  animation: fadeIn 0.2s ease;
+  line-height: 1.5;
+}
+
+.xref-tooltip .xref-term {
+  font-weight: 700;
+  color: var(--psp-gold);
+  margin-bottom: 4px;
+}
+
+.xref-link {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  color: inherit;
+  cursor: help;
+}
+
+/* NOTEPAD HISTORY */
+.notepad-history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.notepad-history-item {
+  padding: 8px 14px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notepad-history-item:hover { border-color: var(--psp-red); }
+.notepad-history-item.active-note { border-color: var(--psp-red); background: #fef5f4; font-weight: 700; }
+
+.notepad-history-item .delete-note {
+  color: var(--danger);
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0 4px;
+}
+
+/* PRINT LAYOUT */
+@media print {
+  .timer-bar, .global-search-overlay, footer,
+  .btn-group, .search-box, .dark-toggle, nav { display: none !important; }
+  header { position: static; box-shadow: none; }
+  .tab-content { display: none !important; }
+  .tab-content.print-target { display: block !important; }
+  .notepad-export { max-height: none; border: 1px solid #000; }
+  .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+}
+
+.print-header {
+  display: none;
+  text-align: center;
+  padding: 16px;
+  border-bottom: 2px solid #000;
+  margin-bottom: 16px;
+}
+
+@media print {
+  .print-header { display: block; }
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .header-top h1 { font-size: 1.05rem; }
@@ -1321,7 +1638,12 @@ footer {
     <button data-tab="scenarios">Scenariusze</button>
     <button data-tab="actions">Działania</button>
     <button data-tab="causes">Przyczyny</button>
+    <button data-tab="izrm">IZRM</button>
+    <button data-tab="validator">Walidator</button>
+    <button data-tab="generator">Generator</button>
+    <button data-tab="compare">Porównanie</button>
     <button data-tab="notepad">Notatnik</button>
+    <button data-tab="flashcards">Fiszki</button>
     <button data-tab="glossary">Slownik</button>
     <button data-tab="checklist">Checklista</button>
     <button data-tab="faq">FAQ</button>
@@ -2211,12 +2533,259 @@ footer {
     <div class="btn-group">
       <button class="btn btn-primary" onclick="exportNotepad()">Eksportuj podgląd</button>
       <button class="btn btn-secondary" onclick="copyNotepad()">Kopiuj do schowka</button>
+      <button class="btn btn-outline" onclick="printNotepad()">Drukuj</button>
       <button class="btn btn-outline" onclick="clearNotepad()">Wyczyść notatnik</button>
+    </div>
+
+    <div class="notepad-section" style="margin-top:24px;">
+      <h3>Historia notatników</h3>
+      <div class="notepad-history-list" id="notepadHistoryList"></div>
+      <div class="btn-group">
+        <button class="btn btn-sm btn-primary" onclick="saveNotepadToHistory()">Zapisz bieżący do historii</button>
+        <button class="btn btn-sm btn-outline" onclick="exportAllData()">Eksport danych (JSON)</button>
+        <button class="btn btn-sm btn-outline" onclick="document.getElementById('importFileInput').click()">Import danych (JSON)</button>
+        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importAllData(event)">
+      </div>
     </div>
 
     <div id="notepadPreview" style="margin-top:16px;display:none;">
       <h3>Podgląd eksportu</h3>
       <div class="notepad-export" id="notepadExportText"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== IZRM DECISION TREE ===== -->
+<div id="izrm" class="tab-content">
+  <div class="card">
+    <h2>Drzewo decyzyjne: Czy to IZRM?</h2>
+    <p style="color:var(--text-light);margin-bottom:16px;">Odpowiedz na pytania, aby ustalić czy zdarzenie kwalifikuje się jako Izolowane Zdarzenie Ratownictwa Medycznego.</p>
+    <div class="decision-path" id="izrmPath"></div>
+    <div id="izrmTree"></div>
+    <div class="btn-group">
+      <button class="btn btn-outline" onclick="resetIzrmTree()">Zacznij od nowa</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Kryteria IZRM — podsumowanie</h2>
+    <div class="info-box">
+      <strong>IZRM to zdarzenie będące we właściwościach PRM</strong>, do którego jednostki ksrg dysponowane są gdy:
+    </div>
+    <ul style="margin:12px 0 0 24px;font-size:0.9rem;">
+      <li>Brak możliwości natychmiastowego zadysponowania ZRM</li>
+      <li>Wydłużony czas dotarcia zadysponowanego ZRM</li>
+      <li>Na prośbę osób postronnych</li>
+      <li>Zdarzenie zauważone przez ratowników ksrg</li>
+    </ul>
+    <div class="danger-box" style="margin-top:12px;">
+      <strong>NIE jest IZRM</strong> gdy dysponowanie wynika z właściwości ksrg (wyszkolenie, sprzęt, charakter zdarzenia). Jeśli w trakcie działań ksrg wystąpi osoba w NZŻ — to kontynuacja działań, nie IZRM.
+    </div>
+    <div class="note-box">
+      <strong>Obowiązki przy IZRM:</strong> karta kpp/ratownika medycznego, opis w pkt. 17 (sprzęt), pkt. 33.6 (nr 36 — opis sprzętu medycznego), zużyty sprzęt w pkt. 33.1. Flaga: IZRM. Obiekt: ... — IZRM
+    </div>
+  </div>
+</div>
+
+<!-- ===== VALIDATOR ===== -->
+<div id="validator" class="tab-content">
+  <div class="card">
+    <h2>Walidator IzZ — wymagane pola</h2>
+    <p style="color:var(--text-light);margin-bottom:16px;">Wybierz rodzaj zdarzenia, aby zobaczyć które pola IzZ są obowiązkowe.</p>
+    <div class="calc-input">
+      <div class="field">
+        <label>Rodzaj zdarzenia</label>
+        <select id="valRodzaj" onchange="runValidator()">
+          <option value="">— wybierz —</option>
+          <option value="P">P — Pożar</option>
+          <option value="MZ">MZ — Miejscowe zagrożenie</option>
+          <option value="AF">AF — Alarm fałszywy</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Cechy zdarzenia</label>
+        <select id="valCechy" onchange="runValidator()">
+          <option value="standard">Standardowe</option>
+          <option value="ofiary">Z ofiarami śmiertelnymi</option>
+          <option value="chem">Z substancjami niebezpiecznymi</option>
+          <option value="izrm">IZRM</option>
+          <option value="duze">Duże / bardzo duże</option>
+        </select>
+      </div>
+    </div>
+    <div id="validatorResult"></div>
+  </div>
+</div>
+
+<!-- ===== GENERATOR ===== -->
+<div id="generator" class="tab-content">
+  <div class="card">
+    <h2>Generator opisu karty zdarzenia</h2>
+    <p style="color:var(--text-light);margin-bottom:16px;">Wypełnij pola, a system wygeneruje gotowy tekst do pkt. 1-2 opisu karty zdarzenia.</p>
+
+    <div class="notepad-section">
+      <h3>Pkt. 1 — Opis wynikający ze zgłoszenia</h3>
+      <div class="notepad-grid">
+        <div class="notepad-field">
+          <label>Kto zgłosił</label>
+          <input type="text" id="gen-zglaszajacy" placeholder="np. mieszkaniec, Policja, CPR">
+        </div>
+        <div class="notepad-field">
+          <label>Co zgłoszono</label>
+          <input type="text" id="gen-co" placeholder="np. dym z okna, wypadek, alarm CO">
+        </div>
+        <div class="notepad-field">
+          <label>Gdzie</label>
+          <input type="text" id="gen-gdzie" placeholder="np. ul. Klonowa 15, m. 4">
+        </div>
+        <div class="notepad-field">
+          <label>Dodatkowe informacje od zgłaszającego</label>
+          <input type="text" id="gen-dodatkowe" placeholder="np. na 3 piętrze, osoba nieprzytomna">
+        </div>
+      </div>
+    </div>
+
+    <div class="notepad-section">
+      <h3>Pkt. 2 — Opis po dojeździe na miejsce</h3>
+      <div class="notepad-grid">
+        <div class="notepad-field">
+          <label>Zastana sytuacja</label>
+          <textarea id="gen-sytuacja" rows="2" placeholder="np. pożar objął pokój na 3 piętrze, dym na klatce schodowej"></textarea>
+        </div>
+        <div class="notepad-field">
+          <label>Podjęte działania</label>
+          <textarea id="gen-dzialania" rows="2" placeholder="np. podano 1 prąd gaśniczy, ewakuowano 5 osób"></textarea>
+        </div>
+        <div class="notepad-field">
+          <label>Zagrożenia / utrudnienia</label>
+          <input type="text" id="gen-zagrozenia" placeholder="np. samochody blokujące dojazd">
+        </div>
+        <div class="notepad-field">
+          <label>Inne służby na miejscu</label>
+          <input type="text" id="gen-sluzby" placeholder="np. Policja, ZRM">
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="generateDescription()">Generuj opis</button>
+      <button class="btn btn-secondary" onclick="copyGenerated()">Kopiuj do schowka</button>
+    </div>
+    <div id="genResult" style="margin-top:16px;display:none;">
+      <h3>Wygenerowany opis:</h3>
+      <div class="notepad-export" id="genText"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Kalkulator czasu interwencji</h2>
+    <p style="color:var(--text-light);margin-bottom:12px;">Wprowadź czasy, aby obliczyć czas interwencji i inne przedziały.</p>
+    <div class="notepad-grid">
+      <div class="notepad-field">
+        <label>Czas zgłoszenia</label>
+        <input type="datetime-local" id="tc-zgloszenie">
+      </div>
+      <div class="notepad-field">
+        <label>Czas przybycia 1. podmiotu</label>
+        <input type="datetime-local" id="tc-przybycie">
+      </div>
+      <div class="notepad-field">
+        <label>Czas lokalizacji P/MZ</label>
+        <input type="datetime-local" id="tc-lokalizacja">
+      </div>
+      <div class="notepad-field">
+        <label>Czas zakończenia działań</label>
+        <input type="datetime-local" id="tc-koniec">
+      </div>
+      <div class="notepad-field">
+        <label>Czas powrotu ostatniego podmiotu</label>
+        <input type="datetime-local" id="tc-powrot">
+      </div>
+      <div class="notepad-field">
+        <label>Dystans dojazdu (km)</label>
+        <input type="number" id="tc-km" min="0" step="0.1" placeholder="np. 8.5">
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="calcTimes()">Oblicz czasy</button>
+    </div>
+    <div id="timesResult" class="calc-result" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<!-- ===== COMPARE ===== -->
+<div id="compare" class="tab-content">
+  <div class="card">
+    <h2>Porównanie wielkości pożarów</h2>
+    <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr><th>Kryterium</th><th>P/M (Mały)</th><th>P/Ś (Średni)</th><th>P/D (Duży)</th><th>P/BD (B. duży)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Powierzchnia obiektu</strong></td><td>do 70 m²</td><td>71-300 m²</td><td>301-1000 m²</td><td>&gt;1000 m²</td></tr>
+        <tr><td><strong>Objętość obiektu</strong></td><td>do 350 m³</td><td>351-1500 m³</td><td>1501-5000 m³</td><td>&gt;5000 m³</td></tr>
+        <tr><td><strong>Las/trawy/uprawy</strong></td><td>do 1 ha</td><td>1-10 ha</td><td>10-100 ha</td><td>&gt;100 ha</td></tr>
+        <tr><td><strong>Prądy gaśnicze</strong></td><td>do 4</td><td>5-12</td><td>13-36</td><td>&gt;36</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Porównanie wielkości MZ</h2>
+    <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr><th class="mz-header">Kryterium</th><th class="mz-header">MZ/M</th><th class="mz-header">MZ/L</th><th class="mz-header">MZ/Ś</th><th class="mz-header">MZ/D</th><th class="mz-header">MZ/GIK</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Ofiary śmiertelne</strong></td><td>0</td><td>&le;1</td><td>2-3</td><td>&gt;3</td><td>—</td></tr>
+        <tr><td><strong>Osoby ZRM</strong></td><td>0</td><td>&le;3</td><td>4-10</td><td>&gt;10</td><td>—</td></tr>
+        <tr><td><strong>Zastępy</strong></td><td>—</td><td>&le;4</td><td>5-12</td><td>&gt;12</td><td>&ge;batalion</td></tr>
+        <tr><td><strong>Grupy specjalistyczne</strong></td><td>0</td><td>0</td><td>1</td><td>&gt;1</td><td>—</td></tr>
+        <tr><td><strong>Sprzęt specjalny</strong></td><td>Nie</td><td>Tak</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td><strong>Cechy</strong></td><td>Ograniczony zakres</td><td>Nagłe uszkodzenie</td><td>—</td><td>Zbiorowe zagrożenie</td><td>Klęska żywiołowa</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Rodzaje zdarzeń w SWD PSP</h2>
+    <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead><tr><th>Kod</th><th>Nazwa</th><th>Uwagi</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P</strong></td><td>Pożar</td><td>Niekontrolowane spalanie; obejmuje sadze w kominie, przypalenie potrawy</td></tr>
+        <tr><td><strong>MZ</strong></td><td>Miejscowe zagrożenie</td><td>Podkategorie a-n (wiatry, wody, chemiczne itd.)</td></tr>
+        <tr><td><strong>AF</strong></td><td>Alarm fałszywy</td><td>Złośliwy / w dobrej wierze / z instalacji wykrywania</td></tr>
+        <tr><td><strong>CW</strong></td><td>Ćwiczenia</td><td>—</td></tr>
+        <tr><td><strong>WG</strong></td><td>Wyjazd gospodarczy</td><td>Administracyjny</td></tr>
+        <tr><td><strong>PZR</strong></td><td>Zabezpieczenie rejonu</td><td>Tylko karta, bez IzZ</td></tr>
+        <tr><td><strong>WKG</strong></td><td>Zdarzenie KG PSP</td><td>Tylko SK KG PSP</td></tr>
+        <tr><td><strong>BL</strong></td><td>Błąd</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div id="flashcards" class="tab-content">
+  <div class="card">
+    <h2>Fiszki — nauka definicji</h2>
+    <p style="color:var(--text-light);margin-bottom:12px;">Kliknij fiszkę, aby ją odwrócić. Strzałki przełączają kolejne.</p>
+    <div class="flashcard-progress" id="fcProgress">1 / 35</div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+        <div class="flashcard-face flashcard-front" id="fcFront">KDR</div>
+        <div class="flashcard-face flashcard-back" id="fcBack">Kierujący Działaniem Ratowniczym</div>
+      </div>
+    </div>
+    <div class="flashcard-controls">
+      <button class="btn btn-outline" onclick="prevFlashcard()">&#8592; Poprzednia</button>
+      <button class="btn btn-secondary" onclick="shuffleFlashcards()">Tasuj</button>
+      <button class="btn btn-outline" onclick="nextFlashcard()">Następna &#8594;</button>
     </div>
   </div>
 </div>
@@ -2289,7 +2858,9 @@ footer {
     <div id="quizArea"></div>
     <div class="btn-group">
       <button class="btn btn-primary" id="quizStartBtn" onclick="startQuiz()">Rozpocznij quiz</button>
+      <button class="btn btn-secondary" id="examStartBtn" onclick="startExam()">Tryb egzaminacyjny (15 min)</button>
     </div>
+    <div id="quizStatsArea" style="margin-top:24px;"></div>
   </div>
 </div>
 
@@ -4036,6 +4607,607 @@ function doGlobalSearch() {
 
 // Request notification permission for timer
 try { if (Notification.permission === 'default') Notification.requestPermission(); } catch(e) {}
+
+// ============================================================
+//  IZRM DECISION TREE
+// ============================================================
+
+const izrmQuestions = [
+  {id:0, q:"Czy zdarzenie dotyczy osoby w stanie nagłego zagrożenia zdrowotnego (NZŻ)?", yes:1, no:'no-nzz'},
+  {id:1, q:"Czy zdarzenie jest we właściwościach Państwowego Ratownictwa Medycznego (PRM)?", yes:2, no:'no-prm'},
+  {id:2, q:"Czy jednostki ksrg zostały zadysponowane z powodu: braku ZRM, wydłużonego czasu dotarcia ZRM, prośby osób postronnych lub zauważenia przez ratowników?", yes:3, no:'no-wlasc'},
+  {id:3, q:"Czy ratownicy ksrg podjęli medyczne działania ratownicze (MDR) wobec poszkodowanego?", yes:4, no:'no-mdr'},
+  {id:4, q:"Czy dysponowanie wynikało z właściwości ksrg (wyszkolenie, sprzęt, charakter zdarzenia — np. wypadek drogowy, pożar)?", yes:'no-ksrg', no:'yes-izrm'},
+];
+
+const izrmResults = {
+  'yes-izrm': {type:'result-yes', text:'TAK — to jest IZRM. Zaznacz flagę IZRM, obiekt: ...— IZRM, wypełnij kartę kpp, opisz sprzęt w pkt. 17 i 33.6 (nr 36).'},
+  'no-nzz': {type:'result-no', text:'NIE — brak osoby w NZŻ. Zdarzenie nie kwalifikuje się jako IZRM.'},
+  'no-prm': {type:'result-no', text:'NIE — zdarzenie nie jest we właściwościach PRM. To są działania ksrg, nie IZRM.'},
+  'no-wlasc': {type:'result-no', text:'NIE — dysponowanie nie wynika z kryteriów IZRM (brak ZRM / wydłużony czas / prośba / zauważenie).'},
+  'no-mdr': {type:'result-no', text:'NIE — nie podjęto MDR. Bez czynności medycznych nie ma IZRM. Ale jeśli MDR były — zweryfikuj ponownie.'},
+  'no-ksrg': {type:'result-no', text:'NIE — dysponowanie wynikało z właściwości ksrg. Osoba w NZŻ podczas działań ksrg = kontynuacja działań, nie IZRM.'},
+};
+
+let izrmHistory = [];
+
+function renderIzrmNode(nodeId) {
+  const container = document.getElementById('izrmTree');
+  const pathEl = document.getElementById('izrmPath');
+
+  // Render path
+  pathEl.innerHTML = izrmHistory.map(h =>
+    `<span class="path-${h.answer}">${h.short} → ${h.answer === 'yes' ? 'TAK' : 'NIE'}</span>`
+  ).join('');
+
+  if (typeof nodeId === 'string') {
+    // Result node
+    const r = izrmResults[nodeId];
+    container.innerHTML = `<div class="decision-node ${r.type}">
+      <p>${r.type === 'result-yes' ? '&#10004; ' : '&#10008; '}${r.text}</p>
+    </div>`;
+    return;
+  }
+
+  const q = izrmQuestions.find(x => x.id === nodeId);
+  container.innerHTML = `<div class="decision-node question">
+    <p>${q.q}</p>
+    <div class="decision-btns">
+      <button class="btn btn-primary" onclick="answerIzrm(${q.id}, true)">TAK</button>
+      <button class="btn btn-outline" onclick="answerIzrm(${q.id}, false)">NIE</button>
+    </div>
+  </div>`;
+}
+
+function answerIzrm(qId, answer) {
+  const q = izrmQuestions.find(x => x.id === qId);
+  izrmHistory.push({short: `Pyt.${qId+1}`, answer: answer ? 'yes' : 'no'});
+  renderIzrmNode(answer ? q.yes : q.no);
+}
+
+function resetIzrmTree() {
+  izrmHistory = [];
+  renderIzrmNode(0);
+}
+
+renderIzrmNode(0);
+
+// ============================================================
+//  VALIDATOR
+// ============================================================
+
+function runValidator() {
+  const rodzaj = document.getElementById('valRodzaj').value;
+  const cechy = document.getElementById('valCechy').value;
+  const container = document.getElementById('validatorResult');
+
+  if (!rodzaj) { container.innerHTML = ''; return; }
+
+  const fields = [
+    {name:'1. Numer ewidencyjny', req:'always', note:'automatyczny'},
+    {name:'2. Współrzędne geograficzne', req:'always'},
+    {name:'3. Ugaszono bez JOP', req: rodzaj==='AF'?'no':'conditional', note:'jeśli dotyczy'},
+    {name:'4. Rodzaj + wielkość', req:'always'},
+    {name:'Podrodzaj', req:'always'},
+    {name:'Flagi', req:'conditional', note:'wg katalogu'},
+    {name:'5. Miejsce zdarzenia (TERYT)', req:'always'},
+    {name:'Numer drogi / pikietaż', req:'conditional', note:'jeśli na drodze'},
+    {name:'6. Obiekt + słowa-klucze', req:'always'},
+    {name:'7. Właściciel/użytkownik', req: rodzaj==='AF'?'optional':'always'},
+    {name:'8. Kod obiektu', req: rodzaj==='AF'?'optional':'always'},
+    {name:'9. Kod właściciela', req: rodzaj==='AF'?'optional':'always'},
+    {name:'10. Czasy (zauważenie, lokalizacja, zakończenie)', req:'always'},
+    {name:'11. Czasy dojazdu, przybycia, powrotu', req:'always'},
+    {name:'12. Zauważenie przez', req:'always'},
+    {name:'13. Sposób zgłoszenia', req:'always'},
+    {name:'14. SIS (pojazdy, osoby)', req:'always'},
+    {name:'15. Sprzęt', req: rodzaj==='AF'?'optional':'always'},
+    {name:'16. Rodzaj działań ratowniczych', req: rodzaj==='AF'?'no':'always'},
+    {name:'17. Sprzęt w działaniach', req: rodzaj==='AF'?'no': cechy==='izrm'?'always':'conditional'},
+    {name:'18. Miejsce działań', req: rodzaj==='AF'?'no':'always'},
+    {name:'19. Użyte środki / zaopatrzenie wodne', req: rodzaj==='P'?'always':'conditional'},
+    {name:'20. Nr ONZ substancji', req: cechy==='chem'?'always':'conditional', note:'NIE przy wyciekach eksploatacyjnych, NIE CO w pożarach'},
+    {name:'21. Wybuchy', req:'conditional'},
+    {name:'22. MDR', req: cechy==='izrm'?'always': rodzaj==='AF'?'no':'conditional'},
+    {name:'23. Wypadki z ludźmi', req: cechy==='ofiary'?'always':'conditional'},
+    {name:'24. Dane personalne poszkodowanych', req: cechy==='ofiary'?'always':'conditional'},
+    {name:'25. Wielkość zdarzenia (m²/ha)', req: rodzaj==='AF'?'no':'always'},
+    {name:'26. Wielkość obiektu', req: rodzaj==='AF'?'no':'optional'},
+    {name:'27. Straty (tys. zł)', req: rodzaj==='AF'?'no':'always'},
+    {name:'28. Uratowane mienie', req: rodzaj==='AF'?'no':'optional'},
+    {name:'29. Przyczyna + kod', req: rodzaj==='AF'?'no':'always'},
+    {name:'30. Dane o budynku', req: rodzaj==='AF'?'no':'conditional'},
+    {name:'31. Kierujący działaniami', req:'always'},
+    {name:'32. Koordynator MDR', req: cechy==='izrm'?'always':'conditional'},
+    {name:'33.1-33.6. Dane opisowe', req: rodzaj==='AF'?'optional':'always'},
+    {name:'34-35. JOP spoza gminy/powiatu', req:'conditional'},
+    {name:'36. Sporządził / Wprowadził', req:'always'},
+  ];
+
+  const labels = {always:'Wymagane', conditional:'Warunkowe', optional:'Opcjonalne', no:'Nie dotyczy'};
+  const icons = {always:'&#9679;', conditional:'&#9675;', optional:'&#9711;', no:'&#8212;'};
+  const classes = {always:'required', conditional:'conditional', optional:'optional', no:'optional'};
+
+  container.innerHTML = `<div style="margin:12px 0;">
+    <span class="tag tag-fire">Wymagane</span>
+    <span class="tag tag-af">Warunkowe</span>
+    <span class="tag" style="background:#f0f0f0;color:#777;">Opcjonalne / nie dotyczy</span>
+  </div>` + fields.filter(f => f.req !== 'no').map(f =>
+    `<div class="validator-field ${classes[f.req]}">
+      <span class="validator-icon">${icons[f.req]}</span>
+      <span><strong>${f.name}</strong>${f.note ? ` <em style="color:var(--text-light);font-size:0.8rem;">— ${f.note}</em>` : ''}</span>
+    </div>`
+  ).join('');
+}
+
+// ============================================================
+//  GENERATOR — card description + time calculator
+// ============================================================
+
+function generateDescription() {
+  const g = id => (document.getElementById(id) || {}).value || '';
+  let lines = [];
+  lines.push('1. ' + [g('gen-co'), g('gen-gdzie')].filter(Boolean).join(', '));
+  if (g('gen-zglaszajacy')) lines.push('   Zgłosił: ' + g('gen-zglaszajacy'));
+  if (g('gen-dodatkowe')) lines.push('   Informacje dodatkowe: ' + g('gen-dodatkowe'));
+  lines.push('');
+  lines.push('2. Po dojeździe na miejsce:');
+  if (g('gen-sytuacja')) lines.push('   ' + g('gen-sytuacja'));
+  if (g('gen-dzialania')) lines.push('   Działania: ' + g('gen-dzialania'));
+  if (g('gen-zagrozenia')) lines.push('   Zagrożenia/utrudnienia: ' + g('gen-zagrozenia'));
+  if (g('gen-sluzby')) lines.push('   Inne służby: ' + g('gen-sluzby'));
+  document.getElementById('genText').textContent = lines.join('\n');
+  document.getElementById('genResult').style.display = 'block';
+}
+
+function copyGenerated() {
+  const text = document.getElementById('genText').textContent;
+  if (!text) { generateDescription(); }
+  navigator.clipboard.writeText(document.getElementById('genText').textContent).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = 'Skopiowano!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }).catch(() => alert('Zaznacz tekst i skopiuj ręcznie.'));
+}
+
+function calcTimes() {
+  const get = id => { const v = document.getElementById(id).value; return v ? new Date(v) : null; };
+  const zgl = get('tc-zgloszenie');
+  const przyb = get('tc-przybycie');
+  const lok = get('tc-lokalizacja');
+  const kon = get('tc-koniec');
+  const powr = get('tc-powrot');
+  const km = parseFloat(document.getElementById('tc-km').value) || 0;
+
+  if (!zgl) { document.getElementById('timesResult').innerHTML = 'Wprowadź czas zgłoszenia.'; return; }
+
+  const fmt = ms => {
+    if (ms < 0) return '—';
+    const totalMin = Math.floor(ms / 60000);
+    const h = Math.floor(totalMin / 60);
+    const m = totalMin % 60;
+    return h > 0 ? `${h} godz. ${m} min` : `${m} min`;
+  };
+
+  let html = '<strong>Obliczone czasy:</strong><br>';
+  if (przyb) html += `&bull; Czas dojazdu: <strong>${fmt(przyb - zgl)}</strong>${km ? ` (${km} km)` : ''}<br>`;
+  if (lok) html += `&bull; Czas do lokalizacji P/MZ: <strong>${fmt(lok - zgl)}</strong><br>`;
+  if (kon) html += `&bull; Czas działań: <strong>${fmt(kon - zgl)}</strong><br>`;
+  if (kon && przyb) html += `&bull; Czas interwencji (od przybycia do zakończenia): <strong>${fmt(kon - przyb)}</strong><br>`;
+  if (powr) html += `&bull; Czas od zgłoszenia do powrotu: <strong>${fmt(powr - zgl)}</strong><br>`;
+  if (lok && przyb) html += `&bull; Czas od przybycia do lokalizacji: <strong>${fmt(lok - przyb)}</strong><br>`;
+  if (km && przyb && zgl) {
+    const minDojazdu = (przyb - zgl) / 60000;
+    if (minDojazdu > 0) html += `&bull; Średnia prędkość dojazdu: <strong>${Math.round(km / (minDojazdu / 60))} km/h</strong><br>`;
+  }
+
+  const el = document.getElementById('timesResult');
+  el.className = 'calc-result active';
+  el.innerHTML = html;
+}
+
+// ============================================================
+//  FLASHCARDS
+// ============================================================
+
+let fcCards = [...glossaryData];
+let fcIndex = 0;
+
+function renderFlashcard() {
+  if (fcCards.length === 0) return;
+  const [term, def] = fcCards[fcIndex];
+  document.getElementById('fcFront').textContent = term;
+  document.getElementById('fcBack').textContent = def;
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('fcProgress').textContent = `${fcIndex + 1} / ${fcCards.length}`;
+}
+
+function flipFlashcard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextFlashcard() {
+  fcIndex = (fcIndex + 1) % fcCards.length;
+  renderFlashcard();
+}
+
+function prevFlashcard() {
+  fcIndex = (fcIndex - 1 + fcCards.length) % fcCards.length;
+  renderFlashcard();
+}
+
+function shuffleFlashcards() {
+  fcCards.sort(() => Math.random() - 0.5);
+  fcIndex = 0;
+  renderFlashcard();
+}
+
+renderFlashcard();
+
+// Keyboard navigation for flashcards
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('flashcards').classList.contains('active')) {
+    if (e.key === 'ArrowRight') nextFlashcard();
+    if (e.key === 'ArrowLeft') prevFlashcard();
+    if (e.key === ' ' && !e.target.matches('input,textarea,select,button')) { e.preventDefault(); flipFlashcard(); }
+  }
+});
+
+// ============================================================
+//  NOTEPAD HISTORY
+// ============================================================
+
+function getNotepadHistoryData() {
+  try { return JSON.parse(localStorage.getItem('swd_notepad_history') || '[]'); } catch(e) { return []; }
+}
+
+function saveNotepadToHistory() {
+  const data = {};
+  notepadFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value) data[id] = el.value;
+  });
+  if (Object.keys(data).length === 0) { alert('Notatnik jest pusty.'); return; }
+
+  const history = getNotepadHistoryData();
+  const label = (data['np-rodzaj'] || '?') + ' — ' + (data['np-adres'] || data['np-lokalizacja'] || new Date().toLocaleDateString('pl-PL'));
+  history.push({label, data, date: new Date().toISOString()});
+  try { localStorage.setItem('swd_notepad_history', JSON.stringify(history)); } catch(e) {}
+  renderNotepadHistory();
+}
+
+function loadNotepadFromHistory(index) {
+  const history = getNotepadHistoryData();
+  if (!history[index]) return;
+  notepadFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = history[index].data[id] || '';
+  });
+  saveNotepad();
+  renderNotepadHistory();
+}
+
+function deleteNotepadHistory(index, e) {
+  e.stopPropagation();
+  if (!confirm('Usunąć ten wpis z historii?')) return;
+  const history = getNotepadHistoryData();
+  history.splice(index, 1);
+  try { localStorage.setItem('swd_notepad_history', JSON.stringify(history)); } catch(e2) {}
+  renderNotepadHistory();
+}
+
+function renderNotepadHistory() {
+  const container = document.getElementById('notepadHistoryList');
+  if (!container) return;
+  const history = getNotepadHistoryData();
+  if (history.length === 0) {
+    container.innerHTML = '<span style="color:var(--text-light);font-size:0.85rem;">Brak zapisanych notatników.</span>';
+    return;
+  }
+  container.innerHTML = history.map((h, i) =>
+    `<div class="notepad-history-item" onclick="loadNotepadFromHistory(${i})">
+      <span>${h.label}</span>
+      <span class="delete-note" onclick="deleteNotepadHistory(${i}, event)">&times;</span>
+    </div>`
+  ).join('');
+}
+
+renderNotepadHistory();
+
+function printNotepad() {
+  exportNotepad();
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('print-target'));
+  document.getElementById('notepad').classList.add('print-target');
+  setTimeout(() => window.print(), 200);
+}
+
+// ============================================================
+//  EXPORT / IMPORT ALL DATA
+// ============================================================
+
+function exportAllData() {
+  const data = {
+    version: '2025.3',
+    exported: new Date().toISOString(),
+    notepad: {},
+    notepadHistory: getNotepadHistoryData(),
+    checklist: {},
+    quizStats: [],
+  };
+  try { data.notepad = JSON.parse(localStorage.getItem('swd_notepad') || '{}'); } catch(e) {}
+  try { data.checklist = JSON.parse(localStorage.getItem('swd_checklist') || '{}'); } catch(e) {}
+  try { data.quizStats = JSON.parse(localStorage.getItem('swd_quiz_stats') || '[]'); } catch(e) {}
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `swd-psp-dane-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importAllData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.notepad) localStorage.setItem('swd_notepad', JSON.stringify(data.notepad));
+      if (data.notepadHistory) localStorage.setItem('swd_notepad_history', JSON.stringify(data.notepadHistory));
+      if (data.checklist) localStorage.setItem('swd_checklist', JSON.stringify(data.checklist));
+      if (data.quizStats) localStorage.setItem('swd_quiz_stats', JSON.stringify(data.quizStats));
+      loadNotepad();
+      buildChecklist();
+      renderNotepadHistory();
+      renderQuizStats();
+      alert('Dane zaimportowane pomyślnie!');
+    } catch(err) {
+      alert('Błąd importu: nieprawidłowy plik JSON.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ============================================================
+//  QUIZ STATS + EXAM MODE
+// ============================================================
+
+function saveQuizResult(score, total, cat, mode) {
+  let stats = [];
+  try { stats = JSON.parse(localStorage.getItem('swd_quiz_stats') || '[]'); } catch(e) {}
+  stats.push({date: new Date().toISOString(), score, total, pct: Math.round(score/total*100), cat, mode});
+  if (stats.length > 50) stats = stats.slice(-50);
+  try { localStorage.setItem('swd_quiz_stats', JSON.stringify(stats)); } catch(e) {}
+  renderQuizStats();
+}
+
+function renderQuizStats() {
+  const container = document.getElementById('quizStatsArea');
+  if (!container) return;
+  let stats = [];
+  try { stats = JSON.parse(localStorage.getItem('swd_quiz_stats') || '[]'); } catch(e) {}
+  if (stats.length === 0) {
+    container.innerHTML = '<div class="info-box">Brak historii quizów. Rozwiąż quiz, aby zobaczyć statystyki.</div>';
+    return;
+  }
+
+  const last10 = stats.slice(-10);
+  const avg = Math.round(stats.reduce((s,x) => s + x.pct, 0) / stats.length);
+  const best = Math.max(...stats.map(x => x.pct));
+  const maxH = 100;
+
+  let html = `<h3>Statystyki quizów</h3>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card" style="cursor:default;"><div class="stat-number">${stats.length}</div><div class="stat-label">Rozwiązanych</div></div>
+      <div class="stat-card" style="cursor:default;"><div class="stat-number">${avg}%</div><div class="stat-label">Średnia</div></div>
+      <div class="stat-card" style="cursor:default;"><div class="stat-number">${best}%</div><div class="stat-label">Najlepszy</div></div>
+    </div>
+    <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:4px;">Ostatnie ${last10.length} wyników:</p>
+    <div class="stats-chart">`;
+
+  last10.forEach(s => {
+    const cls = s.pct >= 80 ? 'good' : s.pct >= 50 ? 'medium' : 'bad';
+    html += `<div class="stats-bar ${cls}" style="height:${Math.max(s.pct, 5)}%;" data-label="${s.pct}% (${s.score}/${s.total})"></div>`;
+  });
+
+  html += `</div>
+    <div class="btn-group"><button class="btn btn-sm btn-outline" onclick="if(confirm('Wyczyścić historię?')){localStorage.removeItem('swd_quiz_stats');renderQuizStats();}">Wyczyść historię</button></div>`;
+  container.innerHTML = html;
+}
+
+renderQuizStats();
+
+// Override quiz result to save stats
+const _origShowQuizResult = showQuizResult;
+showQuizResult = function() {
+  _origShowQuizResult();
+  const cat = document.getElementById('quizCategory').value;
+  saveQuizResult(quizScore, quizQuestions.length, cat, 'quiz');
+};
+
+// Exam mode
+let examInterval = null;
+let examEndTime = null;
+
+function startExam() {
+  const count = parseInt(document.getElementById('quizCount').value);
+  const cat = document.getElementById('quizCategory').value;
+  let pool = cat === 'all' ? [...quizBank] : quizBank.filter(q => q.cat === cat);
+  if (pool.length === 0) pool = [...quizBank];
+  pool.sort(() => Math.random() - 0.5);
+  const n = count === 0 ? pool.length : Math.min(count, pool.length);
+  quizQuestions = pool.slice(0, n);
+  quizScore = 0;
+  quizAnswered = 0;
+  quizActive = true;
+  document.getElementById('quizStartBtn').style.display = 'none';
+  document.getElementById('examStartBtn').style.display = 'none';
+
+  examEndTime = Date.now() + 15 * 60 * 1000;
+
+  const area = document.getElementById('quizArea');
+  area.innerHTML = `<div class="exam-timer" id="examTimer">15:00</div>` +
+    quizQuestions.map((q, qi) =>
+      `<div class="quiz-question-card" id="quiz-q-${qi}">
+        <h4>Pytanie ${qi + 1}/${n} <span class="tag tag-af">EGZAMIN</span></h4>
+        <p style="margin-bottom:12px;font-weight:500;">${q.q}</p>
+        ${q.answers.map((a, ai) =>
+          `<button class="quiz-answer" onclick="quizAnswer(${qi}, ${ai})">${a}</button>`
+        ).join('')}
+      </div>`
+    ).join('');
+
+  examInterval = setInterval(function() {
+    const rem = Math.max(0, Math.floor((examEndTime - Date.now()) / 1000));
+    const m = Math.floor(rem / 60);
+    const s = rem % 60;
+    const el = document.getElementById('examTimer');
+    if (el) el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if (rem <= 0) {
+      clearInterval(examInterval);
+      examInterval = null;
+      // Force end
+      quizActive = false;
+      document.querySelectorAll('.quiz-answer:not(.disabled)').forEach(btn => btn.classList.add('disabled'));
+      finishExam();
+    }
+  }, 500);
+}
+
+function finishExam() {
+  if (examInterval) { clearInterval(examInterval); examInterval = null; }
+  const pct = Math.round((quizScore / quizQuestions.length) * 100);
+  const pass = pct >= 70;
+  const msg = pass ? 'ZDANY' : 'NIEZDANY';
+  const area = document.getElementById('quizArea');
+  area.innerHTML += `<div class="quiz-score" style="background:${pass ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)'};">
+    <div class="score-number">${quizScore}/${quizQuestions.length}</div>
+    <div class="score-label">${pct}% — ${msg} (próg: 70%)</div>
+  </div>`;
+  document.getElementById('quizStartBtn').style.display = '';
+  document.getElementById('examStartBtn').style.display = '';
+  saveQuizResult(quizScore, quizQuestions.length, document.getElementById('quizCategory').value, 'exam');
+}
+
+// Override showQuizResult for exam to also clean up timer
+const _origShowQuizResult2 = showQuizResult;
+showQuizResult = function() {
+  if (examInterval) {
+    finishExam();
+  } else {
+    _origShowQuizResult2();
+  }
+};
+
+// ============================================================
+//  CROSS-REFERENCE (tooltip on abbreviations)
+// ============================================================
+
+const xrefTerms = {};
+glossaryData.forEach(([term, def]) => { xrefTerms[term.toUpperCase()] = {term, def}; });
+
+let xrefTooltip = null;
+
+function setupCrossRef() {
+  document.addEventListener('mouseover', function(e) {
+    const el = e.target.closest('.xref-link');
+    if (!el) return;
+    const key = el.dataset.xref;
+    const entry = xrefTerms[key];
+    if (!entry) return;
+
+    if (!xrefTooltip) {
+      xrefTooltip = document.createElement('div');
+      xrefTooltip.className = 'xref-tooltip';
+      document.body.appendChild(xrefTooltip);
+    }
+
+    xrefTooltip.innerHTML = `<div class="xref-term">${entry.term}</div>${entry.def}`;
+    xrefTooltip.style.display = 'block';
+    const rect = el.getBoundingClientRect();
+    xrefTooltip.style.left = Math.min(rect.left, window.innerWidth - 370) + 'px';
+    xrefTooltip.style.top = (rect.bottom + 8) + 'px';
+  });
+
+  document.addEventListener('mouseout', function(e) {
+    if (e.target.closest('.xref-link') && xrefTooltip) {
+      xrefTooltip.style.display = 'none';
+    }
+  });
+}
+
+// Apply cross-references to FAQ answers and scenario details
+function applyCrossRefs(html) {
+  const terms = Object.keys(xrefTerms).filter(t => t.length >= 3).sort((a,b) => b.length - a.length);
+  terms.forEach(term => {
+    const regex = new RegExp(`\\b(${term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})\\b`, 'g');
+    html = html.replace(regex, `<span class="xref-link" data-xref="${term}">$1</span>`);
+  });
+  return html;
+}
+
+setupCrossRef();
+
+// ============================================================
+//  PWA — Service Worker + Manifest
+// ============================================================
+
+// Inline manifest via data URI
+const manifest = {
+  name: "SWD PSP Asystent",
+  short_name: "SWD PSP",
+  description: "Asystent Ewidencji Zdarzeń w SWD PSP",
+  start_url: "app.html",
+  display: "standalone",
+  background_color: "#f5f6fa",
+  theme_color: "#c0392b",
+  icons: [{
+    src: "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="#c0392b"/><text x="50" y="68" font-family="Arial" font-size="40" font-weight="bold" fill="white" text-anchor="middle">SWD</text></svg>'),
+    sizes: "any",
+    type: "image/svg+xml"
+  }]
+};
+
+try {
+  const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const manifestUrl = URL.createObjectURL(manifestBlob);
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = manifestUrl;
+  document.head.appendChild(link);
+
+  // Theme color meta
+  const meta = document.createElement('meta');
+  meta.name = 'theme-color';
+  meta.content = '#c0392b';
+  document.head.appendChild(meta);
+} catch(e) {}
+
+// Register service worker for offline (inline)
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'swd-psp-v3';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './app.html'])));
+      self.skipWaiting();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('./app.html'))));
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+    });
+  `;
+  try {
+    const swBlob = new Blob([swCode], {type:'application/javascript'});
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl, {scope: './'}).catch(() => {});
+  } catch(e) {}
+}
 
 </script>
 </body>
