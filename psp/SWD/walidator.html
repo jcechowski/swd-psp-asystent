@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWD PSP - Walidator Zdarzen</title>
+<style>
+:root {
+  --psp-red: #c0392b;
+  --psp-red-dark: #962d22;
+  --psp-gold: #f39c12;
+  --psp-blue: #2c3e50;
+  --psp-blue-light: #34495e;
+  --bg: #f5f6fa;
+  --card: #ffffff;
+  --text: #2c3e50;
+  --text-light: #7f8c8d;
+  --border: #dcdde1;
+  --success: #27ae60;
+  --info: #2980b9;
+  --warning: #e67e22;
+  --danger: #e74c3c;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+header {
+  background: linear-gradient(135deg, var(--psp-red) 0%, var(--psp-red-dark) 100%);
+  color: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+}
+
+.header-top h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.header-top .subtitle {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.header-top .badge {
+  background: var(--psp-gold);
+  color: var(--psp-blue);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+nav {
+  display: flex;
+  gap: 0;
+  background: rgba(0,0,0,0.15);
+  overflow-x: auto;
+}
+
+nav button {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+nav button:hover { color: white; background: rgba(255,255,255,0.1); }
+nav button.active {
+  color: white;
+  border-bottom-color: var(--psp-gold);
+  background: rgba(255,255,255,0.1);
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  font-size: 1.1rem;
+  color: var(--psp-red);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.card h3 {
+  font-size: 0.95rem;
+  color: var(--psp-blue-light);
+  margin: 16px 0 8px;
+}
+
+/* FORM */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.form-group label .hint {
+  font-weight: 400;
+  text-transform: none;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+input, select, textarea {
+  padding: 8px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  background: white;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--psp-red);
+  box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+}
+
+textarea { resize: vertical; min-height: 60px; }
+
+.form-group.full-width { grid-column: 1 / -1; }
+
+/* CHECKBOXES */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+
+.checkbox-grid label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.checkbox-grid label:hover { background: #f8f9fa; }
+.checkbox-grid input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--psp-red); }
+
+/* RESULTS PANEL */
+#results-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  transition: transform 0.3s;
+}
+
+#results-panel.collapsed { transform: translateY(calc(100% - 48px)); }
+
+.results-header {
+  background: var(--psp-blue);
+  color: white;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.results-header h3 { font-size: 0.95rem; }
+
+.results-counters {
+  display: flex;
+  gap: 12px;
+}
+
+.counter-badge {
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.counter-badge.errors { background: var(--danger); }
+.counter-badge.warnings { background: var(--warning); }
+.counter-badge.infos { background: var(--info); }
+.counter-badge.ok { background: var(--success); }
+
+.results-body {
+  background: white;
+  max-height: 300px;
+  overflow-y: auto;
+  border-top: 1px solid var(--border);
+  padding: 0;
+}
+
+.result-item {
+  padding: 8px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.result-item:last-child { border-bottom: none; }
+
+.result-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  margin-top: 2px;
+}
+
+.result-icon.error { background: var(--danger); }
+.result-icon.warning { background: var(--warning); }
+.result-icon.info { background: var(--info); }
+
+.result-text { flex: 1; }
+.result-text .rule-id { font-weight: 700; color: var(--text-light); font-size: 0.75rem; margin-right: 6px; }
+.result-text .field-ref { font-size: 0.75rem; color: var(--info); margin-top: 2px; display: block; }
+
+/* ZASTEPY TABLE */
+.zastep-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+.zastep-table th {
+  background: #f8f9fa;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-light);
+  border-bottom: 2px solid var(--border);
+}
+
+.zastep-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.zastep-table input, .zastep-table select {
+  width: 100%;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary { background: var(--psp-red); color: white; }
+.btn-primary:hover { background: var(--psp-red-dark); }
+.btn-secondary { background: #ecf0f1; color: var(--text); }
+.btn-secondary:hover { background: #d5dbdb; }
+.btn-success { background: var(--success); color: white; }
+.btn-success:hover { background: #219a52; }
+.btn-sm { padding: 4px 10px; font-size: 0.78rem; }
+
+.btn-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+/* SCENARIO BUTTONS */
+.scenario-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.scenario-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.scenario-card:hover {
+  border-color: var(--psp-red);
+  box-shadow: 0 4px 16px rgba(192,57,43,0.15);
+}
+
+.scenario-card h4 { color: var(--psp-red); margin-bottom: 6px; }
+.scenario-card p { font-size: 0.85rem; color: var(--text-light); }
+.scenario-card .tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-top: 8px;
+}
+.tag.green { background: #d5f5e3; color: #1e8449; }
+.tag.red { background: #fadbd8; color: #c0392b; }
+.tag.blue { background: #d6eaf8; color: #2471a3; }
+
+/* STICKY VALIDATE BTN */
+.validate-bar {
+  position: sticky;
+  bottom: 52px;
+  z-index: 50;
+  text-align: center;
+  padding: 10px;
+}
+
+.validate-bar .btn { font-size: 1rem; padding: 12px 40px; box-shadow: 0 4px 16px rgba(192,57,43,0.3); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .header-top { flex-direction: column; gap: 8px; text-align: center; }
+  .results-body { max-height: 200px; }
+}
+
+/* Spacer for fixed results panel */
+.bottom-spacer { height: 360px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div>
+      <h1>SWD PSP - Walidator Zdarzen</h1>
+      <span class="subtitle">Silnik regul ewidencjonowania zdarzen | Zasady od 1.01.2025</span>
+    </div>
+    <span class="badge">RULES ENGINE v1.0</span>
+  </div>
+  <nav id="main-nav">
+    <button class="active" data-tab="tab-start">Start</button>
+    <button data-tab="tab-kz">Karta Zdarzenia</button>
+    <button data-tab="tab-izz">Informacja ze Zdarzenia</button>
+    <button data-tab="tab-wyniki">Wyniki walidacji</button>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- ==================== TAB: START ==================== -->
+<div id="tab-start" class="tab-content active">
+  <div class="card">
+    <h2>Walidator zdarzen SWD PSP</h2>
+    <p style="margin-bottom:16px">Silnik regul sprawdza spojnosc danych pomiedzy Karta Zdarzenia (KZ) a Informacja ze Zdarzenia (IzZ). Wypelnij formularze lub zaladuj gotowy scenariusz testowy.</p>
+
+    <h3>Scenariusze testowe</h3>
+    <div class="scenario-cards" style="margin-top:12px">
+      <div class="scenario-card" onclick="loadScenario('green')">
+        <h4>Pozar mieszkania</h4>
+        <p>Poprawne dane: pozar maly, budynek wielorodzinny, 1 osoba z oparzeniami, 2 zastepy (JRG + OSP ksrg).</p>
+        <span class="tag green">GREEN PATH</span>
+      </div>
+      <div class="scenario-card" onclick="loadScenario('red')">
+        <h4>Zdarzenie z bledami</h4>
+        <p>Liczne bledy logiczne: MZ w KZ vs P w IzZ, czas cofniety, ofiary bez danych, CO w pozarze, MDR niespojne.</p>
+        <span class="tag red">RED PATH</span>
+      </div>
+      <div class="scenario-card" onclick="loadScenario('wypadek')">
+        <h4>Wypadek drogowy</h4>
+        <p>Czesciowo wypelniona KZ - wypadek na DK. System generuje podpowiedzi "w locie" z checklista.</p>
+        <span class="tag blue">PODPOWIEDZI</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Jak korzystac</h2>
+    <ol style="padding-left:20px; font-size:0.9rem;">
+      <li style="margin-bottom:6px"><strong>Wypelnij Karte Zdarzenia</strong> - zakladka "Karta Zdarzenia" (rodzaj, podrodzaj, flagi, zastepy, czasy)</li>
+      <li style="margin-bottom:6px"><strong>Wypelnij IzZ</strong> - zakladka "Informacja ze Zdarzenia" (wielkosc, kody obiektow, czasy, MDR, wypadki)</li>
+      <li style="margin-bottom:6px"><strong>Kliknij "Waliduj"</strong> - silnik sprawdzi 40+ regul i wyswietli bledy, ostrzezenia, podpowiedzi</li>
+      <li>Panel wynikow na dole ekranu pokazuje podsumowanie w czasie rzeczywistym</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ==================== TAB: KARTA ZDARZENIA ==================== -->
+<div id="tab-kz" class="tab-content">
+  <div class="card">
+    <h2>Karta Zdarzenia (KZ) - Dane podstawowe</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Rodzaj zdarzenia</label>
+        <select id="kz-rodzaj">
+          <option value="">-- wybierz --</option>
+          <option value="P">P - Pozar</option>
+          <option value="MZ">MZ - Miejscowe zagrozenie</option>
+          <option value="AF">AF - Falszywy alarm</option>
+          <option value="CW">CW - Cwiczenia</option>
+          <option value="WG">WG - Wyjazd gospodarczy</option>
+          <option value="PZR">PZR - Zabezpieczenie rejonu</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Podrodzaj zdarzenia</label>
+        <select id="kz-podrodzaj">
+          <option value="">-- wybierz rodzaj najpierw --</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Jednostka prowadzaca</label>
+        <input type="text" id="kz-jednostka" placeholder="np. JRG-1 Warszawa">
+      </div>
+      <div class="form-group">
+        <label>Teren dzialania</label>
+        <input type="text" id="kz-teren" placeholder="np. JRG-1 Warszawa">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Lokalizacja</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Wojewodztwo</label><input type="text" id="kz-woj" placeholder="np. mazowieckie"></div>
+      <div class="form-group"><label>Powiat</label><input type="text" id="kz-powiat" placeholder="np. Warszawa"></div>
+      <div class="form-group"><label>Gmina</label><input type="text" id="kz-gmina" placeholder="np. Mokotow"></div>
+      <div class="form-group"><label>Miejscowosc</label><input type="text" id="kz-miejscowosc" placeholder="np. Warszawa"></div>
+      <div class="form-group"><label>Ulica</label><input type="text" id="kz-ulica" placeholder="np. Pulawska"></div>
+      <div class="form-group"><label>Nr budynku/lokalu</label><input type="text" id="kz-nrbudynku" placeholder="np. 152/38"></div>
+      <div class="form-group"><label>Nr drogi</label><input type="text" id="kz-nrdrogi" placeholder="np. A2, DK8, DW101"></div>
+      <div class="form-group"><label>Pikietaz (km)</label><input type="text" id="kz-pikietaz" placeholder="np. 163"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Czasy</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Czas przyjecia zgloszenia</label>
+        <input type="datetime-local" id="kz-czas-przyjecia" step="60">
+      </div>
+      <div class="form-group">
+        <label>Sposob powiadomienia</label>
+        <select id="kz-sposob">
+          <option value="">-- wybierz --</option>
+          <option value="telefon">Telefon</option>
+          <option value="radio">Radio</option>
+          <option value="monitoring">Monitoring</option>
+          <option value="inny">Inny (CPR)</option>
+        </select>
+      </div>
+      <div class="form-group full-width">
+        <label>Dane zglaszajacego</label>
+        <input type="text" id="kz-zglaszajacy" placeholder="Imie, nazwisko, telefon">
+      </div>
+      <div class="form-group full-width">
+        <label>Opis zdarzenia</label>
+        <textarea id="kz-opis" rows="3" placeholder="1. Opis ze zgloszenia... 2. Opis po dojedzie..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Powiadomione sluzby</h2>
+    <div class="checkbox-grid" id="kz-powiadomienia">
+      <label><input type="checkbox" value="Policja"> Policja</label>
+      <label><input type="checkbox" value="PRM"> PRM (Pogotowie)</label>
+      <label><input type="checkbox" value="Prokuratura"> Prokuratura</label>
+      <label><input type="checkbox" value="Pogotowie gazowe"> Pogotowie gazowe</label>
+      <label><input type="checkbox" value="Pogotowie energetyczne"> Pogotowie energetyczne</label>
+      <label><input type="checkbox" value="Straz miejska"> Straz miejska</label>
+      <label><input type="checkbox" value="GIOS/WIOS"> GIOS / WIOS</label>
+      <label><input type="checkbox" value="Nadzor budowlany"> Nadzor budowlany</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Flagi zdarzenia <span style="font-weight:400;font-size:0.8rem;color:var(--text-light)">(pole wielokrotnego wyboru)</span></h2>
+    <div class="checkbox-grid" id="kz-flagi">
+      <label><input type="checkbox" value="do_wiadomosci_kw"> Do wiadomosci KW</label>
+      <label><input type="checkbox" value="do_wiadomosci_kg"> Do wiadomosci KG</label>
+      <label><input type="checkbox" value="ewakuacja_osob"> Ewakuacja osob</label>
+      <label><input type="checkbox" value="gios_wios"> GIOS / WIOS</label>
+      <label><input type="checkbox" value="izrm"> IZRM</label>
+      <label><input type="checkbox" value="lpr_169"> LPR_169.000</label>
+      <label><input type="checkbox" value="lpr_kswl"> LPR_KSWL</label>
+      <label><input type="checkbox" value="nieprzejezdnosc_dk_s_a"> Nieprzejezdnosc DK/S/A</label>
+      <label><input type="checkbox" value="obiekt_gospodarczy"> Obiekt gospodarczy</label>
+      <label><input type="checkbox" value="obiekt_mieszkalny"> Obiekt mieszkalny</label>
+      <label><input type="checkbox" value="obiekty_sakralne_zabytki"> Obiekty sakralne / Zabytki</label>
+      <label><input type="checkbox" value="ofiara_smiertelna"> Ofiara smiertelna</label>
+      <label><input type="checkbox" value="osoba_ranna"> Osoba ranna</label>
+      <label><input type="checkbox" value="placowka_dyplomatyczna"> Placowka dyplomatyczna</label>
+      <label><input type="checkbox" value="plama_oleju"> Plama oleju</label>
+      <label><input type="checkbox" value="pomoc_innym_sluzbom"> Pomoc innym sluzbom</label>
+      <label><input type="checkbox" value="pomoc_policji"> Pomoc Policji</label>
+      <label><input type="checkbox" value="pomoc_prm"> Pomoc PRM</label>
+      <label><input type="checkbox" value="pompowanie_wody"> Pompowanie wody</label>
+      <label><input type="checkbox" value="pozar_lasu"> Pozar lasu</label>
+      <label><input type="checkbox" value="pozar_pol"> Pozar pol</label>
+      <label><input type="checkbox" value="pozar_trawy"> Pozar trawy</label>
+      <label><input type="checkbox" value="przybory_wod"> Przybory wod</label>
+      <label><input type="checkbox" value="silne_wiatry"> Silne wiatry</label>
+      <label><input type="checkbox" value="substancja_biologiczna"> Substancja biologiczna</label>
+      <label><input type="checkbox" value="substancja_chemiczna"> Substancja chemiczna</label>
+      <label><input type="checkbox" value="substancja_radiologiczna"> Substancja radiologiczna</label>
+      <label><input type="checkbox" value="tlenek_wegla"> Tlenek wegla</label>
+      <label><input type="checkbox" value="udzial_dronow"> Udzial dronow</label>
+      <label><input type="checkbox" value="udzial_smiglowcow"> Udzial smiglowcow/samolotow</label>
+      <label><input type="checkbox" value="usuwanie_owadow"> Usuwanie owadow</label>
+      <label><input type="checkbox" value="uszkodzony_dach"> Uszkodzony dach</label>
+      <label><input type="checkbox" value="wiatolomy"> Wiatolomy</label>
+      <label><input type="checkbox" value="wypadek_ratownika"> Wypadek ratownika</label>
+      <label><input type="checkbox" value="wypadek_pojazdu_psp"> Wypadek pojazdu PSP</label>
+      <label><input type="checkbox" value="wysypiska_skladowiska"> Wysypiska/skladowiska</label>
+      <label><input type="checkbox" value="zabezp_imprezy_masowej"> Zabezp. imprezy masowej</label>
+      <label><input type="checkbox" value="zabezp_ladowania"> Zabezpieczenie ladowania</label>
+      <label><input type="checkbox" value="zdarzenia_dlugotrwale"> Zdarzenia dlugotrwale</label>
+      <label><input type="checkbox" value="zdr_zzr"> ZDR / ZZR</label>
+      <label><input type="checkbox" value="vip_sop"> VIP / SOP</label>
+      <label><input type="checkbox" value="prezydencja_2025"> PREZYDENCJA 2025</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Dysponowane zastepy</h2>
+    <table class="zastep-table" id="zastepy-table">
+      <thead>
+        <tr>
+          <th>Jednostka</th>
+          <th>Pojazd</th>
+          <th>Obsada</th>
+          <th>Czas zadysponowania</th>
+          <th>Czas dojazdu</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="zastepy-body"></tbody>
+    </table>
+    <div class="btn-row">
+      <button class="btn btn-secondary btn-sm" onclick="addZastep()">+ Dodaj zastep</button>
+    </div>
+  </div>
+
+  <div class="validate-bar">
+    <button class="btn btn-primary" onclick="runValidation()">Waliduj zdarzenie</button>
+  </div>
+</div>
+
+<!-- ==================== TAB: IzZ ==================== -->
+<div id="tab-izz" class="tab-content">
+  <div class="card">
+    <h2>pkt 1-4: Identyfikacja i rodzaj zdarzenia</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Numer ewidencyjny</label><input type="text" id="izz-numer" placeholder="np. 14640010001"></div>
+      <div class="form-group">
+        <label>Rodzaj zdarzenia</label>
+        <select id="izz-rodzaj">
+          <option value="">-- wybierz --</option>
+          <option value="P">P - Pozar</option>
+          <option value="MZ">MZ - Miejscowe zagrozenie</option>
+          <option value="AF">AF - Falszywy alarm</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Wielkosc pozaru</label>
+        <select id="izz-wielkosc-p">
+          <option value="">-- nie dotyczy --</option>
+          <option value="P/M">P/M - Maly</option>
+          <option value="P/S">P/S - Sredni</option>
+          <option value="P/D">P/D - Duzy</option>
+          <option value="P/BD">P/BD - Bardzo duzy</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Wielkosc MZ</label>
+        <select id="izz-wielkosc-mz">
+          <option value="">-- nie dotyczy --</option>
+          <option value="MZ/M">MZ/M - Male</option>
+          <option value="MZ/L">MZ/L - Lokalne</option>
+          <option value="MZ/S">MZ/S - Srednie</option>
+          <option value="MZ/D">MZ/D - Duze</option>
+          <option value="MZ/GIK">MZ/GIK - Gigantyczne</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Klasyfikacja AF</label>
+        <select id="izz-af">
+          <option value="">-- nie dotyczy --</option>
+          <option value="zlosliwy">Zlosliwy</option>
+          <option value="w_dobrej_wierze">W dobrej wierze</option>
+          <option value="z_instalacji">Z instalacji wykrywania</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Dzialania ratownicze</label>
+        <select id="izz-dr">
+          <option value="tak">Tak</option>
+          <option value="nie">Nie</option>
+        </select>
+      </div>
+    </div>
+
+    <h3>Rodzaj MZ <span style="font-weight:400;font-size:0.8rem">(pkt 4.2 - wielokrotny wybor)</span></h3>
+    <div class="checkbox-grid" id="izz-rodzaje-mz" style="margin-top:8px">
+      <label><input type="checkbox" value="silne wiatry"> Silne wiatry</label>
+      <label><input type="checkbox" value="przybory wod"> Przybory wod</label>
+      <label><input type="checkbox" value="opady sniegu"> Opady sniegu</label>
+      <label><input type="checkbox" value="opady deszczu"> Opady deszczu</label>
+      <label><input type="checkbox" value="infrastruktury komunalnej"> Infrastruktura komunalna</label>
+      <label><input type="checkbox" value="chemiczne"> Chemiczne</label>
+      <label><input type="checkbox" value="ekologiczne"> Ekologiczne</label>
+      <label><input type="checkbox" value="radiologiczne"> Radiologiczne</label>
+      <label><input type="checkbox" value="budowlane"> Budowlane</label>
+      <label><input type="checkbox" value="medyczne"> Medyczne</label>
+      <label><input type="checkbox" value="w transporcie drogowym"> W transporcie drogowym</label>
+      <label><input type="checkbox" value="w transporcie kolejowym"> W transporcie kolejowym</label>
+      <label><input type="checkbox" value="w transporcie lotniczym"> W transporcie lotniczym</label>
+      <label><input type="checkbox" value="na obszarach wodnych"> Na obszarach wodnych</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 5-9: Miejsce, obiekt, wlasciciel</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Gmina</label><input type="text" id="izz-gmina" placeholder="np. Mokotow"></div>
+      <div class="form-group"><label>Obiekt <span class="hint">(pkt 6)</span></label><input type="text" id="izz-obiekt" placeholder="np. Budynek mieszkalny wielorodzinny"></div>
+      <div class="form-group">
+        <label>Slowa-klucze</label>
+        <input type="text" id="izz-klucze" placeholder="np. IZRM, POJAZDY ELEKTRYCZNE, SADZE W KOMINIE">
+      </div>
+      <div class="form-group"><label>Wlasciciel <span class="hint">(pkt 7)</span></label><input type="text" id="izz-wlasciciel" placeholder="Imie/nazwa wlasciciela"></div>
+      <div class="form-group"><label>Kod obiektu glowny <span class="hint">(pkt 8)</span></label><input type="number" id="izz-kod-obiektu" min="0" max="819" placeholder="np. 209"></div>
+      <div class="form-group"><label>Kod obiektu dodatkowy</label><input type="number" id="izz-kod-obiektu-dod" min="0" max="819" placeholder="np. 817"></div>
+      <div class="form-group"><label>Kod wlasciciela <span class="hint">(pkt 9)</span></label><input type="number" id="izz-kod-wlasc" min="0" max="900" placeholder="np. 610"></div>
+      <div class="form-group">
+        <label>Ugaszono bez JOP <span class="hint">(pkt 3)</span></label>
+        <select id="izz-bez-jop"><option value="nie">Nie</option><option value="tak">Tak</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 10-11: Czasy</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Czas zauwazenia</label><input type="datetime-local" id="izz-czas-zauw" step="60"></div>
+      <div class="form-group"><label>Czas zgloszenia do SK</label><input type="datetime-local" id="izz-czas-zgl" step="60"></div>
+      <div class="form-group"><label>Przybycie pierwszego</label><input type="datetime-local" id="izz-czas-przyb" step="60"></div>
+      <div class="form-group"><label>Lokalizacja</label><input type="datetime-local" id="izz-czas-lok" step="60"></div>
+      <div class="form-group"><label>Lokalizacja medyczna</label><input type="datetime-local" id="izz-czas-lok-med" step="60"></div>
+      <div class="form-group"><label>Zakonczenie dzialan</label><input type="datetime-local" id="izz-czas-zak" step="60"></div>
+      <div class="form-group"><label>Powrot ostatniego</label><input type="datetime-local" id="izz-czas-powr" step="60"></div>
+      <div class="form-group"><label>Dojazd (km)</label><input type="number" id="izz-dojazd-km" step="0.1" min="0" placeholder="np. 3.2"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 14: Sily i srodki</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>JRG - pojazdy</label><input type="number" id="izz-jrg-poj" min="0" value="0"></div>
+      <div class="form-group"><label>JRG - osoby</label><input type="number" id="izz-jrg-os" min="0" value="0"></div>
+      <div class="form-group"><label>OSP ksrg - pojazdy</label><input type="number" id="izz-osp-ksrg-poj" min="0" value="0"></div>
+      <div class="form-group"><label>OSP ksrg - osoby</label><input type="number" id="izz-osp-ksrg-os" min="0" value="0"></div>
+      <div class="form-group"><label>OSP inne - pojazdy</label><input type="number" id="izz-osp-inne-poj" min="0" value="0"></div>
+      <div class="form-group"><label>OSP inne - osoby</label><input type="number" id="izz-osp-inne-os" min="0" value="0"></div>
+      <div class="form-group"><label>Inne JOP - pojazdy</label><input type="number" id="izz-inne-poj" min="0" value="0"></div>
+      <div class="form-group"><label>Inne JOP - osoby</label><input type="number" id="izz-inne-os" min="0" value="0"></div>
+      <div class="form-group"><label>PRM - pojazdy</label><input type="number" id="izz-prm-poj" min="0" value="0"></div>
+      <div class="form-group"><label>Policja - pojazdy</label><input type="number" id="izz-policja-poj" min="0" value="0"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 16-17: Dzialania ratownicze i sprzet</h2>
+    <h3>Rodzaj prowadzonych dzialan (pkt 16)</h3>
+    <div class="checkbox-grid" id="izz-dzialania" style="margin-top:8px">
+      <label><input type="checkbox" value="1"> 1. Srodki gasnicze - natarcie</label>
+      <label><input type="checkbox" value="2"> 2. Srodki gasnicze - obrona</label>
+      <label><input type="checkbox" value="3"> 3. Schladzanie obiektow</label>
+      <label><input type="checkbox" value="4"> 4. Dostep do osob</label>
+      <label><input type="checkbox" value="5"> 5. Dostep do zwierzat</label>
+      <label><input type="checkbox" value="6"> 6. Ewakuacja ludzi</label>
+      <label><input type="checkbox" value="7"> 7. Ewakuacja zwierzat</label>
+      <label><input type="checkbox" value="8"> 8. Ewakuacja mienia</label>
+      <label><input type="checkbox" value="9"> 9. Transport poszkodow.</label>
+      <label><input type="checkbox" value="10"> 10. Zabezp. miejsca</label>
+      <label><input type="checkbox" value="11"> 11. Zabezp. imprezy</label>
+      <label><input type="checkbox" value="12"> 12. Rozcinanie konstrukcji</label>
+      <label><input type="checkbox" value="13"> 13. Prace rozbiorkowe</label>
+      <label><input type="checkbox" value="14"> 14. Podnoszenie elementow</label>
+      <label><input type="checkbox" value="15"> 15. Przemieszczanie elem.</label>
+      <label><input type="checkbox" value="16"> 16. Odgruzowywanie</label>
+      <label><input type="checkbox" value="17"> 17. Wykopy, podkopy</label>
+      <label><input type="checkbox" value="18"> 18. Otwieranie pomieszczen</label>
+      <label><input type="checkbox" value="19"> 19. Oddymianie</label>
+      <label><input type="checkbox" value="20"> 20. Rozpozn. subst. chem.</label>
+      <label><input type="checkbox" value="21"> 21. Okreslanie stref zagr.</label>
+      <label><input type="checkbox" value="22"> 22. Neutralizacja subst.</label>
+      <label><input type="checkbox" value="23"> 23. Uszczelnianie</label>
+      <label><input type="checkbox" value="24"> 24. Zbieranie subst. chem.</label>
+      <label><input type="checkbox" value="25"> 25. Ogranicz. rozlewow</label>
+      <label><input type="checkbox" value="26"> 26. Pompowanie subst.</label>
+      <label><input type="checkbox" value="27"> 27. Wypompowanie wody</label>
+      <label><input type="checkbox" value="28"> 28. Pasy ochronne</label>
+      <label><input type="checkbox" value="29"> 29. Wycinanie drzew</label>
+      <label><input type="checkbox" value="30"> 30. Przetlaczanie wody</label>
+      <label><input type="checkbox" value="31"> 31. Dowozenie wody (pozary)</label>
+      <label><input type="checkbox" value="32"> 32. Dostarczanie wody (ludn.)</label>
+      <label><input type="checkbox" value="33"> 33. Pomoc materialna</label>
+      <label><input type="checkbox" value="34"> 34. Drogi oddechowe</label>
+      <label><input type="checkbox" value="35"> 35. Masaz serca</label>
+      <label><input type="checkbox" value="36"> 36. Tamowanie krwotokow</label>
+      <label><input type="checkbox" value="37"> 37. Tlenoterapia</label>
+      <label><input type="checkbox" value="38"> 38. Unieruchom. zlaman</label>
+      <label><input type="checkbox" value="39"> 39. Schladzanie oparzen</label>
+      <label><input type="checkbox" value="40"> 40. Zabezp. przed utrata ciepla</label>
+      <label><input type="checkbox" value="41"> 41. Postep. przeciwwstrzas.</label>
+      <label><input type="checkbox" value="42"> 42. Wsparcie psychiczne</label>
+      <label><input type="checkbox" value="43"> 43. Przemieszcz. owadow/zwierzat</label>
+      <label><input type="checkbox" value="44"> 44. Poszukiwanie osob</label>
+    </div>
+
+    <h3 style="margin-top:20px">Sprzet uzyty w dzialaniach (pkt 17)</h3>
+    <div class="checkbox-grid" id="izz-sprzet" style="margin-top:8px">
+      <label><input type="checkbox" value="1"> 1. Podreczny sprzet gasniczy</label>
+      <label><input type="checkbox" value="2"> 2. Podreczny sprzet burzacy</label>
+      <label><input type="checkbox" value="3"> 3. Pompy szlamowe</label>
+      <label><input type="checkbox" value="4"> 4. Pompy pozarnicze</label>
+      <label><input type="checkbox" value="5"> 5. Pompy do innych mediow</label>
+      <label><input type="checkbox" value="6"> 6. Separatory olejowe</label>
+      <label><input type="checkbox" value="7"> 7. Skimery</label>
+      <label><input type="checkbox" value="8"> 8. Zapory, tamy</label>
+      <label><input type="checkbox" value="9"> 9. Ubrania gazoszczelne</label>
+      <label><input type="checkbox" value="10"> 10. Ubrania ochronne chem.</label>
+      <label><input type="checkbox" value="11"> 11. Ubrania zaroodporne</label>
+      <label><input type="checkbox" value="12"> 12. Urzadzenia pomiarowe</label>
+      <label><input type="checkbox" value="13"> 13. Aparaty ochr. drog oddech.</label>
+      <label><input type="checkbox" value="14"> 14. Narzedzia hydrauliczne</label>
+      <label><input type="checkbox" value="15"> 15. Narzedzia pneumatyczne</label>
+      <label><input type="checkbox" value="16"> 16. Ratowniczy ludzi</label>
+      <label><input type="checkbox" value="17"> 17. Drabiny przenosne</label>
+      <label><input type="checkbox" value="18"> 18. Drabiny mech./podnosniki</label>
+      <label><input type="checkbox" value="19"> 19. Pily do drewna</label>
+      <label><input type="checkbox" value="20"> 20. Pily do betonu/stali</label>
+      <label><input type="checkbox" value="21"> 21. Ciecie plomieniem</label>
+      <label><input type="checkbox" value="22"> 22. Agregaty pradotworcze</label>
+      <label><input type="checkbox" value="23"> 23. Oswietleniowy</label>
+      <label><input type="checkbox" value="24"> 24. Do nurkowania</label>
+      <label><input type="checkbox" value="25"> 25. Rat. wysokosciowego</label>
+      <label><input type="checkbox" value="26"> 26. Zestaw opatrunkowy</label>
+      <label><input type="checkbox" value="27"> 27. Przyw. drozn. drog oddech.</label>
+      <label><input type="checkbox" value="28"> 28. Nosze, unieruchamiajacy</label>
+      <label><input type="checkbox" value="29"> 29. Tlenoterapia 100%</label>
+      <label><input type="checkbox" value="30"> 30. Worek samorozprezalny</label>
+      <label><input type="checkbox" value="31"> 31. Respirator</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 19-21: Srodki gasnicze, ONZ, wybuchy</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Prady wody (jednoczesnie max)</label><input type="number" id="izz-prady-wody" min="0" value="0"></div>
+      <div class="form-group"><label>Prady piany</label><input type="number" id="izz-prady-piany" min="0" value="0"></div>
+      <div class="form-group"><label>Zuzyto wody (m3)</label><input type="number" id="izz-woda" min="0" step="0.1" value="0"></div>
+      <div class="form-group"><label>Nr ONZ <span class="hint">(rozdziel przecinkiem)</span></label><input type="text" id="izz-onz" placeholder="np. 1016, 1203"></div>
+      <div class="form-group"><label>Wybuchy</label><select id="izz-wybuchy"><option value="nie">Nie</option><option value="tak">Tak</option></select></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 22: MDR (Medyczne dzialania ratownicze)</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Na terenie akcji</label><input type="number" id="izz-mdr-teren" min="0" value="0"></div>
+      <div class="form-group"><label>W tym przez strazakow</label><input type="number" id="izz-mdr-straz" min="0" value="0"></div>
+      <div class="form-group"><label>Przekazano JOZ</label><input type="number" id="izz-mdr-joz" min="0" value="0"></div>
+      <div class="form-group"><label>Ewakuowano ze strefy</label><input type="number" id="izz-mdr-ewak" min="0" value="0"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 23-24: Wypadki z ludzmi</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Ratownicy - ranni</label><input type="number" id="izz-rat-ranni" min="0" value="0"></div>
+      <div class="form-group"><label>Ratownicy - smiertelni</label><input type="number" id="izz-rat-smiert" min="0" value="0"></div>
+      <div class="form-group"><label>W tym strazacy - ranni</label><input type="number" id="izz-straz-ranni" min="0" value="0"></div>
+      <div class="form-group"><label>W tym strazacy - smiertelni</label><input type="number" id="izz-straz-smiert" min="0" value="0"></div>
+      <div class="form-group"><label>Inne osoby - ranne</label><input type="number" id="izz-inne-ranne" min="0" value="0"></div>
+      <div class="form-group"><label>Inne osoby - smiertelne</label><input type="number" id="izz-inne-smiert" min="0" value="0"></div>
+      <div class="form-group"><label>W tym dzieci - ranne</label><input type="number" id="izz-dzieci-ranne" min="0" value="0"></div>
+      <div class="form-group"><label>W tym dzieci - smiertelne</label><input type="number" id="izz-dzieci-smiert" min="0" value="0"></div>
+    </div>
+    <div class="form-grid" style="margin-top:12px">
+      <div class="form-group full-width">
+        <label>Dane poszkodowanych <span class="hint">(pkt 24 - czy uzupelniono)</span></label>
+        <select id="izz-dane-poszk"><option value="nie">Nie uzupelniono</option><option value="tak">Tak, uzupelniono</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 25-29: Wielkosci, straty, przyczyna</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Powierzchnia zdarzenia (m2)</label><input type="number" id="izz-pow-m2" min="0" step="0.01" value="0"></div>
+      <div class="form-group"><label>Powierzchnia (ha)</label><input type="number" id="izz-pow-ha" min="0" step="0.01" value="0"></div>
+      <div class="form-group"><label>Obiekt - dlugosc (m)</label><input type="number" id="izz-ob-dl" min="0" step="0.1" value="0"></div>
+      <div class="form-group"><label>Obiekt - szerokosc (m)</label><input type="number" id="izz-ob-sz" min="0" step="0.1" value="0"></div>
+      <div class="form-group"><label>Obiekt - wysokosc (m)</label><input type="number" id="izz-ob-wy" min="0" step="0.1" value="0"></div>
+      <div class="form-group"><label>Straty (tys. zl)</label><input type="number" id="izz-straty" min="0" step="0.1" value="0"></div>
+      <div class="form-group"><label>Uratowane (tys. zl)</label><input type="number" id="izz-uratowane" min="0" step="0.1" value="0"></div>
+      <div class="form-group"><label>Kod przyczyny <span class="hint">(pkt 29)</span></label><input type="number" id="izz-przyczyna-kod" min="0" max="38" value="0"></div>
+      <div class="form-group full-width"><label>Opis przyczyny</label><input type="text" id="izz-przyczyna-opis" placeholder="np. Nieostrozonosc przy gotowaniu"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>pkt 31-33: KDR, dane opisowe</h2>
+    <div class="form-grid">
+      <div class="form-group full-width"><label>KDR <span class="hint">(pkt 31 - stopien, nazwisko, imie, funkcja)</span></label><input type="text" id="izz-kdr" placeholder="np. kpt. Kowalski Adam, d-ca zmiany JRG-4"></div>
+      <div class="form-group full-width"><label>KMDR <span class="hint">(pkt 32 - koordynator MDR)</span></label><input type="text" id="izz-kmdr" placeholder="np. ratownik medyczny Jan Nowak"></div>
+      <div class="form-group full-width"><label>Opis przebiegu dzialan <span class="hint">(pkt 33.1)</span></label><textarea id="izz-opis" rows="4" placeholder="Szczegolowy opis podjętych dzialan ratowniczych..."></textarea></div>
+      <div class="form-group full-width"><label>Warunki atmosferyczne - cisnienie (hPa) <span class="hint">(wymagane przy MZ chemiczne)</span></label><input type="number" id="izz-cisnienie" min="900" max="1100" step="1" placeholder="np. 1013"></div>
+    </div>
+  </div>
+
+  <div class="validate-bar">
+    <button class="btn btn-primary" onclick="runValidation()">Waliduj zdarzenie</button>
+  </div>
+</div>
+
+<!-- ==================== TAB: WYNIKI ==================== -->
+<div id="tab-wyniki" class="tab-content">
+  <div class="card" id="wyniki-full">
+    <h2>Wyniki walidacji</h2>
+    <p style="color:var(--text-light)">Kliknij "Waliduj zdarzenie" aby uruchomic silnik regul.</p>
+  </div>
+</div>
+
+<div class="bottom-spacer"></div>
+</div>
+
+<!-- ==================== RESULTS PANEL (FIXED BOTTOM) ==================== -->
+<div id="results-panel" class="collapsed">
+  <div class="results-header" onclick="toggleResults()">
+    <h3 id="results-title">Panel wynikow</h3>
+    <div class="results-counters" id="results-counters"></div>
+  </div>
+  <div class="results-body" id="results-body"></div>
+</div>
+
+<script>
+// ============================================================================
+// NAWIGACJA
+// ============================================================================
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+function switchTab(tabId) {
+  document.querySelectorAll('nav button').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.tab-content').forEach(t => {
+    t.classList.toggle('active', t.id === tabId);
+  });
+}
+
+// ============================================================================
+// PODRODZAJ - dynamiczny
+// ============================================================================
+const PODRODZAJE_P = [
+  "P - Inne pozary", "P - Instytucje, obiekty uzytecznosci publicznej",
+  "P - Obiekty gospodarcze i inne rolnicze", "P - Obiekty magazynowe, place skladowe",
+  "P - Obiekty mieszkalne", "P - Obiekty produkcyjne, instalacje technologiczne",
+  "P - Smietniki, wysypiska", "P - Srodki transportu drogowego",
+  "P - Srodki transportu kolejowego", "P - Srodki transportu lotniczego",
+  "P - Srodki transportu wodnego", "P - Trawy, torfowiska, lasy, pola, stogi"
+];
+
+const PODRODZAJE_MZ = [
+  "MZ - Atmosferyczne", "MZ - Budowlane", "MZ - Chemiczne", "MZ - Drogowe",
+  "MZ - Inne MZ", "MZ - Kolejowe", "MZ - Kolizja", "MZ - Lotnicze",
+  "MZ - Palenie ognisk", "MZ - Podejrzenie podlozenia ladunku",
+  "MZ - Pomoc innym sluzbom", "MZ - Pomoc Policji", "MZ - Pomoc PRM",
+  "MZ - Pomoc w otwarciu mieszkania", "MZ - Poszukiwanie osob zaginionych",
+  "MZ - Proba samobojcza", "MZ - Sanitarno-epidemiologiczne",
+  "MZ - Topienie sie", "MZ - Wodne", "MZ - Wypadek",
+  "MZ - Zabezpieczenie ladunku", "MZ - Zwierzeta"
+];
+
+document.getElementById('kz-rodzaj').addEventListener('change', function() {
+  const sel = document.getElementById('kz-podrodzaj');
+  sel.innerHTML = '<option value="">-- wybierz --</option>';
+  let list = [];
+  if (this.value === 'P') list = PODRODZAJE_P;
+  else if (this.value === 'MZ') list = PODRODZAJE_MZ;
+  list.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p; opt.textContent = p;
+    sel.appendChild(opt);
+  });
+});
+
+// ============================================================================
+// ZASTEPY
+// ============================================================================
+let zastepId = 0;
+
+function addZastep(data) {
+  zastepId++;
+  const tr = document.createElement('tr');
+  tr.id = 'zastep-' + zastepId;
+  const d = data || {};
+  tr.innerHTML = `
+    <td><input type="text" class="z-jednostka" value="${d.jednostka||''}" placeholder="np. JRG-1"></td>
+    <td><input type="text" class="z-pojazd" value="${d.pojazd||''}" placeholder="np. GBA 2.5/16"></td>
+    <td><input type="number" class="z-obsada" value="${d.obsada||0}" min="0" max="12" style="width:60px"></td>
+    <td><input type="datetime-local" class="z-czas-dysp" step="60" value="${d.czas_dysp||''}"></td>
+    <td><input type="datetime-local" class="z-czas-doj" step="60" value="${d.czas_doj||''}"></td>
+    <td><button class="btn btn-secondary btn-sm" onclick="this.closest('tr').remove()">X</button></td>
+  `;
+  document.getElementById('zastepy-body').appendChild(tr);
+}
+
+// ============================================================================
+// ZBIERANIE DANYCH Z FORMULARZY
+// ============================================================================
+function getCheckedValues(containerId) {
+  return [...document.querySelectorAll('#' + containerId + ' input[type=checkbox]:checked')]
+    .map(cb => cb.value);
+}
+
+function getCheckedValuesNum(containerId) {
+  return [...document.querySelectorAll('#' + containerId + ' input[type=checkbox]:checked')]
+    .map(cb => parseInt(cb.value));
+}
+
+function dtVal(id) {
+  const v = document.getElementById(id).value;
+  return v ? new Date(v) : null;
+}
+
+function numVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function strVal(id) { return document.getElementById(id).value.trim(); }
+
+function collectKZ() {
+  const zastepy = [];
+  document.querySelectorAll('#zastepy-body tr').forEach(tr => {
+    zastepy.push({
+      jednostka: tr.querySelector('.z-jednostka').value,
+      pojazd: tr.querySelector('.z-pojazd').value,
+      obsada: parseInt(tr.querySelector('.z-obsada').value) || 0,
+      czas_zadysponowania: tr.querySelector('.z-czas-dysp').value ? new Date(tr.querySelector('.z-czas-dysp').value) : null,
+      czas_dojazdu: tr.querySelector('.z-czas-doj').value ? new Date(tr.querySelector('.z-czas-doj').value) : null,
+    });
+  });
+
+  return {
+    rodzaj_zdarzenia: strVal('kz-rodzaj'),
+    podrodzaj: strVal('kz-podrodzaj'),
+    flagi: new Set(getCheckedValues('kz-flagi')),
+    jednostka_prowadzaca: strVal('kz-jednostka'),
+    gmina: strVal('kz-gmina'),
+    wojewodztwo: strVal('kz-woj'),
+    powiat: strVal('kz-powiat'),
+    czas_przyjecia_zgloszenia: dtVal('kz-czas-przyjecia'),
+    powiadomione_sluzby: getCheckedValues('kz-powiadomienia'),
+    dysponowane_zastepy: zastepy,
+  };
+}
+
+function collectIzZ() {
+  const onzRaw = strVal('izz-onz');
+  const onz = onzRaw ? onzRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const klucze = strVal('izz-klucze');
+  const slowaKlucze = klucze ? klucze.split(',').map(s => s.trim().toUpperCase()).filter(Boolean) : [];
+
+  return {
+    rodzaj_zdarzenia: strVal('izz-rodzaj'),
+    wielkosc_pozaru: strVal('izz-wielkosc-p'),
+    wielkosc_mz: strVal('izz-wielkosc-mz'),
+    klasyfikacja_af: strVal('izz-af'),
+    dzialania_ratownicze: strVal('izz-dr') === 'tak',
+    rodzaje_mz: getCheckedValues('izz-rodzaje-mz'),
+    gmina: strVal('izz-gmina'),
+    obiekt: strVal('izz-obiekt'),
+    slowa_klucze: slowaKlucze,
+    kod_obiektu_glowny: numVal('izz-kod-obiektu'),
+    czas_zauwazenia: dtVal('izz-czas-zauw'),
+    czas_zgloszenia: dtVal('izz-czas-zgl'),
+    czas_przybycia_pierwszego: dtVal('izz-czas-przyb'),
+    czas_lokalizacji: dtVal('izz-czas-lok'),
+    czas_lokalizacji_medycznej: dtVal('izz-czas-lok-med'),
+    czas_zakonczenia: dtVal('izz-czas-zak'),
+    sis_jrg: { pojazdy: numVal('izz-jrg-poj'), osoby: numVal('izz-jrg-os') },
+    sis_osp_ksrg: { pojazdy: numVal('izz-osp-ksrg-poj'), osoby: numVal('izz-osp-ksrg-os') },
+    sis_osp_inne: { pojazdy: numVal('izz-osp-inne-poj'), osoby: numVal('izz-osp-inne-os') },
+    sis_inne_jop: { pojazdy: numVal('izz-inne-poj'), osoby: numVal('izz-inne-os') },
+    sis_prm_poj: numVal('izz-prm-poj'),
+    rodzaj_dzialan: getCheckedValuesNum('izz-dzialania'),
+    sprzet_ratowniczy: getCheckedValuesNum('izz-sprzet'),
+    nr_onz: onz,
+    mdr: {
+      na_terenie_akcji: numVal('izz-mdr-teren'),
+      w_tym_przez_strazakow: numVal('izz-mdr-straz'),
+      przekazano_joz: numVal('izz-mdr-joz'),
+      ewakuowano_ze_strefy: numVal('izz-mdr-ewak'),
+    },
+    wypadki: {
+      ratownicy_ranni: numVal('izz-rat-ranni'),
+      ratownicy_smiertelni: numVal('izz-rat-smiert'),
+      w_tym_strazacy_ranni: numVal('izz-straz-ranni'),
+      w_tym_strazacy_smiertelni: numVal('izz-straz-smiert'),
+      inne_osoby_ranne: numVal('izz-inne-ranne'),
+      inne_osoby_smiertelne: numVal('izz-inne-smiert'),
+      w_tym_dzieci_ranne: numVal('izz-dzieci-ranne'),
+      w_tym_dzieci_smiertelne: numVal('izz-dzieci-smiert'),
+    },
+    dane_poszkodowanych: strVal('izz-dane-poszk') === 'tak',
+    powierzchnia_m2: numVal('izz-pow-m2'),
+    powierzchnia_ha: numVal('izz-pow-ha'),
+    przyczyna_kod: numVal('izz-przyczyna-kod'),
+    opis_dzialan: strVal('izz-opis'),
+    kmdr: strVal('izz-kmdr'),
+    cisnienie_hpa: numVal('izz-cisnienie'),
+  };
+}
+
+// ============================================================================
+// SILNIK REGUL (RULES ENGINE) - JavaScript
+// ============================================================================
+const ERROR = 'error', WARNING = 'warning', INFO = 'info';
+
+function createResult(id, severity, message, src, tgt) {
+  return { id, severity, message, src: src||'', tgt: tgt||'' };
+}
+
+// ---------- WALIDACJA KZ ----------
+function validateKZ(kz) {
+  const r = [];
+
+  if (!kz.rodzaj_zdarzenia)
+    r.push(createResult('KZ-001', ERROR, 'Rodzaj zdarzenia jest wymagany w Karcie Zdarzenia.', 'KZ.rodzaj_zdarzenia'));
+
+  if (!kz.gmina)
+    r.push(createResult('KZ-002', ERROR, 'Miejsce zdarzenia (gmina) jest wymagane do zapisania KZ.', 'KZ.gmina'));
+
+  if (!kz.jednostka_prowadzaca)
+    r.push(createResult('KZ-003', ERROR, 'Jednostka prowadzaca jest wymagana.', 'KZ.jednostka_prowadzaca'));
+
+  if ((kz.rodzaj_zdarzenia === 'P' || kz.rodzaj_zdarzenia === 'MZ') && !kz.podrodzaj)
+    r.push(createResult('KZ-004', WARNING, 'Podrodzaj zdarzenia powinien byc zawsze wybrany (Tabela 1).', 'KZ.podrodzaj'));
+
+  if (kz.podrodzaj === 'MZ - Pomoc Policji' && !kz.flagi.has('pomoc_policji'))
+    r.push(createResult('KZ-005', WARNING, "Podrodzaj 'MZ - Pomoc Policji' wymaga zaznaczenia flagi 'Pomoc Policji'.", 'KZ.podrodzaj', 'KZ.flagi'));
+
+  if (kz.podrodzaj === 'MZ - Pomoc PRM' && !kz.flagi.has('pomoc_prm'))
+    r.push(createResult('KZ-005b', WARNING, "Podrodzaj 'MZ - Pomoc PRM' wymaga zaznaczenia flagi 'Pomoc PRM'.", 'KZ.podrodzaj', 'KZ.flagi'));
+
+  if (kz.flagi.has('izrm') && kz.podrodzaj === 'MZ - Pomoc PRM')
+    r.push(createResult('KZ-006', WARNING, 'Flaga IZRM + podrodzaj Pomoc PRM - zabezpieczenie ladowania LPR NIE jest IZRM.', 'KZ.flagi'));
+
+  if (kz.rodzaj_zdarzenia === 'PZR') {
+    for (const z of kz.dysponowane_zastepy) {
+      if (z.obsada === 0) {
+        r.push(createResult('KZ-007', ERROR, 'Przed zadysponowaniem na PZR musi byc wprowadzona prawidlowa obsada pojazdu.', 'KZ.dysponowane_zastepy'));
+        break;
+      }
+    }
+  }
+
+  if (!kz.czas_przyjecia_zgloszenia)
+    r.push(createResult('KZ-008', ERROR, 'Czas przyjecia zgloszenia jest wymagany.', 'KZ.czas_przyjecia_zgloszenia'));
+
+  const atmoFlagi = ['przybory_wod','silne_wiatry','uszkodzony_dach','wiatolomy'];
+  const hasAtmo = atmoFlagi.some(f => kz.flagi.has(f));
+  if (hasAtmo && kz.podrodzaj !== 'MZ - Atmosferyczne' && kz.rodzaj_zdarzenia === 'MZ') {
+    r.push(createResult('KZ-009', WARNING, 'Flagi atmosferyczne sugeruja podrodzaj MZ - Atmosferyczne.', 'KZ.flagi', 'KZ.podrodzaj'));
+  }
+
+  // Powiadomienie KW/KG (pkt I.2)
+  const powody = [];
+  if (kz.flagi.has('ofiara_smiertelna')) powody.push('ofiara smiertelna');
+  if (kz.flagi.has('wypadek_ratownika')) powody.push('wypadek ratownika');
+  if (kz.flagi.has('substancja_chemiczna') || kz.flagi.has('substancja_radiologiczna')) powody.push('substancja niebezpieczna CBRNe');
+  if (kz.flagi.has('placowka_dyplomatyczna')) powody.push('placowka dyplomatyczna');
+  if (kz.flagi.has('zdr_zzr')) powody.push('ZDR/ZZR');
+  if (kz.flagi.has('udzial_smiglowcow')) powody.push('udzial smiglowcow');
+  if (kz.flagi.has('ewakuacja_osob')) powody.push('ewakuacja osob');
+  if (kz.dysponowane_zastepy.length >= 12) powody.push(kz.dysponowane_zastepy.length + ' zastepow (>=12)');
+
+  if (powody.length > 0) {
+    if (!kz.flagi.has('do_wiadomosci_kw'))
+      r.push(createResult('KZ-010', ERROR, 'Zdarzenie wymaga powiadomienia SK KW PSP (przeslanki: ' + powody.join(', ') + '). Brak flagi "Do wiadomosci KW".', 'KZ.flagi'));
+    if (!kz.flagi.has('do_wiadomosci_kg'))
+      r.push(createResult('KZ-010b', WARNING, 'Rozwaz oznaczenie "Do wiadomosci KG" (przeslanki: ' + powody.join(', ') + ').', 'KZ.flagi'));
+  }
+
+  return r;
+}
+
+// ---------- WALIDACJA IzZ ----------
+function validateIzZ(izz) {
+  const r = [];
+
+  if (!izz.rodzaj_zdarzenia) {
+    r.push(createResult('IZZ-001', ERROR, 'Rodzaj zdarzenia jest wymagany w IzZ.', 'IzZ.rodzaj_zdarzenia'));
+    return r;
+  }
+
+  if (izz.rodzaj_zdarzenia === 'P' && !izz.wielkosc_pozaru)
+    r.push(createResult('IZZ-002', ERROR, 'Wielkosc pozaru jest wymagana (P/M, P/S, P/D, P/BD).', 'IzZ.wielkosc_pozaru'));
+
+  if (izz.rodzaj_zdarzenia === 'MZ' && !izz.wielkosc_mz)
+    r.push(createResult('IZZ-002b', ERROR, 'Wielkosc MZ jest wymagana (MZ/M .. MZ/GIK).', 'IzZ.wielkosc_mz'));
+
+  if (izz.rodzaj_zdarzenia === 'MZ' && izz.rodzaje_mz.length === 0)
+    r.push(createResult('IZZ-003', ERROR, 'Rodzaj MZ jest wymagany (np. chemiczne, budowlane, medyczne...).', 'IzZ.rodzaje_mz'));
+
+  if (izz.rodzaj_zdarzenia === 'AF' && !izz.klasyfikacja_af)
+    r.push(createResult('IZZ-004', ERROR, 'Alarm falszywy wymaga klasyfikacji (zlosliwy / w dobrej wierze / z instalacji).', 'IzZ.klasyfikacja_af'));
+
+  if (izz.kod_obiektu_glowny === 0 && (izz.rodzaj_zdarzenia === 'P' || izz.rodzaj_zdarzenia === 'MZ'))
+    r.push(createResult('IZZ-005', ERROR, 'Kod obiektu glownego jest wymagany.', 'IzZ.kod_obiektu_glowny'));
+
+  // Chronologia czasow
+  const czasy = [
+    ['zauwazenie', izz.czas_zauwazenia],
+    ['zgloszenie', izz.czas_zgloszenia],
+    ['przybycie pierwszego', izz.czas_przybycia_pierwszego],
+    ['lokalizacja', izz.czas_lokalizacji],
+    ['zakonczenie', izz.czas_zakonczenia],
+  ];
+  let prevName = null, prevTime = null;
+  for (const [name, t] of czasy) {
+    if (!t) continue;
+    if (prevTime && t < prevTime) {
+      const fmt = d => d.toLocaleTimeString('pl-PL', {hour:'2-digit',minute:'2-digit'});
+      r.push(createResult('IZZ-007', ERROR,
+        `Czas "${name}" (${fmt(t)}) nie moze byc wczesniejszy niz "${prevName}" (${fmt(prevTime)}).`,
+        'IzZ.czas'));
+    }
+    prevName = name; prevTime = t;
+  }
+
+  if (izz.czas_lokalizacji && izz.czas_zakonczenia && izz.czas_lokalizacji.getTime() === izz.czas_zakonczenia.getTime())
+    r.push(createResult('IZZ-007b', WARNING, 'Godzina lokalizacji i zakonczenia nie powinny byc takie same (wyjatek: przedysponowanie).', 'IzZ.czas_lokalizacji'));
+
+  if (izz.czas_lokalizacji_medycznej && izz.czas_lokalizacji && izz.czas_lokalizacji_medycznej > izz.czas_lokalizacji)
+    r.push(createResult('IZZ-007c', ERROR, 'Czas lokalizacji medycznej nie moze byc pozniejszy niz czas lokalizacji zdarzenia.', 'IzZ.czas_lokalizacji_medycznej'));
+
+  // Ofiary
+  const totalSmiert = izz.wypadki.ratownicy_smiertelni + izz.wypadki.inne_osoby_smiertelne;
+  const totalRanni = izz.wypadki.ratownicy_ranni + izz.wypadki.inne_osoby_ranne;
+
+  if (totalSmiert > 0 && !izz.dane_poszkodowanych)
+    r.push(createResult('IZZ-008a', ERROR, 'Ofiary smiertelne wymagaja uzupelnienia danych personalnych poszkodowanych (pkt 24).', 'IzZ.dane_poszkodowanych'));
+
+  if (izz.wypadki.w_tym_strazacy_ranni > izz.wypadki.ratownicy_ranni)
+    r.push(createResult('IZZ-008b', ERROR, '"W tym strazacy ranni" nie moze przekraczac "Ratownicy ranni".', 'IzZ.wypadki'));
+
+  if (izz.wypadki.w_tym_dzieci_ranne > izz.wypadki.inne_osoby_ranne)
+    r.push(createResult('IZZ-008c', ERROR, '"W tym dzieci ranne" nie moze przekraczac "Inne osoby ranne".', 'IzZ.wypadki'));
+
+  // MZ/M + sprzet specjalny
+  if (izz.wielkosc_mz === 'MZ/M' && izz.dzialania_ratownicze && izz.rodzaj_zdarzenia === 'MZ') {
+    const spec = izz.sprzet_ratowniczy.filter(s => s !== 12);
+    if (spec.length > 0)
+      r.push(createResult('IZZ-009', WARNING, 'MZ/M - uzyto sprzetu specjalnego (poz: ' + spec.join(',') + '). Sprawdz, czy wielkosc MZ nie powinna byc wyzsza.', 'IzZ.sprzet_ratowniczy'));
+  }
+
+  // Wielkosc MZ vs zastepy
+  if (izz.rodzaj_zdarzenia === 'MZ' && izz.wielkosc_mz) {
+    const totalZast = izz.sis_jrg.pojazdy + izz.sis_osp_ksrg.pojazdy + izz.sis_osp_inne.pojazdy + izz.sis_inne_jop.pojazdy;
+    if (izz.wielkosc_mz === 'MZ/L') {
+      if (totalSmiert > 1) r.push(createResult('IZZ-010a', WARNING, `MZ/L: >1 ofiara smiertelna (${totalSmiert}) - rozwaz MZ/S lub wyzsze.`, 'IzZ.wielkosc_mz'));
+      if (totalRanni > 3) r.push(createResult('IZZ-010b', WARNING, `MZ/L: >3 osoby ranne (${totalRanni}) - rozwaz MZ/S.`, 'IzZ.wielkosc_mz'));
+      if (totalZast > 4) r.push(createResult('IZZ-010c', WARNING, `MZ/L: >4 zastepy (${totalZast}) - rozwaz MZ/S.`, 'IzZ.wielkosc_mz'));
+    }
+    if (izz.wielkosc_mz === 'MZ/S') {
+      if (totalSmiert > 3) r.push(createResult('IZZ-010d', WARNING, `MZ/S: >3 ofiary smiertelne (${totalSmiert}) - rozwaz MZ/D.`, 'IzZ.wielkosc_mz'));
+      if (totalZast > 12) r.push(createResult('IZZ-010e', WARNING, `MZ/S: >12 zastepow (${totalZast}) - rozwaz MZ/D.`, 'IzZ.wielkosc_mz'));
+    }
+  }
+
+  // UN 1016 w pozarze
+  if (izz.nr_onz.includes('1016') && izz.rodzaj_zdarzenia === 'P')
+    r.push(createResult('IZZ-011', ERROR, 'W pozarach nie oznaczamy tlenku wegla (UN 1016) - tylko w MZ.', 'IzZ.nr_onz'));
+
+  // MDR
+  const mdr = izz.mdr;
+  if (mdr.w_tym_przez_strazakow > mdr.na_terenie_akcji)
+    r.push(createResult('IZZ-013a', ERROR, 'MDR "w tym przez strazakow" nie moze przekraczac "na terenie akcji".', 'IzZ.mdr'));
+  if (mdr.przekazano_joz > mdr.w_tym_przez_strazakow)
+    r.push(createResult('IZZ-013b', WARNING, 'MDR "przekazano JOZ" przekracza "w tym przez strazakow" - sprawdz dane.', 'IzZ.mdr'));
+  if (mdr.ewakuowano_ze_strefy > mdr.na_terenie_akcji)
+    r.push(createResult('IZZ-013c', ERROR, 'MDR "ewakuowano ze strefy" nie moze przekraczac "na terenie akcji".', 'IzZ.mdr'));
+
+  const mdrDzialania = [34,35,36,37,38,39,40,41,42];
+  if (mdr.w_tym_przez_strazakow > 0 && !izz.rodzaj_dzialan.some(d => mdrDzialania.includes(d)))
+    r.push(createResult('IZZ-013d', WARNING, 'MDR przez strazakow > 0, ale brak odpowiednich dzialan z zakresu MDR (pkt 16, poz. 34-42).', 'IzZ.rodzaj_dzialan'));
+
+  const sprzetMdr = [26,27,28,29,30,31];
+  if (mdr.w_tym_przez_strazakow > 0 && !izz.sprzet_ratowniczy.some(s => sprzetMdr.includes(s)))
+    r.push(createResult('IZZ-013e', WARNING, 'MDR przez strazakow > 0, ale brak sprzetu medycznego (pkt 17, poz. 26-31).', 'IzZ.sprzet_ratowniczy'));
+
+  // Pozar lasu - ha
+  if (izz.rodzaj_zdarzenia === 'P' && izz.kod_obiektu_glowny >= 601 && izz.kod_obiektu_glowny <= 606) {
+    if (izz.powierzchnia_ha === 0 && izz.powierzchnia_m2 === 0)
+      r.push(createResult('IZZ-014', WARNING, 'Pozar lasu - wymagana powierzchnia w hektarach.', 'IzZ.powierzchnia_ha'));
+  }
+
+  // Opis przy ofiarach
+  if ((totalSmiert > 0 || totalRanni > 0) && !izz.opis_dzialan)
+    r.push(createResult('IZZ-015', ERROR, 'Przy poszkodowanych wymagany jest szczegolowy opis podjetych dzialan wraz z zamiarem taktycznym (pkt 33.1).', 'IzZ.opis_dzialan'));
+
+  // MZ chemiczne -> UN
+  if (izz.rodzaje_mz.includes('chemiczne') && izz.nr_onz.length === 0)
+    r.push(createResult('IZZ-016', WARNING, 'MZ chemiczne - rozwaz podanie nr ONZ substancji (pkt 20).', 'IzZ.nr_onz'));
+
+  // IZRM -> medyczne
+  if (izz.slowa_klucze.includes('IZRM') && !izz.rodzaje_mz.includes('medyczne'))
+    r.push(createResult('IZZ-017', WARNING, 'Slowo-klucz IZRM sugeruje rodzaj MZ "medyczne".', 'IzZ.slowa_klucze', 'IzZ.rodzaje_mz'));
+
+  // Chemiczne -> cisnienie
+  if (izz.rodzaje_mz.includes('chemiczne') && !izz.cisnienie_hpa)
+    r.push(createResult('IZZ-018', WARNING, 'MZ chemiczne - wymagane cisnienie atmosferyczne (hPa) w warunkach atm. (pkt 33.4).', 'IzZ.warunki_atmosferyczne'));
+
+  return r;
+}
+
+// ---------- WALIDACJA KRZYZOWA ----------
+function validateCross(kz, izz) {
+  const r = [];
+  const totalSmiert = izz.wypadki.ratownicy_smiertelni + izz.wypadki.inne_osoby_smiertelne;
+  const totalRanni = izz.wypadki.ratownicy_ranni + izz.wypadki.inne_osoby_ranne;
+
+  if (kz.rodzaj_zdarzenia && izz.rodzaj_zdarzenia && kz.rodzaj_zdarzenia !== izz.rodzaj_zdarzenia)
+    r.push(createResult('CROSS-001', ERROR, `Rodzaj zdarzenia w KZ (${kz.rodzaj_zdarzenia}) != IzZ (${izz.rodzaj_zdarzenia}).`, 'KZ.rodzaj_zdarzenia', 'IzZ.rodzaj_zdarzenia'));
+
+  // Czas przybycia < zadysponowania
+  if (kz.dysponowane_zastepy.length > 0 && izz.czas_przybycia_pierwszego) {
+    const dyspCzasy = kz.dysponowane_zastepy.map(z => z.czas_zadysponowania).filter(Boolean);
+    if (dyspCzasy.length > 0) {
+      const najwcz = new Date(Math.min(...dyspCzasy.map(d => d.getTime())));
+      if (izz.czas_przybycia_pierwszego < najwcz) {
+        const fmt = d => d.toLocaleTimeString('pl-PL', {hour:'2-digit',minute:'2-digit'});
+        r.push(createResult('CROSS-002', ERROR,
+          `Czas przybycia pierwszego zastępu w IzZ (${fmt(izz.czas_przybycia_pierwszego)}) jest wczesniejszy niz czas zadysponowania w KZ (${fmt(najwcz)}).`,
+          'IzZ.czas_przybycia_pierwszego', 'KZ.dysponowane_zastepy'));
+      }
+    }
+  }
+
+  // Czas zgloszenia KZ = IzZ
+  if (kz.czas_przyjecia_zgloszenia && izz.czas_zgloszenia && kz.czas_przyjecia_zgloszenia.getTime() !== izz.czas_zgloszenia.getTime())
+    r.push(createResult('CROSS-003', WARNING, 'Czas zgloszenia w IzZ powinien odpowiadac czasowi przyjecia zgloszenia w KZ.', 'KZ.czas_przyjecia_zgloszenia', 'IzZ.czas_zgloszenia'));
+
+  // Liczba SiS
+  const nZastKz = kz.dysponowane_zastepy.length;
+  const nPojIzz = izz.sis_jrg.pojazdy + izz.sis_osp_ksrg.pojazdy + izz.sis_osp_inne.pojazdy + izz.sis_inne_jop.pojazdy;
+  if (nZastKz > 0 && nPojIzz > 0 && nZastKz !== nPojIzz)
+    r.push(createResult('CROSS-004', WARNING, `Liczba pojazdow w IzZ (${nPojIzz}) != zastepow w KZ (${nZastKz}). Sprawdz podmiany lub zawrocenia.`, 'KZ.dysponowane_zastepy', 'IzZ.sis'));
+
+  // Flaga ofiara smiertelna
+  if (kz.flagi.has('ofiara_smiertelna') && totalSmiert === 0)
+    r.push(createResult('CROSS-005a', ERROR, 'Flaga "Ofiara smiertelna" w KZ, ale brak ofiar smiertelnych w pkt 23 IzZ.', 'KZ.flagi', 'IzZ.wypadki'));
+  if (totalSmiert > 0 && !kz.flagi.has('ofiara_smiertelna'))
+    r.push(createResult('CROSS-005b', ERROR, 'Ofiary smiertelne w IzZ (pkt 23), ale brak flagi "Ofiara smiertelna" w KZ.', 'IzZ.wypadki', 'KZ.flagi'));
+
+  // Flaga osoba ranna
+  if (kz.flagi.has('osoba_ranna') && totalRanni === 0)
+    r.push(createResult('CROSS-006a', WARNING, 'Flaga "Osoba ranna" w KZ, ale 0 rannych w pkt 23 IzZ.', 'KZ.flagi', 'IzZ.wypadki'));
+  if (totalRanni > 0 && !kz.flagi.has('osoba_ranna'))
+    r.push(createResult('CROSS-006b', WARNING, 'Osoby ranne w IzZ (pkt 23), ale brak flagi "Osoba ranna" w KZ.', 'IzZ.wypadki', 'KZ.flagi'));
+
+  // Wypadek ratownika
+  if (kz.flagi.has('wypadek_ratownika') && izz.wypadki.ratownicy_ranni === 0 && izz.wypadki.ratownicy_smiertelni === 0)
+    r.push(createResult('CROSS-007', ERROR, 'Flaga "Wypadek ratownika" w KZ, ale brak rannych/smiertelnych ratownikow w pkt 23 IzZ.', 'KZ.flagi', 'IzZ.wypadki'));
+
+  // Ofiary -> Policja/Prokuratura
+  if (totalSmiert > 0) {
+    const polPow = kz.powiadomione_sluzby.some(s => s.includes('Policja') || s.includes('Prokurat'));
+    if (!polPow)
+      r.push(createResult('CROSS-008', WARNING, 'Ofiary smiertelne - sprawdz powiadomienie Prokuratora / Policji w KZ.', 'IzZ.wypadki', 'KZ.powiadomione_sluzby'));
+  }
+
+  // Tlenek wegla + pozar
+  if (kz.flagi.has('tlenek_wegla') && izz.rodzaj_zdarzenia === 'P')
+    r.push(createResult('CROSS-009', ERROR, 'Flaga "Tlenek wegla" w KZ, ale rodzaj zdarzenia to P (pozar). CO ewidencjonuje sie tylko w MZ.', 'KZ.flagi', 'IzZ.rodzaj_zdarzenia'));
+
+  // Substancja chemiczna -> MZ chemiczne
+  if (kz.flagi.has('substancja_chemiczna') && izz.rodzaj_zdarzenia === 'MZ' && !izz.rodzaje_mz.includes('chemiczne'))
+    r.push(createResult('CROSS-010', WARNING, 'Flaga "Substancja chemiczna" w KZ - rozwaz dodanie rodzaju MZ "chemiczne" w IzZ.', 'KZ.flagi', 'IzZ.rodzaje_mz'));
+
+  // IZRM -> slowo-klucz
+  if (kz.flagi.has('izrm')) {
+    if (!izz.slowa_klucze.includes('IZRM'))
+      r.push(createResult('CROSS-011', WARNING, 'Flaga IZRM w KZ - wymagane slowo-klucz "IZRM" w polu Obiekt IzZ.', 'KZ.flagi', 'IzZ.slowa_klucze'));
+    if (!izz.rodzaje_mz.includes('medyczne'))
+      r.push(createResult('CROSS-011b', WARNING, 'Flaga IZRM w KZ - rodzaj MZ "medyczne" powinien byc zaznaczony w IzZ.', 'KZ.flagi', 'IzZ.rodzaje_mz'));
+  }
+
+  // Lokalizacja KZ vs IzZ
+  if (kz.gmina && izz.gmina && kz.gmina !== izz.gmina)
+    r.push(createResult('CROSS-013', WARNING, `Gmina w KZ (${kz.gmina}) != IzZ (${izz.gmina}). Sprawdz aktualizacje adresu.`, 'KZ.gmina', 'IzZ.gmina'));
+
+  // Wielkosc pozaru vs powierzchnia
+  if (izz.wielkosc_pozaru && izz.powierzchnia_m2 > 0) {
+    const p = izz.powierzchnia_m2;
+    let expected = '';
+    if (p <= 70) expected = 'P/M';
+    else if (p <= 300) expected = 'P/S';
+    else if (p <= 1000) expected = 'P/D';
+    else expected = 'P/BD';
+    if (izz.wielkosc_pozaru !== expected)
+      r.push(createResult('CROSS-015', WARNING, `Powierzchnia ${p} m2 sugeruje wielkosc pozaru "${expected}", a wpisano "${izz.wielkosc_pozaru}".`, 'IzZ.powierzchnia_m2', 'IzZ.wielkosc_pozaru'));
+  }
+
+  return r;
+}
+
+// ---------- PODPOWIEDZI ----------
+function getSuggestions(kz, izz) {
+  const r = [];
+
+  if (kz && kz.rodzaj_zdarzenia) {
+    if (kz.rodzaj_zdarzenia === 'P') {
+      if (kz.podrodzaj && kz.podrodzaj.includes('Trawy')) {
+        if (!kz.flagi.has('pozar_lasu') && !kz.flagi.has('pozar_trawy'))
+          r.push(createResult('SUG-001', INFO, 'Pozar trawy/lasu - rozwaz zaznaczenie flagi "Pozar lasu", "Pozar pol" lub "Pozar trawy".', 'KZ.podrodzaj'));
+      }
+      if (kz.podrodzaj && kz.podrodzaj.includes('mieszkalne') && !kz.flagi.has('obiekt_mieszkalny'))
+        r.push(createResult('SUG-001b', INFO, 'Pozar obiektu mieszkalnego - rozwaz flage "Obiekt mieszkalny".', 'KZ.podrodzaj'));
+    }
+
+    if (kz.rodzaj_zdarzenia === 'MZ') {
+      if (kz.podrodzaj === 'MZ - Chemiczne')
+        r.push(createResult('SUG-002', INFO, 'MZ Chemiczne - sprawdz:\n  - Zadysponuj SGRChem jesli wymagane\n  - Oznacz flage "Substancja chemiczna"\n  - W IzZ podaj nr ONZ substancji (pkt 20)\n  - W IzZ wpisz cisnienie atm. (hPa)\n  - Rozwaz flage GIOS/WIOS', 'KZ.podrodzaj'));
+
+      if (kz.podrodzaj === 'MZ - Wypadek')
+        r.push(createResult('SUG-002b', INFO, 'MZ Wypadek drogowy - w IzZ:\n  - Oznacz rodzaj MZ "w transporcie drogowym"\n  - Wpisz marke, model, nr rej. w polu Obiekt\n  - Podaj nr i pikietaz drogi\n  - Uzupelnij pkt 22 (MDR) i 23 (wypadki z ludzmi)\n  - Zaznacz "Osoba ranna" / "Ofiara smiertelna"', 'KZ.podrodzaj'));
+
+      if (kz.podrodzaj === 'MZ - Pomoc w otwarciu mieszkania')
+        r.push(createResult('SUG-002c', INFO, 'Pomoc w otwarciu mieszkania:\n  - Jesli na prosbe Policji: zaznacz flage "Pomoc Policji"\n  - Kwalifikuj jako MZ (nie AF) nawet gdy nikogo nie zastano', 'KZ.podrodzaj'));
+
+      if (kz.podrodzaj === 'MZ - Zwierzeta')
+        r.push(createResult('SUG-002d', INFO, 'MZ Zwierzeta - w IzZ:\n  - Uzyj slowa-klucza "OWADY" jesli usuwanie owadow\n  - Zaznacz flage "Usuwanie owadow"\n  - Dzialanie pkt 16: poz. 43', 'KZ.podrodzaj'));
+    }
+
+    const n = kz.dysponowane_zastepy.length;
+    if (n >= 8 && !kz.flagi.has('do_wiadomosci_kw'))
+      r.push(createResult('SUG-003', INFO, `Zadysponowano ${n} zastepow - zblizasz sie do progu 12 wymagajacego powiadomienia SK KW PSP.`, 'KZ.dysponowane_zastepy'));
+
+    if (kz.flagi.has('udzial_smiglowcow') && !kz.flagi.has('lpr_169') && !kz.flagi.has('lpr_kswl'))
+      r.push(createResult('SUG-004', INFO, 'Udzial smiglowca - rozwaz flage "LPR_169.000" lub "LPR_KSWL" (kanal lacznosci).', 'KZ.flagi'));
+  }
+
+  if (izz && izz.rodzaj_zdarzenia) {
+    if (izz.rodzaj_zdarzenia === 'P' && izz.kod_obiektu_glowny >= 601 && izz.kod_obiektu_glowny <= 606)
+      r.push(createResult('SUG-010', INFO, 'Pozar lasu - wymagane:\n  - Powierzchnia w ha\n  - Typ pozaru: podpowierzchniowy/pokrywy gleby/calkowity/pojedyncze drzewo\n  - Klasa wieku drzewostanu (kod 601-606)', 'IzZ.kod_obiektu_glowny'));
+
+    const totalSmiert = izz.wypadki.ratownicy_smiertelni + izz.wypadki.inne_osoby_smiertelne;
+    if (izz.rodzaj_zdarzenia === 'P' && totalSmiert > 0)
+      r.push(createResult('SUG-012', INFO, 'Pozar z ofiarami smiertelnymi - IzZ powinna byc traktowana priorytetowo i zatwierdzona w najkrotszym czasie.', 'IzZ.wypadki'));
+
+    if (izz.rodzaj_zdarzenia === 'P' && izz.przyczyna_kod === 35)
+      r.push(createResult('SUG-013', INFO, 'Przyczyna 35 (pozar jako nastepstwo MZ) - w danych opisowych (pkt 33.1) opisz przyczyne zdarzenia przed powstaniem pozaru.', 'IzZ.przyczyna_kod'));
+
+    if (izz.rodzaje_mz.includes('medyczne') && izz.mdr.na_terenie_akcji > 0 && !izz.kmdr)
+      r.push(createResult('SUG-014', INFO, 'MZ medyczne z MDR - uzupelnij pkt 32 (Koordynacja medycznych dzialan ratowniczych).', 'IzZ.kmdr'));
+  }
+
+  if (kz && izz && kz.rodzaj_zdarzenia && izz.rodzaj_zdarzenia) {
+    if (kz.podrodzaj === 'MZ - Chemiczne' && izz.rodzaj_zdarzenia === 'P')
+      r.push(createResult('SUG-020', WARNING, 'W KZ wskazano MZ Chemiczne, a w IzZ rodzaj to Pozar. Sprawdz kwalifikacje zdarzenia.', 'KZ.podrodzaj', 'IzZ.rodzaj_zdarzenia'));
+
+    if (kz.flagi.has('ewakuacja_osob') && !izz.rodzaj_dzialan.includes(6))
+      r.push(createResult('SUG-021', INFO, 'Flaga "Ewakuacja osob" w KZ - sprawdz, czy pkt 16 IzZ zawiera "Ewakuacja ludzi" (poz. 6). Podaj liczbe ewakuowanych w pkt 33.1.', 'KZ.flagi', 'IzZ.rodzaj_dzialan'));
+  }
+
+  return r;
+}
+
+// ============================================================================
+// URUCHOMIENIE WALIDACJI
+// ============================================================================
+function runValidation() {
+  const kz = collectKZ();
+  const izz = collectIzZ();
+
+  const results = [
+    ...validateKZ(kz),
+    ...validateIzZ(izz),
+    ...validateCross(kz, izz),
+    ...getSuggestions(kz, izz),
+  ];
+
+  displayResults(results);
+  displayFullResults(results);
+  switchTab('tab-wyniki');
+
+  const panel = document.getElementById('results-panel');
+  panel.classList.remove('collapsed');
+}
+
+function displayResults(results) {
+  const errors = results.filter(r => r.severity === ERROR);
+  const warnings = results.filter(r => r.severity === WARNING);
+  const infos = results.filter(r => r.severity === INFO);
+
+  // Counters
+  const counters = document.getElementById('results-counters');
+  if (results.length === 0) {
+    counters.innerHTML = '<span class="counter-badge ok">0 uwag</span>';
+    document.getElementById('results-title').textContent = 'Dane poprawne';
+  } else {
+    let html = '';
+    if (errors.length) html += `<span class="counter-badge errors">${errors.length} bledow</span>`;
+    if (warnings.length) html += `<span class="counter-badge warnings">${warnings.length} ostrzezen</span>`;
+    if (infos.length) html += `<span class="counter-badge infos">${infos.length} podpowiedzi</span>`;
+    counters.innerHTML = html;
+    document.getElementById('results-title').textContent = `Wyniki walidacji (${results.length})`;
+  }
+
+  // Body
+  const body = document.getElementById('results-body');
+  if (results.length === 0) {
+    body.innerHTML = '<div class="result-item" style="color:var(--success);font-weight:600">Brak uwag - dane wygladaja poprawnie.</div>';
+  } else {
+    body.innerHTML = results.map(r => {
+      const icon = r.severity === ERROR ? 'X' : r.severity === WARNING ? '!' : 'i';
+      return `<div class="result-item">
+        <div class="result-icon ${r.severity}">${icon}</div>
+        <div class="result-text">
+          <span class="rule-id">${r.id}</span>${escHtml(r.message).replace(/\n/g, '<br>')}
+          ${r.src ? `<span class="field-ref">${r.src}${r.tgt ? ' → ' + r.tgt : ''}</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function displayFullResults(results) {
+  const el = document.getElementById('wyniki-full');
+  const errors = results.filter(r => r.severity === ERROR);
+  const warnings = results.filter(r => r.severity === WARNING);
+  const infos = results.filter(r => r.severity === INFO);
+
+  let html = '<h2>Wyniki walidacji</h2>';
+
+  if (results.length === 0) {
+    html += '<p style="color:var(--success);font-weight:600;font-size:1.1rem;padding:20px 0">Brak uwag - dane wygladaja poprawnie.</p>';
+  } else {
+    html += `<p style="margin-bottom:16px">Podsumowanie: <strong style="color:var(--danger)">${errors.length} bledow</strong>, <strong style="color:var(--warning)">${warnings.length} ostrzezen</strong>, <strong style="color:var(--info)">${infos.length} podpowiedzi</strong></p>`;
+
+    const renderGroup = (title, items, severity) => {
+      if (!items.length) return '';
+      const colors = { error: 'var(--danger)', warning: 'var(--warning)', info: 'var(--info)' };
+      let h = `<h3 style="color:${colors[severity]};margin-top:20px">${title} (${items.length})</h3>`;
+      h += items.map(r => `<div class="result-item" style="border-left:3px solid ${colors[severity]};margin:6px 0;padding:8px 16px;background:#fafafa;border-radius:4px">
+        <div class="result-text"><span class="rule-id">${r.id}</span>${escHtml(r.message).replace(/\n/g, '<br>')}
+        ${r.src ? `<span class="field-ref">${r.src}${r.tgt ? ' → ' + r.tgt : ''}</span>` : ''}
+        </div></div>`).join('');
+      return h;
+    };
+
+    html += renderGroup('Bledy', errors, ERROR);
+    html += renderGroup('Ostrzezenia', warnings, WARNING);
+    html += renderGroup('Podpowiedzi', infos, INFO);
+  }
+
+  el.innerHTML = html;
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toggleResults() {
+  document.getElementById('results-panel').classList.toggle('collapsed');
+}
+
+// ============================================================================
+// SCENARIUSZE TESTOWE
+// ============================================================================
+function loadScenario(name) {
+  clearForm();
+
+  if (name === 'green') loadGreenPath();
+  else if (name === 'red') loadRedPath();
+  else if (name === 'wypadek') loadWypadek();
+
+  runValidation();
+}
+
+function clearForm() {
+  document.querySelectorAll('input[type="text"], input[type="number"], input[type="datetime-local"], textarea').forEach(el => {
+    if (el.type === 'number') el.value = '0';
+    else el.value = '';
+  });
+  document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+  document.getElementById('zastepy-body').innerHTML = '';
+  zastepId = 0;
+}
+
+function setVal(id, v) { document.getElementById(id).value = v; }
+function setCheck(containerId, values) {
+  document.querySelectorAll('#' + containerId + ' input[type=checkbox]').forEach(cb => {
+    cb.checked = values.includes(cb.value);
+  });
+}
+function dt(y,mo,d,h,mi) {
+  const dd = new Date(y,mo-1,d,h,mi);
+  return dd.getFullYear() + '-' + String(dd.getMonth()+1).padStart(2,'0') + '-' + String(dd.getDate()).padStart(2,'0') + 'T' + String(dd.getHours()).padStart(2,'0') + ':' + String(dd.getMinutes()).padStart(2,'0');
+}
+
+function loadGreenPath() {
+  // KZ
+  setVal('kz-rodzaj', 'P');
+  document.getElementById('kz-rodzaj').dispatchEvent(new Event('change'));
+  setTimeout(() => setVal('kz-podrodzaj', 'P - Obiekty mieszkalne'), 10);
+  setVal('kz-jednostka', 'JRG-4 Warszawa');
+  setVal('kz-teren', 'JRG-4 Warszawa');
+  setVal('kz-woj', 'mazowieckie');
+  setVal('kz-powiat', 'Warszawa');
+  setVal('kz-gmina', 'Mokotow');
+  setVal('kz-miejscowosc', 'Warszawa');
+  setVal('kz-ulica', 'Pulawska');
+  setVal('kz-nrbudynku', '152/38');
+  setVal('kz-czas-przyjecia', dt(2025,3,15,14,30));
+  setVal('kz-sposob', 'telefon');
+  setVal('kz-zglaszajacy', 'Jan Nowak, tel. 601-123-456');
+  setVal('kz-opis', '1. Dym z okna mieszkania na 3 pietrze.\n2. Po dojedzie: pozar pokoju, 1 osoba z oparzeniami.');
+  setCheck('kz-powiadomienia', ['Policja', 'PRM']);
+  setCheck('kz-flagi', ['obiekt_mieszkalny', 'osoba_ranna']);
+  addZastep({jednostka:'JRG-4', pojazd:'GBA 2.5/16', obsada:6, czas_dysp:dt(2025,3,15,14,31), czas_doj:dt(2025,3,15,14,38)});
+  addZastep({jednostka:'OSP Ursus ksrg', pojazd:'GBA 2.5/16', obsada:4, czas_dysp:dt(2025,3,15,14,32), czas_doj:dt(2025,3,15,14,45)});
+
+  // IzZ
+  setVal('izz-numer', '14640010001');
+  setVal('izz-rodzaj', 'P');
+  setVal('izz-wielkosc-p', 'P/M');
+  setVal('izz-gmina', 'Mokotow');
+  setVal('izz-obiekt', 'Budynek mieszkalny wielorodzinny, mieszkanie nr 38');
+  setVal('izz-kod-obiektu', '209');
+  setVal('izz-kod-wlasc', '610');
+  setVal('izz-czas-zauw', dt(2025,3,15,14,25));
+  setVal('izz-czas-zgl', dt(2025,3,15,14,30));
+  setVal('izz-czas-przyb', dt(2025,3,15,14,38));
+  setVal('izz-czas-lok', dt(2025,3,15,14,55));
+  setVal('izz-czas-zak', dt(2025,3,15,15,30));
+  setVal('izz-czas-powr', dt(2025,3,15,16,0));
+  setVal('izz-dojazd-km', '3.2');
+  setVal('izz-jrg-poj', '1'); setVal('izz-jrg-os', '6');
+  setVal('izz-osp-ksrg-poj', '1'); setVal('izz-osp-ksrg-os', '4');
+  setCheck('izz-dzialania', ['1','4','6','9','10','19','36','39','40','42']);
+  setCheck('izz-sprzet', ['1','4','13','22','23','26','28','29']);
+  setVal('izz-prady-wody', '1');
+  setVal('izz-woda', '2.5');
+  setVal('izz-mdr-teren', '1'); setVal('izz-mdr-straz', '1');
+  setVal('izz-mdr-joz', '1'); setVal('izz-mdr-ewak', '1');
+  setVal('izz-inne-ranne', '1');
+  setVal('izz-dane-poszk', 'tak');
+  setVal('izz-pow-m2', '40');
+  setVal('izz-ob-dl', '48'); setVal('izz-ob-sz', '14'); setVal('izz-ob-wy', '16');
+  setVal('izz-straty', '35'); setVal('izz-uratowane', '450');
+  setVal('izz-przyczyna-kod', '5');
+  setVal('izz-przyczyna-opis', 'Nieostrozonosc przy gotowaniu - zapalenie oleju na patelni');
+  setVal('izz-kdr', 'kpt. Kowalski Adam, d-ca zmiany JRG-4');
+  setVal('izz-opis', 'Po dojedzie na miejsce zastano dym wydobywajacy sie z okna mieszkania na III pietrze. KDR zarzadzil rozpoznanie z 1 pradem wody. W mieszkaniu odnaleziono 1 osobe z oparzeniami rak. Ewakuowano poszkodowanego ze strefy zagrozenia. Udzielono KPP. ZRM przejal poszkodowanego o godz. 14:50.');
+}
+
+function loadRedPath() {
+  // KZ
+  setVal('kz-rodzaj', 'MZ');
+  document.getElementById('kz-rodzaj').dispatchEvent(new Event('change'));
+  setTimeout(() => setVal('kz-podrodzaj', 'MZ - Chemiczne'), 10);
+  setVal('kz-jednostka', ''); // BLAD
+  setVal('kz-woj', 'slaskie');
+  setVal('kz-powiat', 'Katowice');
+  setVal('kz-gmina', ''); // BLAD
+  setVal('kz-czas-przyjecia', dt(2025,4,10,8,0));
+  setCheck('kz-flagi', ['tlenek_wegla', 'pomoc_prm']);
+  addZastep({jednostka:'JRG-1 Katowice', pojazd:'GBA 2.5/16', obsada:5, czas_dysp:dt(2025,4,10,8,5)});
+  addZastep({jednostka:'JRG-2 Katowice', pojazd:'GCBA 5/32', obsada:4, czas_dysp:dt(2025,4,10,8,5)});
+  addZastep({jednostka:'JRG-3 Katowice', pojazd:'SLOp', obsada:2, czas_dysp:dt(2025,4,10,8,10)});
+  addZastep({jednostka:'JRG-4 Katowice', pojazd:'GBA', obsada:5, czas_dysp:dt(2025,4,10,8,10)});
+  addZastep({jednostka:'JRG-5 Katowice', pojazd:'GBA', obsada:5, czas_dysp:dt(2025,4,10,8,12)});
+  addZastep({jednostka:'OSP-A', pojazd:'GBA', obsada:4, czas_dysp:dt(2025,4,10,8,15)});
+
+  // IzZ - celowo P zamiast MZ
+  setVal('izz-rodzaj', 'P');
+  setVal('izz-wielkosc-p', 'P/M');
+  setVal('izz-gmina', 'Katowice-Srodmiescie'); // inna
+  setVal('izz-kod-obiektu', '209');
+  setVal('izz-czas-zauw', dt(2025,4,10,7,50));
+  setVal('izz-czas-zgl', dt(2025,4,10,8,0));
+  setVal('izz-czas-przyb', dt(2025,4,10,8,2)); // < zadysponowania
+  setVal('izz-czas-lok', dt(2025,4,10,8,30));
+  setVal('izz-czas-zak', dt(2025,4,10,8,30)); // == lokalizacja
+  setVal('izz-onz', '1016'); // CO w pozarze
+  setVal('izz-jrg-poj', '4'); setVal('izz-jrg-os', '16');
+  setVal('izz-osp-ksrg-poj', '1'); setVal('izz-osp-ksrg-os', '4');
+  setVal('izz-mdr-teren', '3');
+  setVal('izz-mdr-straz', '5'); // > na_terenie
+  setVal('izz-mdr-joz', '2');
+  setVal('izz-mdr-ewak', '10'); // > na_terenie
+  setVal('izz-inne-smiert', '2');
+  setVal('izz-inne-ranne', '3');
+  setVal('izz-dzieci-ranne', '5'); // > inne_ranne
+  setVal('izz-dane-poszk', 'nie'); // brak danych
+  setCheck('izz-dzialania', ['1','2','10']);
+  setCheck('izz-sprzet', ['1','4']);
+}
+
+function loadWypadek() {
+  setVal('kz-rodzaj', 'MZ');
+  document.getElementById('kz-rodzaj').dispatchEvent(new Event('change'));
+  setTimeout(() => setVal('kz-podrodzaj', 'MZ - Wypadek'), 10);
+  setVal('kz-jednostka', 'JRG-1 Piaseczno');
+  setVal('kz-gmina', 'Piaseczno');
+  setVal('kz-czas-przyjecia', dt(2025,5,1,17,45));
+  setVal('kz-nrdrogi', 'DK7');
+  setVal('kz-pikietaz', '28');
+  addZastep({jednostka:'JRG-1', pojazd:'GBA 2.5/16', obsada:6, czas_dysp:dt(2025,5,1,17,46)});
+  addZastep({jednostka:'JRG-1', pojazd:'SRt', obsada:3, czas_dysp:dt(2025,5,1,17,46)});
+}
+
+// ============================================================================
+// INIT
+// ============================================================================
+addZastep();
+</script>
+</body>
+</html>
