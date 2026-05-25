@@ -255,6 +255,10 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
         if filter_code and code != filter_code:
             continue
 
+        # Pomijaj węże (11-znakowe kody W*) — zarządzane osobno
+        if len(code) == 11 and code.startswith("W") and code[1:2].isalpha():
+            continue
+
         # Suma obu magazynów
         stock_techtor = firmao_stocks.get(code, 0)
         tarnawa_data  = tarnawa_stocks.get(code, {"qty": 0, "status": ""})

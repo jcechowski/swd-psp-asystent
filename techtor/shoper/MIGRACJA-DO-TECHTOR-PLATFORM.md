@@ -18,6 +18,21 @@ snippet.js wstrzyknięty w opisy 669 produktów jako <img onload="...">
 
 ---
 
+## WAŻNE: Zakres migracji
+
+Migracja dotyczy **TYLKO zakładki Produkty** (PIUSI, RAASM, Adam Pumps itp.).
+
+**NIE dotyczy:**
+- **Węży** — kody 11-znakowe zaczynające się na `W` (np. `WA019008GZ1`)
+  - Format: `W` + typ (litera) + średnica 3 cyfry + długość 3 cyfry + końcówka (000/GZ1/GZ2)
+  - Stany magazynowe węży będą zarządzane osobno (moduł FlexGen / warianty)
+- **FlexGen** — generator wariantów węży
+- **Innych modułów** techtor-platform (HoseFlow, zamówienia itp.)
+
+`sync-stock.py` powinien **pomijać produkty z kodem W*** przy sync do Shoper.
+
+---
+
 ## Konflikty do rozwiązania PRZED migracją
 
 ### 1. KRYTYCZNY: Dwa systemy piszą do Shoper stock
