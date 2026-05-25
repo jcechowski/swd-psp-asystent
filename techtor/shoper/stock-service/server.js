@@ -17,7 +17,7 @@ function cors(req, res, next) {
 }
 
 // snippet.js — cache 5min, CORS (obsługuje też /v2/snippet.js)
-app.get(['/snippet.js', '/v2/snippet.js', '/v3/snippet.js'], cors, (req, res) => {
+app.get(['/snippet.js', '/v2/snippet.js', '/v3/snippet.js', '/v4/snippet.js'], cors, (req, res) => {
   res.set('Cache-Control', 'public, max-age=300, s-maxage=300');
   res.set('Content-Type', 'application/javascript; charset=utf-8');
   res.sendFile(path.join(__dirname, 'public', 'snippet.js'));

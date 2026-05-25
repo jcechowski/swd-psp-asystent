@@ -53,7 +53,8 @@ TARNAWA_DIR     = os.environ.get("TARNAWA_OUTPUT_DIR",
     str(Path(__file__).resolve().parent.parent / "Scrapery" / "TARNAWA" / "output"))
 
 # Shoper IDs
-AVAIL_UNAVAILABLE   = 9   # trwale niedostępny
+AVAIL_UNAVAILABLE   = 9   # trwale niedostępny (can_buy=0)
+AVAIL_ON_ORDER      = 6   # dostępny na zamówienie (can_buy=0) — Tarnawa "on-backorder"
 AVAIL_AVAILABLE     = 2   # dostępny
 AVAIL_MEDIUM        = 4   # średnia ilość
 AVAIL_LARGE         = 5   # duża ilość
@@ -81,12 +82,23 @@ def _ipv4_only(*args, **kwargs):
 socket.getaddrinfo = _ipv4_only
 
 
-def calc_availability(total: int) -> int:
-    """Oblicz availability_id na podstawie sumarycznego stanu."""
-    if total <= 0:  return AVAIL_UNAVAILABLE
-    if total >= 20: return AVAIL_LARGE
-    if total >= 10: return AVAIL_MEDIUM
-    return AVAIL_AVAILABLE
+def calc_availability(total: int, tarnawa_status: str = "") -> int:
+    """Oblicz availability_id na podstawie sumarycznego stanu i statusu Tarnawa.
+
+    Priorytet:
+      1. Jeśli total > 0 → dostępny/średnia/duża (na podstawie ilości)
+      2. Jeśli total = 0 i Tarnawa "on-backorder" → na zamówienie (can_buy=0)
+      3. Jeśli total = 0 i Tarnawa "out-of-stock" → niedostępny (can_buy=0)
+      4. Jeśli total = 0 → niedostępny
+    """
+    if total > 0:
+        if total >= 20: return AVAIL_LARGE
+        if total >= 10: return AVAIL_MEDIUM
+        return AVAIL_AVAILABLE
+    # total = 0 — sprawdź status Tarnawa
+    if tarnawa_status == "on-backorder":
+        return AVAIL_ON_ORDER       # ID 6: "dostępny na zamówienie" (can_buy=0)
+    return AVAIL_UNAVAILABLE        # ID 9: "trwale niedostępny" (can_buy=0)
 
 
 def calc_delivery(stock_techtor: int) -> int:
@@ -126,8 +138,11 @@ def fetch_firmao_stocks() -> dict[str, int]:
 
 
 # ── Tarnawa ─────────────────────────────────────────────────────────────────
-def load_tarnawa_stocks() -> dict[str, int]:
-    """Załaduj stany Tarnawa ze scrapera (output/*/product.json)."""
+def load_tarnawa_stocks() -> dict[str, dict]:
+    """Załaduj stany Tarnawa ze scrapera (output/*/product.json).
+    Zwraca {code: {"qty": int, "status": str}} gdzie status to:
+      "in-stock", "on-backorder", "out-of-stock"
+    """
     log.info(f"Ładowanie stanów Tarnawa z {TARNAWA_DIR}...")
     stocks = {}
     if not os.path.isdir(TARNAWA_DIR):
@@ -142,12 +157,18 @@ def load_tarnawa_stocks() -> dict[str, int]:
             with open(product_json) as f:
                 data = json.load(f)
             qty = data.get("stock_quantity", 0)
-            stocks[code_dir] = int(qty) if qty else 0
+            status = data.get("stock_status", "")
+            stocks[code_dir] = {
+                "qty": int(qty) if qty else 0,
+                "status": status,
+            }
         except (json.JSONDecodeError, ValueError, TypeError):
             pass
 
-    with_stock = sum(1 for v in stocks.values() if v > 0)
-    log.info(f"  Tarnawa: {len(stocks)} produktów, {with_stock} ze stanem > 0")
+    by_status = {}
+    for v in stocks.values():
+        by_status[v["status"]] = by_status.get(v["status"], 0) + 1
+    log.info(f"  Tarnawa: {len(stocks)} produktów — {by_status}")
     return stocks
 
 
@@ -236,7 +257,9 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
 
         # Suma obu magazynów
         stock_techtor = firmao_stocks.get(code, 0)
-        stock_tarnawa = tarnawa_stocks.get(code, 0)
+        tarnawa_data  = tarnawa_stocks.get(code, {"qty": 0, "status": ""})
+        stock_tarnawa = tarnawa_data["qty"]
+        tarnawa_status = tarnawa_data["status"]
         total = stock_techtor + stock_tarnawa
 
         # Pomijaj produkty bez danych w żadnym źródle
@@ -245,7 +268,7 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
         matched += 1
 
         # Oblicz docelowe wartości
-        new_avail    = calc_availability(total)
+        new_avail    = calc_availability(total, tarnawa_status)
         new_delivery = calc_delivery(stock_techtor)
 
         # Sprawdź czy potrzebna zmiana
@@ -300,10 +323,18 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
     log.info(f"  Błędy: {errors}")
 
     # 4. Generuj stock-data.json dla snippet JS
+    # Format: {"SKU": stockTechtor, ...} dla produktów ze stanem > 0
+    # Dla on-backorder/out-of-stock: {"SKU": 0, "SKU__status": "on-backorder"}
     stock_data_path = Path(__file__).resolve().parent / "stock-service" / "public" / "stock-data.json"
-    stock_map = {code: firmao_stocks.get(code, 0)
-                 for code in shoper_stocks
-                 if firmao_stocks.get(code, 0) > 0}
+    stock_map = {}
+    for code in shoper_stocks:
+        st = firmao_stocks.get(code, 0)
+        td = tarnawa_stocks.get(code, {"qty": 0, "status": ""})
+        total = st + td["qty"]
+        if st > 0:
+            stock_map[code] = st
+        if total == 0 and td["status"] in ("on-backorder", "out-of-stock"):
+            stock_map[code + "__status"] = td["status"]
     try:
         stock_data_path.parent.mkdir(parents=True, exist_ok=True)
         stock_data_path.write_text(json.dumps(stock_map, separators=(",", ":")))
