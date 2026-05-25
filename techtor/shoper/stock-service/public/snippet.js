@@ -104,21 +104,65 @@
 
         var stockTechtor = stockData[sku] || 0;
 
-        // Dynamiczny czas wysyłki
+        // Oblicz totalStock z stock-data (stockTechtor + ewentualnie Tarnawa via Shoper stock)
+        var totalStock = 0;
+        var stockInfoEl = document.querySelector('h-input-stepper.product-quantity__input, .product-quantity__input');
+        if (stockInfoEl) {
+          // Shoper ustawia max stock w atrybucie max (jeśli overselling wyłączony)
+          var shoperMax = parseInt(stockInfoEl.getAttribute('max'), 10);
+          totalStock = shoperMax > 0 ? shoperMax : 9999;
+        }
+
+        // Dynamiczny czas wysyłki + blokada ilości
         var qi = document.querySelector('h-input-stepper.product-quantity__input, .product-quantity__input');
         var de = document.querySelector('[data-shipping-time]');
 
-        if (qi && de && stockTechtor > 0) {
+        if (qi && de) {
           attached = true;
+
+          // Pobierz totalStock z stock-data — Shoper stock field
+          // stockData[sku] = stockTechtor, totalStock = stock z Shoper (Techtor + Tarnawa)
+          // stock-data.json ma stockTechtor; totalStock musimy pobrać ze strony lub z dodatkowego pola
+          var sdTotal = stockData[sku + '__total'];
+          if (sdTotal > 0) totalStock = sdTotal;
+
+          // Ustaw max na input — blokada po stronie klienta
+          if (totalStock > 0 && totalStock < 9999) {
+            qi.setAttribute('max', totalStock);
+          }
 
           function upd() {
             var q = parseInt(qi.getAttribute('value') || qi.value, 10) || 1;
-            if (q <= stockTechtor) {
-              de.textContent = '24 godziny';
-              de.style.color = '';
-            } else {
-              de.textContent = '48 godzin';
-              de.style.color = '#b45309';
+
+            // Blokada ilości — nie pozwól przekroczyć stanu
+            if (totalStock > 0 && totalStock < 9999 && q > totalStock) {
+              qi.setAttribute('value', totalStock);
+              q = totalStock;
+            }
+
+            // Dynamiczny czas wysyłki
+            if (stockTechtor > 0) {
+              if (q <= stockTechtor) {
+                de.textContent = '24 godziny';
+                de.style.color = '';
+              } else {
+                de.textContent = '48 godzin';
+                de.style.color = '#b45309';
+              }
+            }
+
+            // Zablokuj przycisk "Dodaj do koszyka" jeśli qty > totalStock
+            var buyBtn = document.querySelector('buy-button .btn_primary, .product-actions .btn_primary');
+            if (buyBtn && totalStock > 0 && totalStock < 9999) {
+              if (q > totalStock) {
+                buyBtn.disabled = true;
+                buyBtn.style.opacity = '0.5';
+                buyBtn.style.pointerEvents = 'none';
+              } else {
+                buyBtn.disabled = false;
+                buyBtn.style.opacity = '';
+                buyBtn.style.pointerEvents = '';
+              }
             }
           }
 

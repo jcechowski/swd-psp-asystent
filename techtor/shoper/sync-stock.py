@@ -349,8 +349,11 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
         st = firmao_stocks.get(code, 0)
         td = tarnawa_stocks.get(code, {"qty": 0, "status": ""})
         total = st + td["qty"]
-        # Zawsze zapisz stockTechtor (0 = niedostępny → snippet pokaże "Zapytaj")
+        # stockTechtor (0 = niedostępny → snippet pokaże "Zapytaj")
         stock_map[code] = st
+        # totalStock (Techtor + Tarnawa) — snippet używa do blokady ilości
+        if total > 0:
+            stock_map[code + "__total"] = total
         if total == 0 and td["status"] in ("on-backorder", "out-of-stock"):
             stock_map[code + "__status"] = td["status"]
     try:
