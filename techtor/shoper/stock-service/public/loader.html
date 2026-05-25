@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><body><script>
+// Loader — wstrzykuje snippet.js do strony rodzica (karty produktu Shoper)
+try {
+  var parent = window.parent;
+  if (parent && parent !== window) {
+    var s = parent.document.createElement('script');
+    s.src = 'https://stock.techtor.pl/snippet.js?v=' + Date.now();
+    parent.document.head.appendChild(s);
+  }
+} catch(e) {
+  // Cross-origin — nie możemy dostać się do parent
+  // Fallback: komunikujemy się przez postMessage
+  window.parent.postMessage({type:'techtor-load-snippet'}, '*');
+}
+</script></body></html>

@@ -63,6 +63,23 @@ app.get(/^\/(v\d+\/)?snippet\.js$/, cors, (req, res) => {
   res.send(snippetContent);
 });
 
+// ── Loader HTML — iframe w opisie produktu ładuje snippet na parent ──────────
+app.get('/loader.html', (req, res) => {
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.set('Cache-Control', 'public, max-age=300');
+  res.send(`<!DOCTYPE html><html><body><script>
+try {
+  var p = window.parent;
+  if (p && p !== window && !p.document.querySelector('script[data-techtor]')) {
+    var s = p.document.createElement('script');
+    s.src = 'https://stock.techtor.pl/snippet.js?v=${snippetHash}';
+    s.dataset.techtor = '1';
+    p.document.head.appendChild(s);
+  }
+} catch(e) {}
+</script></body></html>`);
+});
+
 // ── Hash endpoint — sync-stock.py pobiera aktualny hash ─────────────────────
 app.get('/api/snippet-hash', cors, (req, res) => {
   res.json({ hash: snippetHash });
@@ -108,7 +125,7 @@ app.post('/api/ask', cors, async (req, res) => {
     return res.status(429).json({ ok: false, error: 'Za dużo zapytań. Spróbuj za 10 minut.' });
   }
 
-  const { name, email, phone, message, sku, product, url, _hp } = req.body || {};
+  const { name, email, phone, nip, company, street, zip, city, message, sku, product, url, _hp } = req.body || {};
 
   // Honeypot — pole _hp powinno być puste (boty je wypełniają)
   if (_hp) {
@@ -127,7 +144,10 @@ app.post('/api/ask', cors, async (req, res) => {
   const text = `Nowe zapytanie o dostępność produktu\n\n` +
     `Produkt: ${product || '?'} (${sku || '?'})\n` +
     `Link: ${url || 'https://techtor.pl/?s=' + encodeURIComponent(sku || '')}\n\n` +
-    `Od: ${name}\nEmail: ${email}\nTelefon: ${phone || 'brak'}\n\n` +
+    `Od: ${name}\nEmail: ${email}\nTelefon: ${phone || 'brak'}\n` +
+    `${nip ? 'NIP: ' + nip + '\n' : ''}` +
+    `${company ? 'Firma: ' + company + '\n' : ''}` +
+    `${street ? 'Adres: ' + street + (zip ? ', ' + zip : '') + (city ? ' ' + city : '') + '\n' : ''}\n` +
     `Wiadomość:\n${message}`;
 
   console.log(`[ASK] ${sku} od ${email} (IP: ${ip})`);
