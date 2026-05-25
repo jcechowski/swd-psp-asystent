@@ -372,7 +372,15 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
 
 # ── Auto-inject snippet ────────────────────────────────────────────────────
 SNIPPET_MARKER = "stock.techtor.pl"
-SNIPPET_TAG = '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" onload="var s=document.createElement(&#39;script&#39;);s.src=&#39;https://stock.techtor.pl/snippet.js&#39;;document.head.appendChild(s)" style="display:none">'
+def get_snippet_tag() -> str:
+    """Generuj tag z aktualnym hashem snippeta."""
+    try:
+        import hashlib
+        snippet_path = Path(__file__).resolve().parent / "stock-service" / "public" / "snippet.js"
+        h = hashlib.md5(snippet_path.read_bytes()).hexdigest()[:8]
+    except Exception:
+        h = "latest"
+    return f'<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" onload="var s=document.createElement(&#39;script&#39;);s.src=&#39;https://stock.techtor.pl/snippet.js?v={h}&#39;;document.head.appendChild(s)" style="display:none">'
 
 def inject_snippet(shoper: 'ShoperClient'):
     """Sprawdź i dodaj brakujący snippet do opisów produktów."""
@@ -408,7 +416,7 @@ def inject_snippet(shoper: 'ShoperClient'):
         if SNIPPET_MARKER in desc:
             continue
         missing += 1
-        new_desc = desc + SNIPPET_TAG
+        new_desc = desc + get_snippet_tag()
         r = shoper.session.put(
             f"{SHOPER_URL}/products/{pid}",
             json={"translations": {"pl_PL": {"description": new_desc}}},
