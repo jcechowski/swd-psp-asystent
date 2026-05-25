@@ -14,6 +14,17 @@ const SMTP_PASS = process.env.SMTP_PASS || '';
 
 app.use(express.json());
 
+// CORS preflight dla wszystkich routes
+app.options('*', (req, res) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+  }
+  res.sendStatus(204);
+});
+
 function cors(req, res, next) {
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS.includes(origin)) {
@@ -27,7 +38,7 @@ function cors(req, res, next) {
 }
 
 // snippet.js — cache 5min, CORS (obsługuje też /v2/snippet.js)
-app.get(['/snippet.js', '/v2/snippet.js', '/v3/snippet.js', '/v4/snippet.js', '/v5/snippet.js', '/v6/snippet.js'], cors, (req, res) => {
+app.get(['/snippet.js', '/v2/snippet.js', '/v3/snippet.js', '/v4/snippet.js', '/v5/snippet.js', '/v6/snippet.js', '/v7/snippet.js'], cors, (req, res) => {
   res.set('Cache-Control', 'public, max-age=300, s-maxage=300');
   res.set('Content-Type', 'application/javascript; charset=utf-8');
   res.sendFile(path.join(__dirname, 'public', 'snippet.js'));
@@ -44,14 +55,14 @@ app.get('/api/stock-data.json', cors, (req, res) => {
 
 // Zapytanie o dostępność — formularz z karty produktu
 app.post('/api/ask', cors, async (req, res) => {
-  const { name, email, phone, message, sku, product } = req.body || {};
+  const { name, email, phone, message, sku, product, url } = req.body || {};
   if (!name || !email || !message) {
     return res.status(400).json({ ok: false, error: 'Wypełnij wymagane pola' });
   }
 
   const text = `Nowe zapytanie o dostępność produktu\n\n` +
     `Produkt: ${product || '?'} (${sku || '?'})\n` +
-    `Link: https://techtor.pl/?s=${encodeURIComponent(sku || '')}\n\n` +
+    `Link: ${url || 'https://techtor.pl/?s=' + encodeURIComponent(sku || '')}\n\n` +
     `Od: ${name}\nEmail: ${email}\nTelefon: ${phone || 'brak'}\n\n` +
     `Wiadomość:\n${message}`;
 

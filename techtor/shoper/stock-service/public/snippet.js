@@ -64,6 +64,7 @@
         message: form.message.value,
         sku: sku,
         product: productName,
+        url: window.location.href,
       };
 
       fetch('https://stock.techtor.pl/api/ask', {
