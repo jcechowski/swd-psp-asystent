@@ -7,6 +7,11 @@ services:
       NODE_ENV: production
       PORT: 3000
       ALLOWED_ORIGINS: "https://techtor.pl,https://www.techtor.pl"
+      NOTIFY_EMAIL: "biuro@techtor.pl"
+      SMTP_HOST: "smtp.gmail.com"
+      SMTP_PORT: "587"
+      SMTP_USER: "biuro@techtor.pl"
+      SMTP_PASS: "svasedqxfgpuliea"
     ports:
       - "3100:3000"
     volumes:
