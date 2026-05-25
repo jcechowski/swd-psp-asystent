@@ -245,6 +245,20 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
     shoper = ShoperClient()
     shoper_stocks  = shoper.get_all_stocks()
 
+    # Walidacja źródeł danych
+    if len(firmao_stocks) == 0:
+        msg = "Firmao zwróciło 0 produktów — API niedostępne?"
+        log.error(msg)
+        send_alert("Firmao niedostępne", msg)
+        return {"matched": 0, "updated": 0, "skipped": 0, "errors": 1}
+    if len(shoper_stocks) == 0:
+        msg = "Shoper zwrócił 0 stocków — API niedostępne?"
+        log.error(msg)
+        send_alert("Shoper niedostępne", msg)
+        return {"matched": 0, "updated": 0, "skipped": 0, "errors": 1}
+    if len(tarnawa_stocks) == 0:
+        log.warning("Tarnawa: 0 produktów — scraper nie uruchomiony?")
+
     # 2. Oblicz i synchronizuj
     matched = 0
     updated = 0
@@ -346,7 +360,93 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
     except Exception as e:
         log.error(f"  stock-data.json: {e}")
 
+    # 5. Auto-inject snippet w opisy produktów (bez niego dynamiczny czas nie działa)
+    if not dry_run:
+        inject_snippet(shoper)
+
     return {"matched": matched, "updated": updated, "skipped": skipped, "errors": errors}
+
+
+# ── Auto-inject snippet ────────────────────────────────────────────────────
+SNIPPET_MARKER = "stock.techtor.pl"
+SNIPPET_TAG = '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" onload="var s=document.createElement(&#39;script&#39;);s.src=&#39;https://stock.techtor.pl/snippet.js&#39;;document.head.appendChild(s)" style="display:none">'
+
+def inject_snippet(shoper: 'ShoperClient'):
+    """Sprawdź i dodaj brakujący snippet do opisów produktów."""
+    log.info("Sprawdzanie snippet w opisach produktów...")
+
+    products = []
+    page = 1
+    while True:
+        r = shoper.session.get(
+            f"{SHOPER_URL}/products",
+            params={"limit": 50, "page": page, "include": "translations"},
+            timeout=15,
+        )
+        if r.status_code != 200:
+            break
+        data = r.json()
+        products.extend(data.get("list", []))
+        if page >= int(data.get("pages", 1)):
+            break
+        page += 1
+        time.sleep(0.3)
+
+    missing = 0
+    injected = 0
+    for p in products:
+        pid = p.get("product_id")
+        code = p.get("code", "")
+        # Pomijaj węże
+        if len(code) == 11 and code.startswith("W") and code[1:2].isalpha():
+            continue
+        t = p.get("translations", {}).get("pl_PL", {})
+        desc = t.get("description", "") or ""
+        if SNIPPET_MARKER in desc:
+            continue
+        missing += 1
+        new_desc = desc + SNIPPET_TAG
+        r = shoper.session.put(
+            f"{SHOPER_URL}/products/{pid}",
+            json={"translations": {"pl_PL": {"description": new_desc}}},
+            timeout=15,
+        )
+        if r.status_code == 200:
+            injected += 1
+        time.sleep(0.4)
+
+    if missing > 0:
+        log.info(f"  Snippet: {injected} dodanych (brakowało w {missing} produktach)")
+    else:
+        log.info(f"  Snippet: OK (wszystkie produkty mają)")
+
+
+# ── Alerty mailowe ──────────────────────────────────────────────────────────
+def send_alert(subject: str, body: str):
+    """Wyślij alert mailowy o błędzie sync."""
+    try:
+        import smtplib
+        from email.mime.text import MIMEText
+
+        smtp_user = os.environ.get("SMTP_USER", "biuro@techtor.pl")
+        smtp_pass = os.environ.get("SMTP_PASS", "svasedqxfgpuliea")
+        notify_email = os.environ.get("NOTIFY_EMAIL", "biuro@techtor.pl")
+
+        if not smtp_pass:
+            return
+
+        msg = MIMEText(body)
+        msg["Subject"] = f"[TECHTOR Sync] {subject}"
+        msg["From"] = f"TECHTOR Sync <{smtp_user}>"
+        msg["To"] = notify_email
+
+        with smtplib.SMTP("smtp.gmail.com", 587) as s:
+            s.starttls()
+            s.login(smtp_user, smtp_pass)
+            s.send_message(msg)
+        log.info(f"  Alert wysłany: {subject}")
+    except Exception as e:
+        log.error(f"  Alert SMTP error: {e}")
 
 
 if __name__ == "__main__":
@@ -356,6 +456,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     result = sync(dry_run=args.dry_run, filter_code=args.code)
+
+    # Alerty przy błędach
+    if result["errors"] > 0:
+        send_alert(
+            f"Sync zakończony z {result['errors']} błędami",
+            f"Dopasowane: {result['matched']}\n"
+            f"Zaktualizowane: {result['updated']}\n"
+            f"Błędy: {result['errors']}\n\n"
+            f"Sprawdź logi: /var/log/shoper-stock-sync.log"
+        )
 
     if result["errors"] > 0:
         sys.exit(1)

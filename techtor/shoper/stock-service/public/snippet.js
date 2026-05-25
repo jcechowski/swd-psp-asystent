@@ -36,6 +36,7 @@
           '<textarea name="message" rows="3" style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;margin-bottom:16px;font-size:14px;resize:vertical;box-sizing:border-box;">' +
             'Dzień dobry,\nchciałbym zapytać o dostępność produktu ' + productName + ' (' + sku + ').\nProszę o kontakt.' +
           '</textarea>' +
+          '<input name="_hp" type="text" style="position:absolute;left:-9999px;opacity:0;height:0;" tabindex="-1" autocomplete="off">' +
           '<button type="submit" style="width:100%;padding:12px;border:none;border-radius:8px;background:#b45309;color:#fff;font-size:15px;font-weight:600;cursor:pointer;">Wyślij zapytanie</button>' +
         '</form>' +
         '<div id="techtor-ask-success" style="display:none;text-align:center;padding:20px 0;">' +
@@ -60,6 +61,7 @@
       var data = {
         name: form.name.value,
         email: form.email.value,
+        _hp: form._hp ? form._hp.value : '',
         phone: form.phone.value,
         message: form.message.value,
         sku: sku,
