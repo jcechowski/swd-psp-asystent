@@ -299,6 +299,18 @@ def sync(dry_run: bool = False, filter_code: str | None = None):
     log.info(f"  Bez zmian: {skipped}")
     log.info(f"  Błędy: {errors}")
 
+    # 4. Generuj stock-data.json dla snippet JS
+    stock_data_path = Path(__file__).resolve().parent / "stock-service" / "public" / "stock-data.json"
+    stock_map = {code: firmao_stocks.get(code, 0)
+                 for code in shoper_stocks
+                 if firmao_stocks.get(code, 0) > 0}
+    try:
+        stock_data_path.parent.mkdir(parents=True, exist_ok=True)
+        stock_data_path.write_text(json.dumps(stock_map, separators=(",", ":")))
+        log.info(f"  stock-data.json: {len(stock_map)} produktów ({stock_data_path.stat().st_size} B)")
+    except Exception as e:
+        log.error(f"  stock-data.json: {e}")
+
     return {"matched": matched, "updated": updated, "skipped": skipped, "errors": errors}
 
 

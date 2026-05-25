@@ -1,0 +1,23 @@
+services:
+  stock:
+    build: .
+    container_name: shoper_stock_service
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      ALLOWED_ORIGINS: "https://techtor.pl,https://www.techtor.pl"
+    ports:
+      - "3100:3000"
+    volumes:
+      - ./public/stock-data.json:/app/public/stock-data.json:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  default:
+    name: techtor_net
+    external: true

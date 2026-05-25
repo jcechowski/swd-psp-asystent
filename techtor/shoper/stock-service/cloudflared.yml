@@ -1,0 +1,7 @@
+tunnel: 9b3f0cfb-cd70-4857-8810-427852ad146d
+credentials-file: /root/.cloudflared/9b3f0cfb-cd70-4857-8810-427852ad146d.json
+
+ingress:
+  - hostname: stock.techtor.pl
+    service: http://127.0.0.1:3100
+  - service: http_status:404
