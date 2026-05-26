@@ -3,14 +3,30 @@
 
   var API_URL = 'https://stock.techtor.pl/api/stock-data.json';
   var VAT_API = 'https://vat.techtor.pl/api/gus';
-  if (window._techtorAttached) return;
-  window._techtorAttached = true;
-  var attached = false;
 
-  // Ukryj oryginalny przycisk "Zapytaj o produkt" z Shoper
-  var style = document.createElement('style');
-  style.textContent = '[data-module-name="product_ask_questions"] { display: none !important; }';
-  document.head.appendChild(style);
+  // Ukryj oryginalny przycisk "Zapytaj o produkt" z Shoper (raz)
+  if (!document.getElementById('techtor-hide-ask')) {
+    var style = document.createElement('style');
+    style.id = 'techtor-hide-ask';
+    style.textContent = '[data-module-name="product_ask_questions"] { display: none !important; }';
+    document.head.appendChild(style);
+  }
+
+  // Guard: porównaj URL + timestamp — pozwala na re-run po F5 i Turbo nawigacji
+  var now = Date.now();
+  var lastRun = window._techtorRun || 0;
+  var currentUrl = window.location.pathname;
+  // Jeśli ten sam URL i minęło < 2s — to duplikat (desktop+mobile short_description)
+  if (window._techtorUrl === currentUrl && (now - lastRun) < 2000) return;
+  window._techtorUrl = currentUrl;
+  window._techtorRun = now;
+
+  // Usuń stare elementy z poprzedniej strony/odświeżenia
+  ['techtor-stock-warning', 'techtor-ask-overlimit', 'techtor-ask-modal'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.remove();
+  });
+  document.querySelectorAll('.techtor-ask-btn').forEach(function(el) { el.remove(); });
 
   function getSku() {
     var el = document.querySelector('[data-product-code="sku"]');
@@ -41,7 +57,6 @@
         '<h3 style="margin:0 0 4px;font-size:18px;color:#1f2937;">Zapytaj o dostępność</h3>' +
         '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;">Produkt: <strong>' + productName + '</strong> (' + sku + ')</p>' +
         '<form id="techtor-ask-form">' +
-          // NIP + autofill
           '<div style="' + rowStyle + '">' +
             '<div style="flex:1;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">NIP</label>' +
@@ -49,10 +64,8 @@
             '</div>' +
           '</div>' +
           '<div id="techtor-nip-status" style="display:none;padding:6px 12px;border-radius:6px;font-size:12px;margin-bottom:10px;"></div>' +
-          // Firma
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Firma</label>' +
           '<input name="company" placeholder="Nazwa firmy" style="' + inputStyle + '">' +
-          // Imię + Telefon
           '<div style="' + rowStyle + '">' +
             '<div style="flex:1;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Imię i nazwisko *</label>' +
@@ -63,10 +76,8 @@
               '<input name="phone" type="tel" placeholder="np. 600 100 200" style="' + inputStyle + '">' +
             '</div>' +
           '</div>' +
-          // Email
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Email *</label>' +
           '<input name="email" type="email" placeholder="Adres e-mail" required style="' + inputStyle + '">' +
-          // Adres
           '<div style="' + rowStyle + '">' +
             '<div style="flex:2;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Ulica</label>' +
@@ -79,7 +90,6 @@
           '</div>' +
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Miasto</label>' +
           '<input name="city" placeholder="Miasto" style="' + inputStyle + '">' +
-          // Wiadomość
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Wiadomość</label>' +
           '<textarea name="message" rows="3" style="' + inputStyle + 'resize:vertical;">' +
             'Dzień dobry,\nchciałbym zapytać o dostępność produktu ' + productName + ' (' + sku + ').\nProszę o kontakt.' +
@@ -98,7 +108,6 @@
     document.getElementById('techtor-ask-close').onclick = function () { overlay.remove(); };
     overlay.onclick = function (e) { if (e.target === overlay) overlay.remove(); };
 
-    // NIP autofill
     var nipInput = overlay.querySelector('input[name="nip"]');
     var nipStatus = document.getElementById('techtor-nip-status');
     var nipTimeout = null;
@@ -131,16 +140,13 @@
                 nipStatus.textContent = 'Nie znaleziono firmy o podanym NIP';
               }
             })
-            .catch(function () {
-              nipStatus.style.display = 'none';
-            });
+            .catch(function () { nipStatus.style.display = 'none'; });
         }, 300);
       } else {
         nipStatus.style.display = 'none';
       }
     });
 
-    // Submit
     document.getElementById('techtor-ask-form').onsubmit = function (e) {
       e.preventDefault();
       var form = e.target;
@@ -153,15 +159,11 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: form.name.value,
-          email: form.email.value,
+          name: form.name.value, email: form.email.value,
           _hp: form._hp ? form._hp.value : '',
-          phone: form.phone.value,
-          nip: form.nip.value,
-          company: form.company.value,
-          street: form.street.value,
-          zip: form.zip.value,
-          city: form.city.value,
+          phone: form.phone.value, nip: form.nip.value,
+          company: form.company.value, street: form.street.value,
+          zip: form.zip.value, city: form.city.value,
           message: form.message.value,
           sku: sku, product: productName, url: window.location.href,
         }),
@@ -174,14 +176,12 @@
             setTimeout(function () { overlay.remove(); }, 3000);
           } else {
             btn.textContent = res.error || 'Błąd — spróbuj ponownie';
-            btn.disabled = false;
-            btn.style.background = '#dc2626';
+            btn.disabled = false; btn.style.background = '#dc2626';
           }
         })
         .catch(function () {
           btn.textContent = 'Błąd — spróbuj ponownie';
-          btn.disabled = false;
-          btn.style.background = '#dc2626';
+          btn.disabled = false; btn.style.background = '#dc2626';
         });
     };
   }
@@ -189,6 +189,7 @@
   fetch(API_URL)
     .then(function (r) { return r.json(); })
     .then(function (stockData) {
+      var attached = false;
 
       function tryAttach() {
         if (attached) return;
@@ -204,8 +205,21 @@
         var buyBtns = document.querySelectorAll('buy-button');
         var productName = getProductName();
 
+        // Produkty dostępne (totalStock > 0)
         if (qi && totalStock > 0) {
           attached = true;
+
+          // Ustaw domyślny czas wysyłki od razu (nie czekaj na zmianę qty)
+          if (de) {
+            if (stockTechtor > 0) {
+              de.textContent = '24 godziny';
+              de.style.color = '';
+            } else {
+              // Tylko Tarnawa — zawsze 48h
+              de.textContent = '48 godzin';
+              de.style.color = '#b45309';
+            }
+          }
 
           var banner = document.getElementById('techtor-stock-warning');
           if (!banner) {
@@ -227,7 +241,7 @@
 
             banner.style.display = overLimit ? 'block' : 'none';
 
-            // Przycisk "Zapytaj o dostępność" gdy przekroczono max
+            // Przycisk "Zapytaj" gdy przekroczono max
             var askOverLimit = document.getElementById('techtor-ask-overlimit');
             if (overLimit && !askOverLimit) {
               askOverLimit = document.createElement('button');
@@ -237,18 +251,15 @@
               askOverLimit.onmouseover = function () { askOverLimit.style.background = '#b91c1c'; };
               askOverLimit.onmouseout = function () { askOverLimit.style.background = '#dc2626'; };
               askOverLimit.onclick = function () { showAskModal(sku, productName); };
-              // Wstaw po bannerze lub po product-actions
-              var insertParent = banner.parentNode || document.querySelector('.product-actions, [data-module-name="product_actions"]');
+              var insertParent = banner.parentNode || document.querySelector('.product-actions');
               if (insertParent) {
-                if (banner.parentNode) {
-                  banner.parentNode.insertBefore(askOverLimit, banner.nextSibling);
-                } else {
-                  insertParent.appendChild(askOverLimit);
-                }
+                if (banner.parentNode) banner.parentNode.insertBefore(askOverLimit, banner.nextSibling);
+                else insertParent.appendChild(askOverLimit);
               }
             }
             if (askOverLimit) askOverLimit.style.display = overLimit ? 'flex' : 'none';
 
+            // Blokada koszyka
             buyBtns.forEach(function (bb) {
               var btn = bb.querySelector('.btn_primary');
               if (!btn) return;
@@ -268,8 +279,9 @@
               }
             });
 
-            if (de && stockTechtor > 0 && !overLimit) {
-              if (q <= stockTechtor) {
+            // Dynamiczny czas wysyłki
+            if (de && !overLimit) {
+              if (stockTechtor > 0 && q <= stockTechtor) {
                 de.textContent = '24 godziny';
                 de.style.color = '';
               } else {
@@ -294,11 +306,18 @@
           upd();
         }
 
+        // Produkty niedostępne (totalStock=0, koszyk zablokowany)
         if (totalStock <= 0 && !qi) {
           attached = true;
+
+          // Ustaw czas na "brak" jeśli element istnieje
+          if (de) {
+            de.textContent = 'niedostępny';
+            de.style.color = '#991b1b';
+          }
+
           var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"]');
           if (buyArea && !buyArea.querySelector('.techtor-ask-btn')) {
-            var productName = getProductName();
             var askBtn = document.createElement('button');
             askBtn.className = 'techtor-ask-btn';
             askBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:14px 28px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;margin-top:8px;transition:background 0.2s;box-shadow:0 4px 12px rgba(220,38,38,0.3);';
