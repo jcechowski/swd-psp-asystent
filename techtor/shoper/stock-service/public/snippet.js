@@ -197,6 +197,7 @@
         var qi = document.querySelector('h-input-stepper.product-quantity__input, .product-quantity__input');
         var de = document.querySelector('[data-shipping-time]');
         var buyBtns = document.querySelectorAll('buy-button');
+        var productName = getProductName();
 
         if (qi && totalStock > 0) {
           attached = true;
@@ -220,6 +221,28 @@
             var overLimit = q > totalStock;
 
             banner.style.display = overLimit ? 'block' : 'none';
+
+            // Przycisk "Zapytaj o dostępność" gdy przekroczono max
+            var askOverLimit = document.getElementById('techtor-ask-overlimit');
+            if (overLimit && !askOverLimit) {
+              askOverLimit = document.createElement('button');
+              askOverLimit.id = 'techtor-ask-overlimit';
+              askOverLimit.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:14px 28px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;margin-top:8px;transition:background 0.2s;box-shadow:0 4px 12px rgba(220,38,38,0.3);width:100%;';
+              askOverLimit.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Potrzebujesz więcej? Zapytaj o dostępność';
+              askOverLimit.onmouseover = function () { askOverLimit.style.background = '#b91c1c'; };
+              askOverLimit.onmouseout = function () { askOverLimit.style.background = '#dc2626'; };
+              askOverLimit.onclick = function () { showAskModal(sku, productName); };
+              // Wstaw po bannerze lub po product-actions
+              var insertParent = banner.parentNode || document.querySelector('.product-actions, [data-module-name="product_actions"]');
+              if (insertParent) {
+                if (banner.parentNode) {
+                  banner.parentNode.insertBefore(askOverLimit, banner.nextSibling);
+                } else {
+                  insertParent.appendChild(askOverLimit);
+                }
+              }
+            }
+            if (askOverLimit) askOverLimit.style.display = overLimit ? 'flex' : 'none';
 
             buyBtns.forEach(function (bb) {
               var btn = bb.querySelector('.btn_primary');
