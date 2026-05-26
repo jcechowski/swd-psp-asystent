@@ -7,6 +7,11 @@
   window._techtorAttached = true;
   var attached = false;
 
+  // Ukryj oryginalny przycisk "Zapytaj o produkt" z Shoper
+  var style = document.createElement('style');
+  style.textContent = '[data-module-name="product_ask_questions"] { display: none !important; }';
+  document.head.appendChild(style);
+
   function getSku() {
     var el = document.querySelector('[data-product-code="sku"]');
     if (el) return el.textContent.trim();
