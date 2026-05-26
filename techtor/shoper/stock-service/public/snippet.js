@@ -3,6 +3,8 @@
 
   var API_URL = 'https://stock.techtor.pl/api/stock-data.json';
   var VAT_API = 'https://vat.techtor.pl/api/gus';
+  if (window._techtorAttached) return;
+  window._techtorAttached = true;
   var attached = false;
 
   function getSku() {
@@ -199,12 +201,15 @@
         if (qi && totalStock > 0) {
           attached = true;
 
-          var banner = document.createElement('div');
-          banner.id = 'techtor-stock-warning';
-          banner.style.cssText = 'display:none;padding:10px 16px;margin:8px 0;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px;font-weight:500;';
-          banner.textContent = 'Maksymalna dostępna ilość: ' + totalStock + ' szt.';
-          var actionsEl = document.querySelector('.product-actions, [data-module-name="product_actions"]');
-          if (actionsEl) actionsEl.parentNode.insertBefore(banner, actionsEl);
+          var banner = document.getElementById('techtor-stock-warning');
+          if (!banner) {
+            banner = document.createElement('div');
+            banner.id = 'techtor-stock-warning';
+            banner.style.cssText = 'display:none;padding:10px 16px;margin:8px 0;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px;font-weight:500;';
+            banner.textContent = 'Maksymalna dostępna ilość: ' + totalStock + ' szt.';
+            var actionsEl = document.querySelector('.product-actions, [data-module-name="product_actions"]');
+            if (actionsEl) actionsEl.parentNode.insertBefore(banner, actionsEl);
+          }
 
           function getQty() {
             return parseInt(qi.getAttribute('value') || qi.value, 10) || 1;
