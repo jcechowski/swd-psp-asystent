@@ -63,50 +63,63 @@
     var rowStyle = 'display:flex;gap:10px;';
 
     overlay.innerHTML =
-      '<div style="background:#fff;border-radius:16px;padding:28px;max-width:520px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:90vh;overflow-y:auto;">' +
+      '<div style="background:#fff;border-radius:16px;padding:28px;max-width:780px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:90vh;overflow-y:auto;">' +
         '<button id="techtor-ask-close" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#666;">&times;</button>' +
         '<h3 style="margin:0 0 4px;font-size:18px;color:#1f2937;">Zapytaj o dostępność</h3>' +
-        '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;">Produkt: <strong>' + productName + '</strong> (' + sku + ')</p>' +
         '<form id="techtor-ask-form">' +
+          '<div style="' + rowStyle + 'align-items:center;margin-bottom:16px;">' +
+            '<p style="margin:0;font-size:13px;color:#6b7280;flex:1;">Produkt: <strong>' + productName + '</strong> (' + sku + ')</p>' +
+            '<div style="display:flex;align-items:center;gap:12px;flex:0 0 auto;">' +
+              '<div style="flex:0 0 100px;">' +
+                '<label style="font-size:12px;font-weight:700;color:#1f2937;margin-bottom:4px;display:block;text-align:center;">Ilość (szt.)</label>' +
+                '<input name="quantity" type="number" min="1" value="' + (quantity || 1) + '" style="width:100%;padding:14px;border:2px solid #dc2626;border-radius:12px;font-size:22px;font-weight:800;text-align:center;color:#dc2626;background:#fef2f2;box-sizing:border-box;outline:none;">' +
+              '</div>' +
+              '<p style="margin:0;font-size:14px;font-weight:700;color:#991b1b;line-height:1.4;max-width:120px;">Podaj ilość<br>sztuk</p>' +
+            '</div>' +
+          '</div>' +
           '<div style="' + rowStyle + '">' +
-            '<div style="flex:0 0 100px;">' +
-              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Ilość (szt.) *</label>' +
-              '<input name="quantity" type="number" min="1" value="' + (quantity || 1) + '" style="' + inputStyle + 'text-align:center;font-weight:700;font-size:16px;">' +
+            '<div style="flex:0 0 160px;">' +
+              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">NIP</label>' +
+              '<input name="nip" placeholder="NIP firmy" maxlength="13" style="' + inputStyle + '">' +
             '</div>' +
             '<div style="flex:1;">' +
-              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">NIP</label>' +
-              '<input name="nip" placeholder="Wpisz NIP — dane uzupełnią się automatycznie" maxlength="13" style="' + inputStyle + '">' +
+              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Firma</label>' +
+              '<input name="company" placeholder="Nazwa firmy" style="' + inputStyle + '">' +
             '</div>' +
           '</div>' +
           '<div id="techtor-nip-status" style="display:none;padding:6px 12px;border-radius:6px;font-size:12px;margin-bottom:10px;"></div>' +
-          '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Firma</label>' +
-          '<input name="company" placeholder="Nazwa firmy" style="' + inputStyle + '">' +
           '<div style="' + rowStyle + '">' +
             '<div style="flex:1;">' +
-              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Imię i nazwisko *</label>' +
-              '<input name="name" placeholder="Imię i nazwisko" style="' + inputStyle + '">' +
+              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Email *</label>' +
+              '<input name="email" placeholder="Adres e-mail" style="' + inputStyle + '">' +
             '</div>' +
             '<div style="flex:1;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Telefon</label>' +
               '<input name="phone" type="tel" placeholder="np. 600 100 200" style="' + inputStyle + '">' +
             '</div>' +
           '</div>' +
-          '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Email *</label>' +
-          '<input name="email" placeholder="Adres e-mail" style="' + inputStyle + '">' +
           '<div style="' + rowStyle + '">' +
+            '<div style="flex:1;">' +
+              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Imię i nazwisko *</label>' +
+              '<input name="name" placeholder="Imię i nazwisko" style="' + inputStyle + '">' +
+            '</div>' +
             '<div style="flex:2;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Ulica</label>' +
               '<input name="street" placeholder="Ulica i numer" style="' + inputStyle + '">' +
             '</div>' +
-            '<div style="flex:1;">' +
+          '</div>' +
+          '<div style="' + rowStyle + '">' +
+            '<div style="flex:0 0 120px;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Kod pocztowy</label>' +
               '<input name="zip" placeholder="00-000" style="' + inputStyle + '">' +
             '</div>' +
+            '<div style="flex:1;">' +
+              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Miasto</label>' +
+              '<input name="city" placeholder="Miasto" style="' + inputStyle + '">' +
+            '</div>' +
           '</div>' +
-          '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Miasto</label>' +
-          '<input name="city" placeholder="Miasto" style="' + inputStyle + '">' +
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Wiadomość</label>' +
-          '<textarea name="message" rows="3" style="' + inputStyle + 'resize:vertical;">' +
+          '<textarea name="message" rows="5" style="' + inputStyle + 'resize:vertical;">' +
             'Dzień dobry,\nchciałbym zapytać o dostępność produktu ' + productName + ' (' + sku + ')' + (quantity ? ' w ilości ' + quantity + ' szt.' : '') + '.\nProszę o kontakt.' +
           '</textarea>' +
           '<input name="_hp" type="text" style="position:absolute;left:-9999px;opacity:0;height:0;" tabindex="-1" autocomplete="off">' +
