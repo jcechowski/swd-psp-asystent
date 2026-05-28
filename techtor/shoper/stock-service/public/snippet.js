@@ -4,29 +4,22 @@
   var API_URL = 'https://stock.techtor.pl/api/stock-data.json';
   var VAT_API = 'https://vat.techtor.pl/api/gus';
 
-  // Ukryj oryginalny przycisk "Zapytaj o produkt" z Shoper (raz)
+  // Zapobiegaj podwójnemu ładowaniu (header loader ustawia _tLoad=0, img onload sprawdza)
+  window._tLoad = 1;
+
+  // Globalny numer runu — nowszy anuluje starsze
+  var runId = window._tRunId = (window._tRunId || 0) + 1;
+
+  // Wyczyść stary interval
+  if (window._tInterval) { clearInterval(window._tInterval); window._tInterval = null; }
+
+  // Ukryj oryginalny przycisk "Zapytaj o produkt" z Shoper
   if (!document.getElementById('techtor-hide-ask')) {
     var style = document.createElement('style');
     style.id = 'techtor-hide-ask';
     style.textContent = '[data-module-name="product_ask_questions"] { display: none !important; }';
     document.head.appendChild(style);
   }
-
-  // Guard: porównaj URL + timestamp — pozwala na re-run po F5 i Turbo nawigacji
-  var now = Date.now();
-  var lastRun = window._techtorRun || 0;
-  var currentUrl = window.location.pathname;
-  // Jeśli ten sam URL i minęło < 2s — to duplikat (desktop+mobile short_description)
-  if (window._techtorUrl === currentUrl && (now - lastRun) < 2000) return;
-  window._techtorUrl = currentUrl;
-  window._techtorRun = now;
-
-  // Usuń stare elementy z poprzedniej strony/odświeżenia
-  ['techtor-stock-warning', 'techtor-ask-overlimit', 'techtor-ask-modal'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.remove();
-  });
-  document.querySelectorAll('.techtor-ask-btn').forEach(function(el) { el.remove(); });
 
   function getSku() {
     var el = document.querySelector('[data-product-code="sku"]');
@@ -111,7 +104,6 @@
     var nipInput = overlay.querySelector('input[name="nip"]');
     var nipStatus = document.getElementById('techtor-nip-status');
     var nipTimeout = null;
-
     nipInput.addEventListener('input', function () {
       var nip = nipInput.value.replace(/[\s-]/g, '');
       clearTimeout(nipTimeout);
@@ -142,19 +134,14 @@
             })
             .catch(function () { nipStatus.style.display = 'none'; });
         }, 300);
-      } else {
-        nipStatus.style.display = 'none';
-      }
+      } else { nipStatus.style.display = 'none'; }
     });
 
     document.getElementById('techtor-ask-form').onsubmit = function (e) {
       e.preventDefault();
       var form = e.target;
       var btn = form.querySelector('button[type="submit"]');
-      btn.textContent = 'Wysyłanie...';
-      btn.disabled = true;
-      btn.style.background = '#9ca3af';
-
+      btn.textContent = 'Wysyłanie...'; btn.disabled = true; btn.style.background = '#9ca3af';
       fetch('https://stock.techtor.pl/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -186,153 +173,276 @@
     };
   }
 
-  fetch(API_URL)
-    .then(function (r) { return r.json(); })
-    .then(function (stockData) {
-      var attached = false;
+  // ── Główna logika ──
 
-      function tryAttach() {
-        if (attached) return;
+  function getStockData(cb) {
+    var CACHE_KEY = 'techtor_sd';
+    var CACHE_TTL = 5 * 60 * 1000;
+    try {
+      var c = JSON.parse(sessionStorage.getItem(CACHE_KEY));
+      if (c && c.ts && Date.now() - c.ts < CACHE_TTL) return cb(c.d);
+    } catch (e) {}
+    fetch(API_URL)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), d: d })); } catch (e) {}
+        cb(d);
+      })
+      .catch(function () { cb(null); });
+  }
 
-        var sku = getSku();
-        if (!sku) return;
+  // ── Ciągły loop aplikujący stan — łapie elementy renderowane przez Shoper po starcie ──
+  function startLoop(stockData) {
+    if (!stockData) return;
 
-        var stockTechtor = stockData[sku] || 0;
-        var totalStock = stockData[sku + '__total'] || 0;
+    var sku = null;
+    var stockTechtor = 0;
+    var totalStock = 0;
+    var productName = '';
 
-        var qi = document.querySelector('h-input-stepper.product-quantity__input, .product-quantity__input');
-        var de = document.querySelector('[data-shipping-time]');
-        var buyBtns = document.querySelectorAll('buy-button');
-        var productName = getProductName();
+    function applyState() {
+      // Sprawdź czy nowszy run nie zastąpił tego
+      if (window._tRunId !== runId) {
+        clearInterval(window._tInterval);
+        return;
+      }
 
-        // Produkty dostępne (totalStock > 0)
-        if (qi && totalStock > 0) {
-          attached = true;
+      // Znajdź SKU (raz)
+      if (!sku) {
+        sku = getSku();
+        if (!sku) return; // czekaj
+        stockTechtor = stockData[sku] || 0;
+        totalStock = stockData[sku + '__total'] || 0;
+        productName = getProductName();
+        dbg('SKU: ' + sku + ' techtor=' + stockTechtor + ' total=' + totalStock);
+      }
 
-          // Ustaw domyślny czas wysyłki od razu (nie czekaj na zmianę qty)
-          if (de) {
-            if (stockTechtor > 0) {
-              de.textContent = '24 godziny';
-              de.style.color = '';
-            } else {
-              // Tylko Tarnawa — zawsze 48h
-              de.textContent = '48 godzin';
-              de.style.color = '#b45309';
-            }
+      // Znajdź elementy DOM (mogą pojawić się w różnym czasie)
+      var qi = document.querySelector('h-input-stepper.product-quantity__input, .product-quantity__input, h-input-stepper, [class*="quantity__input"], input[name="quantity"], input[type="number"][min]');
+      var de = document.querySelector('[data-shipping-time]');
+      var buyBtns = document.querySelectorAll('buy-button, [class*="buy-button"], .product-buy__button, button[type="submit"][class*="btn_primary"]');
+      if (buyBtns.length === 0) buyBtns = document.querySelectorAll('.btn_primary');
+      var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"], .product-detail__actions');
+
+      if (!de && !qi && !buyArea) return; // DOM jeszcze nie gotowy
+
+      // ── DOSTĘPNY ──
+      if (totalStock > 0) {
+        if (de) {
+          if (stockTechtor > 0) {
+            de.textContent = '24 godziny'; de.style.color = '';
+          } else {
+            de.textContent = '48 godzin'; de.style.color = '#b45309';
           }
-
-          var banner = document.getElementById('techtor-stock-warning');
-          if (!banner) {
-            banner = document.createElement('div');
-            banner.id = 'techtor-stock-warning';
-            banner.style.cssText = 'display:none;padding:10px 16px;margin:8px 0;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px;font-weight:500;';
-            banner.textContent = 'Maksymalna dostępna ilość: ' + totalStock + ' szt.';
-            var actionsEl = document.querySelector('.product-actions, [data-module-name="product_actions"]');
-            if (actionsEl) actionsEl.parentNode.insertBefore(banner, actionsEl);
-          }
-
-          function getQty() {
-            return parseInt(qi.getAttribute('value') || qi.value, 10) || 1;
-          }
-
-          function upd() {
-            var q = getQty();
-            var overLimit = q > totalStock;
-
-            banner.style.display = overLimit ? 'block' : 'none';
-
-            // Przycisk "Zapytaj" gdy przekroczono max
-            var askOverLimit = document.getElementById('techtor-ask-overlimit');
-            if (overLimit && !askOverLimit) {
-              askOverLimit = document.createElement('button');
-              askOverLimit.id = 'techtor-ask-overlimit';
-              askOverLimit.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:14px 28px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;margin-top:8px;transition:background 0.2s;box-shadow:0 4px 12px rgba(220,38,38,0.3);width:100%;';
-              askOverLimit.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Potrzebujesz więcej? Zapytaj o dostępność';
-              askOverLimit.onmouseover = function () { askOverLimit.style.background = '#b91c1c'; };
-              askOverLimit.onmouseout = function () { askOverLimit.style.background = '#dc2626'; };
-              askOverLimit.onclick = function () { showAskModal(sku, productName); };
-              var insertParent = banner.parentNode || document.querySelector('.product-actions');
-              if (insertParent) {
-                if (banner.parentNode) banner.parentNode.insertBefore(askOverLimit, banner.nextSibling);
-                else insertParent.appendChild(askOverLimit);
-              }
-            }
-            if (askOverLimit) askOverLimit.style.display = overLimit ? 'flex' : 'none';
-
-            // Blokada koszyka
-            buyBtns.forEach(function (bb) {
-              var btn = bb.querySelector('.btn_primary');
-              if (!btn) return;
-              if (overLimit) {
-                bb.setAttribute('is-buyable', '0');
-                btn.disabled = true;
-                btn.style.opacity = '0.4';
-                btn.style.pointerEvents = 'none';
-                if (!btn.dataset.origText) btn.dataset.origText = btn.textContent;
-                btn.textContent = 'Brak wystarczającej ilości';
-              } else {
-                bb.setAttribute('is-buyable', '1');
-                btn.disabled = false;
-                btn.style.opacity = '';
-                btn.style.pointerEvents = '';
-                if (btn.dataset.origText) btn.textContent = btn.dataset.origText;
-              }
-            });
-
-            // Dynamiczny czas wysyłki
-            if (de && !overLimit) {
-              if (stockTechtor > 0 && q <= stockTechtor) {
-                de.textContent = '24 godziny';
-                de.style.color = '';
-              } else {
-                de.textContent = '48 godzin';
-                de.style.color = '#b45309';
-              }
-            }
-          }
-
-          new MutationObserver(function () { setTimeout(upd, 10); })
-            .observe(qi, { attributes: true, attributeFilter: ['value'] });
-          var qc = qi.closest('product-quantity, [class*="quantity"]');
-          if (qc) qc.addEventListener('click', function () { setTimeout(upd, 50); setTimeout(upd, 150); });
-          qi.querySelectorAll('h-button-stepper, button').forEach(function (btn) {
-            btn.addEventListener('click', function () { setTimeout(upd, 50); setTimeout(upd, 150); });
-          });
-          var innerInput = qi.querySelector('input');
-          if (innerInput) {
-            innerInput.addEventListener('change', function () { setTimeout(upd, 10); });
-            innerInput.addEventListener('blur', function () { setTimeout(upd, 10); });
-          }
-          upd();
         }
 
-        // Produkty niedostępne (totalStock=0, koszyk zablokowany)
-        if (totalStock <= 0 && !qi) {
-          attached = true;
+        if (!qi) return; // stepper jeszcze nie wyrenderowany
 
-          // Ustaw czas na "brak" jeśli element istnieje
-          if (de) {
-            de.textContent = 'niedostępny';
-            de.style.color = '#991b1b';
-          }
+        var q = parseInt(qi.getAttribute('value') || qi.value, 10) || 1;
+        var overLimit = q > totalStock;
 
-          var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"]');
-          if (buyArea && !buyArea.querySelector('.techtor-ask-btn')) {
-            var askBtn = document.createElement('button');
-            askBtn.className = 'techtor-ask-btn';
-            askBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:14px 28px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;margin-top:8px;transition:background 0.2s;box-shadow:0 4px 12px rgba(220,38,38,0.3);';
-            askBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Zapytaj o dostępność';
-            askBtn.onmouseover = function () { askBtn.style.background = '#b91c1c'; };
-            askBtn.onmouseout = function () { askBtn.style.background = '#dc2626'; };
-            askBtn.onclick = function () { showAskModal(sku, productName); };
-            buyArea.appendChild(askBtn);
+        // Banner "Przekroczono ilość"
+        var banner = document.getElementById('techtor-stock-warning');
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.id = 'techtor-stock-warning';
+          banner.style.cssText = 'display:none;padding:14px 20px;margin:12px 0 16px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;color:#92400e;font-size:14px;font-weight:600;line-height:1.5;';
+          banner.innerHTML = '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+            '<span>Maksymalna dostępna ilość: <strong>' + totalStock + ' szt.</strong></span>' +
+            '</div>';
+          var actionsEl = document.querySelector('.product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"]');
+          if (actionsEl) actionsEl.parentNode.insertBefore(banner, actionsEl);
+          else { var p = qi.closest('section, .product-info, .product-detail, [class*="product"]'); if (p) p.appendChild(banner); }
+        }
+        banner.style.display = overLimit ? 'block' : 'none';
+
+        // Przycisk "Zapytaj" przy overlimit
+        var askOL = document.getElementById('techtor-ask-overlimit');
+        if (overLimit && !askOL) {
+          askOL = document.createElement('button');
+          askOL.id = 'techtor-ask-overlimit';
+          askOL.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;margin:12px 0 16px;box-shadow:0 4px 14px rgba(220,38,38,0.25);width:100%;transition:all 0.2s ease;';
+          askOL.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Potrzebujesz więcej? Zapytaj o dostępność';
+          askOL.onmouseover = function () { askOL.style.background = '#b91c1c'; askOL.style.boxShadow = '0 6px 20px rgba(220,38,38,0.35)'; askOL.style.transform = 'translateY(-1px)'; };
+          askOL.onmouseout = function () { askOL.style.background = '#dc2626'; askOL.style.boxShadow = '0 4px 14px rgba(220,38,38,0.25)'; askOL.style.transform = ''; };
+          askOL.onclick = function () { showAskModal(sku, productName); };
+          if (banner && banner.parentNode) banner.parentNode.insertBefore(askOL, banner.nextSibling);
+        }
+        if (askOL) askOL.style.display = overLimit ? 'flex' : 'none';
+
+        // Blokada koszyka
+        buyBtns.forEach(function (bb) {
+          var btn = bb.querySelector('.btn_primary') || (bb.classList.contains('btn_primary') ? bb : null);
+          if (!btn) return;
+          if (overLimit) {
+            bb.setAttribute('is-buyable', '0');
+            btn.disabled = true; btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none';
+            if (!btn.dataset.origText) btn.dataset.origText = btn.textContent;
+            btn.textContent = 'Brak wystarczającej ilości';
+          } else {
+            bb.setAttribute('is-buyable', '1');
+            btn.disabled = false; btn.style.opacity = ''; btn.style.pointerEvents = '';
+            if (btn.dataset.origText) btn.textContent = btn.dataset.origText;
           }
+        });
+
+        // Dynamiczny czas wysyłki
+        if (de) {
+          var deWrapper = de.closest('[class*="shipping"], [class*="delivery"], [data-module-name*="shipping"]') || de.parentElement;
+          var deTarget = deWrapper || de;
+          if (overLimit) {
+            // Przekroczono stan — ukryj czas dostawy
+            if (deTarget.style.display !== 'none') {
+              deTarget.style.display = 'none';
+              deTarget.dataset.techtorHidden = '1';
+            }
+          } else {
+            // W granicach stanu — pokaż i ustaw czas
+            if (deTarget.dataset.techtorHidden) {
+              deTarget.style.display = '';
+              delete deTarget.dataset.techtorHidden;
+            }
+            if (stockTechtor > 0 && q <= stockTechtor) {
+              de.textContent = '24 godziny'; de.style.color = '';
+            } else {
+              de.textContent = '48 godzin'; de.style.color = '#b45309';
+            }
+          }
+        }
+
+        // Event listeners na stepper (raz)
+        if (!qi.dataset.techtorBound) {
+          qi.dataset.techtorBound = '1';
+          new MutationObserver(function () { setTimeout(applyState, 10); })
+            .observe(qi, { attributes: true, attributeFilter: ['value'] });
+          var qc = qi.closest('product-quantity, [class*="quantity"]');
+          if (qc) qc.addEventListener('click', function () { setTimeout(applyState, 50); setTimeout(applyState, 150); });
+          qi.querySelectorAll('h-button-stepper, button').forEach(function (btn) {
+            btn.addEventListener('click', function () { setTimeout(applyState, 50); setTimeout(applyState, 150); });
+          });
+          var innerInput = qi.querySelector('input') || (qi.tagName === 'INPUT' ? qi : null);
+          if (innerInput) {
+            innerInput.addEventListener('change', function () { setTimeout(applyState, 10); });
+            innerInput.addEventListener('input', function () { setTimeout(applyState, 10); });
+            innerInput.addEventListener('blur', function () { setTimeout(applyState, 10); });
+          }
+        }
+        return;
+      }
+
+      // ── NIEDOSTĘPNY (totalStock <= 0) ──
+
+      // Ukryj czas dostawy (nie pokazujemy "niedostępny" — baner wystarczy)
+      if (de) {
+        var deWrapper = de.closest('[class*="shipping"], [class*="delivery"], [data-module-name*="shipping"]') || de.parentElement;
+        if (deWrapper && deWrapper.style.display !== 'none') {
+          deWrapper.style.display = 'none';
+          deWrapper.dataset.techtorHidden = '1';
+        } else if (de.style.display !== 'none') {
+          de.style.display = 'none';
+          de.dataset.techtorHidden = '1';
         }
       }
 
-      tryAttach();
-      var obs = new MutationObserver(function () { if (!attached) tryAttach(); else obs.disconnect(); });
-      obs.observe(document.documentElement, { childList: true, subtree: true });
-    })
-    .catch(function () {});
+      // Ukryj stepper (Shoper może go wyrenderować po naszym pierwszym runie)
+      if (qi) {
+        var qiWrapper = qi.closest('product-quantity, [class*="quantity"], .product-quantity');
+        var hideEl = qiWrapper || qi;
+        if (hideEl.style.display !== 'none') {
+          hideEl.style.display = 'none';
+          hideEl.dataset.techtorHidden = '1';
+        }
+      }
+
+      // Ukryj każdy buy button (mogą się pojawić w kolejnych renderach Shoper)
+      buyBtns.forEach(function (bb) {
+        var btn = bb.querySelector('.btn_primary') || (bb.classList.contains('btn_primary') ? bb : null);
+        if (btn && btn.style.display !== 'none') {
+          btn.disabled = true; btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none';
+          btn.style.display = 'none';
+          btn.dataset.techtorHidden = '1';
+        }
+      });
+
+      // Baner "Produkt niedostępny" + przycisk "Zapytaj" (raz)
+      if (buyArea && !buyArea.querySelector('.techtor-unavailable-banner')) {
+        var banner = document.createElement('div');
+        banner.className = 'techtor-unavailable-banner';
+        banner.style.cssText = 'margin:16px 0 20px;padding:20px 24px;border-radius:12px;background:linear-gradient(135deg,#fef2f2 0%,#fff1f2 100%);border:1px solid #fecaca;text-align:center;';
+
+        banner.innerHTML =
+          '<div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:#fee2e2;margin-bottom:12px;">' +
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+          '</div>' +
+          '<p style="margin:0 0 4px;font-size:16px;font-weight:700;color:#1f2937;">Produkt chwilowo niedostępny</p>' +
+          '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;line-height:1.5;">Zostaw dane — powiadomimy Cię, gdy pojawi się w magazynie.</p>';
+
+        var askBtn = document.createElement('button');
+        askBtn.className = 'techtor-ask-btn';
+        askBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;box-shadow:0 4px 14px rgba(220,38,38,0.25);transition:all 0.2s ease;';
+        askBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Zapytaj o dostępność';
+        askBtn.onmouseover = function () { askBtn.style.background = '#b91c1c'; askBtn.style.boxShadow = '0 6px 20px rgba(220,38,38,0.35)'; askBtn.style.transform = 'translateY(-1px)'; };
+        askBtn.onmouseout = function () { askBtn.style.background = '#dc2626'; askBtn.style.boxShadow = '0 4px 14px rgba(220,38,38,0.25)'; askBtn.style.transform = ''; };
+        askBtn.onclick = function () { showAskModal(sku, productName); };
+
+        banner.appendChild(askBtn);
+        buyArea.insertBefore(banner, buyArea.firstChild);
+      }
+    }
+
+    // Uruchom natychmiast + co 500ms (łapie elementy dorenderowane przez Shoper)
+    applyState();
+    window._tInterval = setInterval(applyState, 500);
+  }
+
+  // ── Debug ──
+  var DEBUG = location.hash.includes('debug') || localStorage.getItem('techtor_debug') === '1';
+  function dbg(msg) {
+    if (!DEBUG) return;
+    var panel = document.getElementById('techtor-debug-panel');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.id = 'techtor-debug-panel';
+      panel.style.cssText = 'position:fixed;bottom:10px;right:10px;z-index:99999;background:#1f2937;color:#10b981;font-family:monospace;font-size:11px;padding:12px 16px;border-radius:12px;max-width:400px;max-height:300px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5);';
+      panel.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b style="color:#f59e0b;">TECHTOR Stock Debug</b><button onclick="this.parentNode.parentNode.remove();localStorage.removeItem(\'techtor_debug\')" style="background:#374151;border:none;color:#9ca3af;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:10px;">Zamknij</button></div><div id="techtor-debug-log"></div>';
+      document.body.appendChild(panel);
+    }
+    var log = document.getElementById('techtor-debug-log');
+    var line = document.createElement('div');
+    line.style.cssText = 'padding:2px 0;border-bottom:1px solid #374151;';
+    line.textContent = msg;
+    log.appendChild(line);
+    console.log('[TECHTOR]', msg);
+  }
+
+  // ── Init ──
+  try { sessionStorage.removeItem('techtor_sd'); } catch(e) {}
+  getStockData(function (stockData) {
+    if (!stockData) return;
+    if (window._tRunId !== runId) return;
+    dbg('Stock data loaded, starting loop [id=' + runId + ']');
+    startLoop(stockData);
+
+    // Globalny rerun — SPA nawigacja
+    window._tRerun = function () {
+      dbg('=== RERUN (SPA) ===');
+      runId = window._tRunId = (window._tRunId || 0) + 1;
+      if (window._tInterval) { clearInterval(window._tInterval); window._tInterval = null; }
+      // Cleanup
+      ['techtor-stock-warning', 'techtor-ask-overlimit', 'techtor-ask-modal'].forEach(function (id) {
+        var el = document.getElementById(id); if (el) el.remove();
+      });
+      document.querySelectorAll('.techtor-ask-btn, .techtor-unavailable-banner').forEach(function (el) { el.remove(); });
+      document.querySelectorAll('[data-techtor-hidden]').forEach(function (el) {
+        el.style.display = ''; delete el.dataset.techtorHidden;
+      });
+      document.querySelectorAll('[data-techtor-bound]').forEach(function (el) { delete el.dataset.techtorBound; });
+      sessionStorage.removeItem('techtor_sd');
+      getStockData(function (freshData) {
+        if (window._tRunId !== runId) return;
+        startLoop(freshData);
+      });
+    };
+  });
 })();

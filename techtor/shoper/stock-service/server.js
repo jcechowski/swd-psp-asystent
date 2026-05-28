@@ -54,12 +54,17 @@ function cors(req, res, next) {
   next();
 }
 
-// ── Snippet JS — wildcard route, cache 1h ───────────────────────────────────
+// ── Snippet JS — NO CACHE (Cloudflare nadpisywał max-age na 28800=8h!) ──────
 // Obsługuje: /snippet.js, /v2/snippet.js, /v99/snippet.js, /snippet.js?v=abc
 app.get(/^\/(v\d+\/)?snippet\.js$/, cors, (req, res) => {
-  res.set('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('CDN-Cache-Control', 'no-store');
+  res.set('Cloudflare-CDN-Cache-Control', 'no-store');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   res.set('Content-Type', 'application/javascript; charset=utf-8');
   res.set('ETag', `"${snippetHash}"`);
+  loadSnippet();
   res.send(snippetContent);
 });
 
@@ -72,7 +77,7 @@ try {
   var p = window.parent;
   if (p && p !== window && !p.document.querySelector('script[data-techtor]')) {
     var s = p.document.createElement('script');
-    s.src = 'https://stock.techtor.pl/snippet.js?v=${snippetHash}';
+    s.src = 'https://stock.techtor.pl/v2/snippet.js?v=${snippetHash}';
     s.dataset.techtor = '1';
     p.document.head.appendChild(s);
   }
