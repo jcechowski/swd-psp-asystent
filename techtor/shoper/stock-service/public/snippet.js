@@ -1,5 +1,23 @@
 (function () {
   'use strict';
+  console.log('[TECHTOR] snippet.js START v4');
+  // Auto-debug: pokaż raport po 5s jeśli nic nie zadziałało
+  setTimeout(function() {
+    var hasUI = document.querySelector('.techtor-unavailable-banner, .techtor-ask-btn, #techtor-stock-warning');
+    if (!hasUI) {
+      var sku = document.querySelector('[data-product-code="sku"]');
+      var qi = document.querySelector('h-input-stepper, [class*="quantity__input"], input[name="quantity"]');
+      var de = document.querySelector('[data-shipping-time]');
+      var buyBtns = document.querySelectorAll('buy-button, .btn_primary');
+      console.warn('[TECHTOR DEBUG] Brak UI po 5s!', {
+        _tLoad: window._tLoad, _tRunId: window._tRunId, _tSendAsk: typeof window._tSendAsk,
+        sku: sku ? sku.textContent.trim() : null,
+        qi: qi ? qi.tagName : null, de: de ? de.textContent : null,
+        buyBtns: buyBtns.length,
+        modal: !!document.getElementById('techtor-ask-modal'),
+      });
+    }
+  }, 5000);
 
   var API_URL = 'https://stock.techtor.pl/api/stock-data.json';
   var VAT_API = 'https://vat.techtor.pl/api/gus';
@@ -53,7 +71,7 @@
           '<div style="' + rowStyle + '">' +
             '<div style="flex:0 0 100px;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Ilość (szt.) *</label>' +
-              '<input name="quantity" type="number" min="1" value="' + (quantity || 1) + '" required style="' + inputStyle + 'text-align:center;font-weight:700;font-size:16px;">' +
+              '<input name="quantity" type="number" min="1" value="' + (quantity || 1) + '" style="' + inputStyle + 'text-align:center;font-weight:700;font-size:16px;">' +
             '</div>' +
             '<div style="flex:1;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">NIP</label>' +
@@ -66,7 +84,7 @@
           '<div style="' + rowStyle + '">' +
             '<div style="flex:1;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Imię i nazwisko *</label>' +
-              '<input name="name" placeholder="Imię i nazwisko" required style="' + inputStyle + '">' +
+              '<input name="name" placeholder="Imię i nazwisko" style="' + inputStyle + '">' +
             '</div>' +
             '<div style="flex:1;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Telefon</label>' +
@@ -74,7 +92,7 @@
             '</div>' +
           '</div>' +
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Email *</label>' +
-          '<input name="email" type="email" placeholder="Adres e-mail" required style="' + inputStyle + '">' +
+          '<input name="email" placeholder="Adres e-mail" style="' + inputStyle + '">' +
           '<div style="' + rowStyle + '">' +
             '<div style="flex:2;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Ulica</label>' +
@@ -92,7 +110,7 @@
             'Dzień dobry,\nchciałbym zapytać o dostępność produktu ' + productName + ' (' + sku + ')' + (quantity ? ' w ilości ' + quantity + ' szt.' : '') + '.\nProszę o kontakt.' +
           '</textarea>' +
           '<input name="_hp" type="text" style="position:absolute;left:-9999px;opacity:0;height:0;" tabindex="-1" autocomplete="off">' +
-          '<button type="submit" style="width:100%;padding:14px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px;transition:background 0.2s;">Wyślij zapytanie</button>' +
+          '<button type="button" id="techtor-ask-send" onclick="window._tSendAsk&&window._tSendAsk()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px;transition:background 0.2s;">Wyślij zapytanie</button>' +
         '</form>' +
         '<div id="techtor-ask-success" style="display:none;text-align:center;padding:24px 0;">' +
           '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" style="margin:0 auto 12px;display:block;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' +
@@ -123,12 +141,14 @@
               if (res.ok && res.data) {
                 var d = res.data;
                 var form = overlay.querySelector('form');
-                if (d.name) form.company.value = d.name;
-                if (d.street) form.street.value = d.street;
-                if (d.postalCode) form.zip.value = d.postalCode;
-                if (d.city) form.city.value = d.city;
-                if (d.email && !form.email.value) form.email.value = d.email;
-                if (d.phone && !form.phone.value) form.phone.value = d.phone;
+                function setF(n, v) { var el = form.querySelector('[name="' + n + '"]'); if (el) el.value = v; }
+                function getF(n) { var el = form.querySelector('[name="' + n + '"]'); return el ? el.value : ''; }
+                if (d.name) setF('company', d.name);
+                if (d.street) setF('street', d.street);
+                if (d.postalCode) setF('zip', d.postalCode);
+                if (d.city) setF('city', d.city);
+                if (d.email && !getF('email')) setF('email', d.email);
+                if (d.phone && !getF('phone')) setF('phone', d.phone);
                 nipStatus.style.background = '#f0fdf4';
                 nipStatus.style.color = '#166534';
                 nipStatus.textContent = 'Dane uzupełnione — ' + d.name;
@@ -143,21 +163,30 @@
       } else { nipStatus.style.display = 'none'; }
     });
 
-    document.getElementById('techtor-ask-form').onsubmit = function (e) {
-      e.preventDefault();
-      var form = e.target;
-      var btn = form.querySelector('button[type="submit"]');
+    console.log('[TECHTOR] Modal created, setting up handlers');
+    // Globalna funkcja wysyłania — dostępna z inline onclick, .onclick i onsubmit
+    window._tSendAsk = function () {
+      console.log('[TECHTOR] _tSendAsk called');
+      var form = document.getElementById('techtor-ask-form');
+      if (!form) return;
+      function fv(n) { var el = form.querySelector('[name="' + n + '"]'); return el ? el.value : ''; }
+
+      if (!fv('name').trim()) { form.querySelector('[name="name"]').focus(); return; }
+      if (!fv('email').trim() || fv('email').indexOf('@') < 0) { form.querySelector('[name="email"]').focus(); return; }
+
+      var btn = document.getElementById('techtor-ask-send');
+      if (!btn || btn.disabled) return;
       btn.textContent = 'Wysyłanie...'; btn.disabled = true; btn.style.background = '#9ca3af';
       fetch('https://stock.techtor.pl/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: form.name.value, email: form.email.value,
-          _hp: form._hp ? form._hp.value : '',
-          phone: form.phone.value, nip: form.nip.value,
-          company: form.company.value, street: form.street.value,
-          zip: form.zip.value, city: form.city.value,
-          message: form.message.value, quantity: form.quantity.value,
+          name: fv('name'), email: fv('email'),
+          _hp: fv('_hp'),
+          phone: fv('phone'), nip: fv('nip'),
+          company: fv('company'), street: fv('street'),
+          zip: fv('zip'), city: fv('city'),
+          message: fv('message'), quantity: fv('quantity'),
           sku: sku, product: productName, url: window.location.href,
         }),
       })
@@ -177,6 +206,10 @@
           btn.disabled = false; btn.style.background = '#dc2626';
         });
     };
+    // Potrójne zabezpieczenie — onclick na elemencie, .onclick property, i onsubmit formularza
+    var sendBtn = document.getElementById('techtor-ask-send');
+    if (sendBtn) sendBtn.onclick = window._tSendAsk;
+    document.getElementById('techtor-ask-form').onsubmit = function(e) { e.preventDefault(); window._tSendAsk(); };
   }
 
   // ── Główna logika ──
@@ -281,7 +314,7 @@
           askOL.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Potrzebujesz więcej? Zapytaj o dostępność';
           askOL.onmouseover = function () { askOL.style.background = '#b91c1c'; askOL.style.boxShadow = '0 6px 20px rgba(220,38,38,0.35)'; askOL.style.transform = 'translateY(-1px)'; };
           askOL.onmouseout = function () { askOL.style.background = '#dc2626'; askOL.style.boxShadow = '0 4px 14px rgba(220,38,38,0.25)'; askOL.style.transform = ''; };
-          askOL.onclick = function () { showAskModal(sku, productName, getQty()); };
+          askOL.onclick = function () { showAskModal(sku, productName, parseInt(qi.getAttribute('value') || qi.value, 10) || 1); };
           if (banner && banner.parentNode) banner.parentNode.insertBefore(askOL, banner.nextSibling);
         }
         if (askOL) askOL.style.display = overLimit ? 'flex' : 'none';

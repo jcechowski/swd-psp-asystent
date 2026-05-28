@@ -211,6 +211,135 @@ app.get('/health', (req, res) => {
   });
 });
 
+// ── Debugger — strona HTML do wklejenia w iframe na techtor.pl ──────────────
+app.get('/debug', cors, (req, res) => {
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.send(`<!DOCTYPE html><html><head><title>TECHTOR Stock Debug</title>
+<style>
+  body{font-family:system-ui;background:#111;color:#eee;padding:20px;font-size:14px;margin:0}
+  h2{color:#f59e0b;margin:0 0 16px}
+  .ok{color:#10b981} .err{color:#ef4444} .warn{color:#f59e0b}
+  pre{background:#1f2937;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;max-height:300px;overflow-y:auto}
+  button{background:#3b82f6;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;margin:4px}
+  button:hover{background:#2563eb}
+  #log{white-space:pre-wrap}
+</style></head><body>
+<h2>TECHTOR Stock Debugger</h2>
+<div id="log"></div>
+<button onclick="runTest()">Uruchom ponownie</button>
+<button onclick="testForm()">Test formularza</button>
+<script>
+var L=document.getElementById('log');
+function log(msg,cls){L.innerHTML+='<div class="'+(cls||'')+'">'+ new Date().toLocaleTimeString()+' '+msg+'</div>';}
+
+async function runTest(){
+  L.innerHTML='';
+  log('=== TECHTOR Stock Debugger ===','warn');
+
+  // 1. Czy snippet zaladowany?
+  log('window._tLoad = '+window.parent._tLoad);
+  log('window._tRunId = '+window.parent._tRunId);
+  log('window._tInterval = '+window.parent._tInterval);
+  log('window._tRerun = '+(typeof window.parent._tRerun));
+  log('window._tSendAsk = '+(typeof window.parent._tSendAsk));
+
+  if(window.parent._tLoad){log('Snippet ZALADOWANY','ok');}
+  else{log('Snippet NIE ZALADOWANY!','err');}
+
+  // 2. DOM elementy
+  var p=window.parent.document;
+  var sku=p.querySelector('[data-product-code="sku"]');
+  var qi=p.querySelector('h-input-stepper, [class*="quantity__input"], input[name="quantity"]');
+  var de=p.querySelector('[data-shipping-time]');
+  var buyBtns=p.querySelectorAll('buy-button, .btn_primary');
+  var banner=p.querySelector('.techtor-unavailable-banner');
+  var askBtn=p.querySelector('.techtor-ask-btn');
+  var modal=p.getElementById('techtor-ask-modal');
+  var sendBtn=p.getElementById('techtor-ask-send');
+  var hideCSS=p.getElementById('techtor-unavailable-css');
+
+  log('SKU: '+(sku?sku.textContent.trim():'NULL'));
+  log('Quantity input (qi): '+(qi?qi.tagName+'.'+qi.className:'NULL'));
+  log('Shipping time (de): '+(de?'"'+de.textContent+'"':'NULL'));
+  log('Buy buttons: '+buyBtns.length);
+  log('Unavailable banner: '+(banner?'TAK':'NIE'));
+  log('Ask button: '+(askBtn?'TAK':'NIE'));
+  log('Modal open: '+(modal?'TAK':'NIE'));
+  log('Send button: '+(sendBtn?'TAK — disabled='+sendBtn.disabled:'NIE'));
+  log('Hide CSS: '+(hideCSS?'TAK':'NIE'));
+  log('.techtor-hide elements: '+p.querySelectorAll('.techtor-hide').length);
+  log('[data-techtor-hidden] elements: '+p.querySelectorAll('[data-techtor-hidden]').length);
+
+  // 3. Stock data
+  try{
+    var r=await fetch('https://stock.techtor.pl/api/stock-data.json');
+    var d=await r.json();
+    var skuVal=sku?sku.textContent.trim():'';
+    if(skuVal&&d){
+      log('stockTechtor['+skuVal+']: '+(d[skuVal]||0));
+      log('totalStock['+skuVal+']: '+(d[skuVal+'__total']||0));
+      log('status['+skuVal+']: '+(d[skuVal+'__status']||'brak'));
+    }
+    log('Stock data: '+Object.keys(d).length+' entries','ok');
+  }catch(e){log('Stock data BLAD: '+e.message,'err');}
+
+  // 4. Script tags
+  var scripts=p.querySelectorAll('script[data-techtor-snippet], script[src*="stock.techtor"]');
+  log('Script tags ze snippet: '+scripts.length);
+  scripts.forEach(function(s,i){log('  ['+i+'] src='+(s.src||'inline').substring(0,80));});
+
+  // 5. Snippet wersja
+  try{
+    var r2=await fetch('https://stock.techtor.pl/health');
+    var h=await r2.json();
+    log('Server snippet hash: '+h.snippetHash);
+    log('Server uptime: '+h.uptime+'s');
+  }catch(e){log('Health check BLAD: '+e.message,'err');}
+
+  log('=== KONIEC ===','warn');
+}
+
+function testForm(){
+  log('--- TEST FORMULARZA ---','warn');
+  var p=window.parent;
+  log('_tSendAsk: '+(typeof p._tSendAsk));
+
+  // Sprobuj otworzyc modal
+  var modal=p.document.getElementById('techtor-ask-modal');
+  if(!modal){
+    log('Modal nie istnieje — probuje otworzyc...','warn');
+    var askBtn=p.document.querySelector('.techtor-ask-btn');
+    if(askBtn){askBtn.click();log('Kliknalem askBtn','ok');}
+    else{log('Brak przycisku Zapytaj!','err');return;}
+    setTimeout(function(){testFormInner();},500);
+  }else{testFormInner();}
+}
+function testFormInner(){
+  var p=window.parent;
+  var modal=p.document.getElementById('techtor-ask-modal');
+  log('Modal po otwarciu: '+(modal?'TAK':'NIE'));
+  log('_tSendAsk po otwarciu: '+(typeof p._tSendAsk));
+  var sendBtn=p.document.getElementById('techtor-ask-send');
+  log('Send button: '+(sendBtn?'TAK, disabled='+sendBtn.disabled+', onclick='+(typeof sendBtn.onclick):'NIE'));
+  var form=p.document.getElementById('techtor-ask-form');
+  log('Form: '+(form?'TAK, onsubmit='+(typeof form.onsubmit):'NIE'));
+  if(sendBtn){
+    log('Send btn HTML: '+sendBtn.outerHTML.substring(0,200));
+  }
+
+  // Test fetch do API
+  fetch('https://stock.techtor.pl/api/ask',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:'DEBUG TEST',email:'debug@test.pl',message:'test debugger',sku:'TEST',product:'Debug',url:location.href,quantity:'1',_hp:''})
+  }).then(function(r){return r.json();}).then(function(d){
+    log('API /ask odpowiedz: '+JSON.stringify(d),(d.ok?'ok':'err'));
+  }).catch(function(e){log('API /ask BLAD: '+e.message,'err');});
+}
+
+runTest();
+</script></body></html>`);
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Stock service running on port ${PORT}`);
 });
