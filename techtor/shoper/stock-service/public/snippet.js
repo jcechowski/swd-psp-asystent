@@ -34,7 +34,7 @@
     return el ? el.textContent.trim() : '';
   }
 
-  function showAskModal(sku, productName) {
+  function showAskModal(sku, productName, quantity) {
     if (document.getElementById('techtor-ask-modal')) return;
 
     var overlay = document.createElement('div');
@@ -51,6 +51,10 @@
         '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;">Produkt: <strong>' + productName + '</strong> (' + sku + ')</p>' +
         '<form id="techtor-ask-form">' +
           '<div style="' + rowStyle + '">' +
+            '<div style="flex:0 0 100px;">' +
+              '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Ilość (szt.) *</label>' +
+              '<input name="quantity" type="number" min="1" value="' + (quantity || 1) + '" required style="' + inputStyle + 'text-align:center;font-weight:700;font-size:16px;">' +
+            '</div>' +
             '<div style="flex:1;">' +
               '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">NIP</label>' +
               '<input name="nip" placeholder="Wpisz NIP — dane uzupełnią się automatycznie" maxlength="13" style="' + inputStyle + '">' +
@@ -85,7 +89,7 @@
           '<input name="city" placeholder="Miasto" style="' + inputStyle + '">' +
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Wiadomość</label>' +
           '<textarea name="message" rows="3" style="' + inputStyle + 'resize:vertical;">' +
-            'Dzień dobry,\nchciałbym zapytać o dostępność produktu ' + productName + ' (' + sku + ').\nProszę o kontakt.' +
+            'Dzień dobry,\nchciałbym zapytać o dostępność produktu ' + productName + ' (' + sku + ')' + (quantity ? ' w ilości ' + quantity + ' szt.' : '') + '.\nProszę o kontakt.' +
           '</textarea>' +
           '<input name="_hp" type="text" style="position:absolute;left:-9999px;opacity:0;height:0;" tabindex="-1" autocomplete="off">' +
           '<button type="submit" style="width:100%;padding:14px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px;transition:background 0.2s;">Wyślij zapytanie</button>' +
@@ -153,7 +157,7 @@
           phone: form.phone.value, nip: form.nip.value,
           company: form.company.value, street: form.street.value,
           zip: form.zip.value, city: form.city.value,
-          message: form.message.value,
+          message: form.message.value, quantity: form.quantity.value,
           sku: sku, product: productName, url: window.location.href,
         }),
       })
@@ -277,7 +281,7 @@
           askOL.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Potrzebujesz więcej? Zapytaj o dostępność';
           askOL.onmouseover = function () { askOL.style.background = '#b91c1c'; askOL.style.boxShadow = '0 6px 20px rgba(220,38,38,0.35)'; askOL.style.transform = 'translateY(-1px)'; };
           askOL.onmouseout = function () { askOL.style.background = '#dc2626'; askOL.style.boxShadow = '0 4px 14px rgba(220,38,38,0.25)'; askOL.style.transform = ''; };
-          askOL.onclick = function () { showAskModal(sku, productName); };
+          askOL.onclick = function () { showAskModal(sku, productName, getQty()); };
           if (banner && banner.parentNode) banner.parentNode.insertBefore(askOL, banner.nextSibling);
         }
         if (askOL) askOL.style.display = overLimit ? 'flex' : 'none';

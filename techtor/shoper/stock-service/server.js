@@ -130,7 +130,7 @@ app.post('/api/ask', cors, async (req, res) => {
     return res.status(429).json({ ok: false, error: 'Za dużo zapytań. Spróbuj za 10 minut.' });
   }
 
-  const { name, email, phone, nip, company, street, zip, city, message, sku, product, url, _hp } = req.body || {};
+  const { name, email, phone, nip, company, street, zip, city, message, quantity, sku, product, url, _hp } = req.body || {};
 
   // Honeypot — pole _hp powinno być puste (boty je wypełniają)
   if (_hp) {
@@ -148,6 +148,7 @@ app.post('/api/ask', cors, async (req, res) => {
 
   const text = `Nowe zapytanie o dostępność produktu\n\n` +
     `Produkt: ${product || '?'} (${sku || '?'})\n` +
+    `Ilość: ${quantity || '?'} szt.\n` +
     `Link: ${url || 'https://techtor.pl/?s=' + encodeURIComponent(sku || '')}\n\n` +
     `Od: ${name}\nEmail: ${email}\nTelefon: ${phone || 'brak'}\n` +
     `${nip ? 'NIP: ' + nip + '\n' : ''}` +
