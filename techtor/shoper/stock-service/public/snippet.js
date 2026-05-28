@@ -99,7 +99,7 @@
 
     document.body.appendChild(overlay);
     document.getElementById('techtor-ask-close').onclick = function () { overlay.remove(); };
-    overlay.onclick = function (e) { if (e.target === overlay) overlay.remove(); };
+    // Kliknięcie w tło NIE zamyka — tylko przycisk X (żeby nie stracić wpisanych danych)
 
     var nipInput = overlay.querySelector('input[name="nip"]');
     var nipStatus = document.getElementById('techtor-nip-status');
@@ -123,6 +123,8 @@
                 if (d.street) form.street.value = d.street;
                 if (d.postalCode) form.zip.value = d.postalCode;
                 if (d.city) form.city.value = d.city;
+                if (d.email && !form.email.value) form.email.value = d.email;
+                if (d.phone && !form.phone.value) form.phone.value = d.phone;
                 nipStatus.style.background = '#f0fdf4';
                 nipStatus.style.color = '#166534';
                 nipStatus.textContent = 'Dane uzupełnione — ' + d.name;
@@ -226,6 +228,15 @@
 
       if (!de && !qi && !buyArea) return; // DOM jeszcze nie gotowy
 
+      // CSS helper (potrzebny dla overlimit w dostępnych i dla niedostępnych)
+      if (!document.getElementById('techtor-unavailable-css')) {
+        var css = document.createElement('style');
+        css.id = 'techtor-unavailable-css';
+        css.textContent =
+          '.techtor-hide { display: none !important; opacity: 0 !important; pointer-events: none !important; }';
+        document.head.appendChild(css);
+      }
+
       // ── DOSTĘPNY ──
       if (totalStock > 0) {
         if (de) {
@@ -293,16 +304,12 @@
           var deTarget = deWrapper || de;
           if (overLimit) {
             // Przekroczono stan — ukryj czas dostawy
-            if (deTarget.style.display !== 'none') {
-              deTarget.style.display = 'none';
-              deTarget.dataset.techtorHidden = '1';
-            }
+            deTarget.classList.add('techtor-hide');
+            deTarget.dataset.techtorHidden = '1';
           } else {
             // W granicach stanu — pokaż i ustaw czas
-            if (deTarget.dataset.techtorHidden) {
-              deTarget.style.display = '';
-              delete deTarget.dataset.techtorHidden;
-            }
+            deTarget.classList.remove('techtor-hide');
+            delete deTarget.dataset.techtorHidden;
             if (stockTechtor > 0 && q <= stockTechtor) {
               de.textContent = '24 godziny'; de.style.color = '';
             } else {
@@ -333,36 +340,26 @@
 
       // ── NIEDOSTĘPNY (totalStock <= 0) ──
 
-      // Ukryj czas dostawy (nie pokazujemy "niedostępny" — baner wystarczy)
+      // Ukryj czas dostawy
       if (de) {
         var deWrapper = de.closest('[class*="shipping"], [class*="delivery"], [data-module-name*="shipping"]') || de.parentElement;
-        if (deWrapper && deWrapper.style.display !== 'none') {
-          deWrapper.style.display = 'none';
-          deWrapper.dataset.techtorHidden = '1';
-        } else if (de.style.display !== 'none') {
-          de.style.display = 'none';
-          de.dataset.techtorHidden = '1';
-        }
+        (deWrapper || de).classList.add('techtor-hide');
+        (deWrapper || de).dataset.techtorHidden = '1';
       }
 
-      // Ukryj stepper (Shoper może go wyrenderować po naszym pierwszym runie)
+      // Ukryj stepper
       if (qi) {
         var qiWrapper = qi.closest('product-quantity, [class*="quantity"], .product-quantity');
-        var hideEl = qiWrapper || qi;
-        if (hideEl.style.display !== 'none') {
-          hideEl.style.display = 'none';
-          hideEl.dataset.techtorHidden = '1';
-        }
+        (qiWrapper || qi).classList.add('techtor-hide');
+        (qiWrapper || qi).dataset.techtorHidden = '1';
       }
 
-      // Ukryj każdy buy button (mogą się pojawić w kolejnych renderach Shoper)
+      // Ukryj buy buttons
       buyBtns.forEach(function (bb) {
+        bb.classList.add('techtor-hide');
+        bb.dataset.techtorHidden = '1';
         var btn = bb.querySelector('.btn_primary') || (bb.classList.contains('btn_primary') ? bb : null);
-        if (btn && btn.style.display !== 'none') {
-          btn.disabled = true; btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none';
-          btn.style.display = 'none';
-          btn.dataset.techtorHidden = '1';
-        }
+        if (btn) { btn.classList.add('techtor-hide'); btn.dataset.techtorHidden = '1'; }
       });
 
       // Baner "Produkt niedostępny" + przycisk "Zapytaj" (raz)
@@ -435,8 +432,11 @@
       });
       document.querySelectorAll('.techtor-ask-btn, .techtor-unavailable-banner').forEach(function (el) { el.remove(); });
       document.querySelectorAll('[data-techtor-hidden]').forEach(function (el) {
+        el.classList.remove('techtor-hide');
         el.style.display = ''; delete el.dataset.techtorHidden;
       });
+      var oldCss = document.getElementById('techtor-unavailable-css');
+      if (oldCss) oldCss.remove();
       document.querySelectorAll('[data-techtor-bound]').forEach(function (el) { delete el.dataset.techtorBound; });
       sessionStorage.removeItem('techtor_sd');
       getStockData(function (freshData) {
