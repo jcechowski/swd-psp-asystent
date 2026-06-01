@@ -338,12 +338,11 @@
           availEl.textContent = 'zapytaj o dostępność';
           availEl.style.color = '#b45309';
         }
-        // Baner "Zapytaj o cenę"
-        var bannerTarget = buyArea || document.querySelector('.product-detail, .product-info, [class*="product-detail"], [class*="product__info"], .product__actions, main section');
-        if (bannerTarget && !bannerTarget.querySelector('.techtor-price0-banner')) {
+        // Baner "Zapytaj o cenę" — stały kontener (id) odporny na rerender Shoper Phoenix
+        if (!document.getElementById('techtor-price0-banner')) {
           var b0 = document.createElement('div');
-          b0.className = 'techtor-price0-banner';
-          b0.style.cssText = 'margin:16px 0 20px;padding:20px 24px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;text-align:center;';
+          b0.id = 'techtor-price0-banner';
+          b0.style.cssText = 'margin:16px 0 20px;padding:20px 24px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;text-align:center;position:relative;z-index:100;';
           b0.innerHTML =
             '<div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:#fef3c7;margin-bottom:12px;">' +
               '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
@@ -358,8 +357,16 @@
           askP.onmouseout = function () { askP.style.background = '#d97706'; };
           askP.onclick = function () { showAskModal(sku, productName, null, true); };
           b0.appendChild(askP);
-          bannerTarget.insertBefore(b0, bannerTarget.firstChild);
+          // Wstaw do body jako overlay jeśli nie ma buyArea
+          var target = buyArea || document.querySelector('.product-detail, .product-info, [class*="product-detail"], [class*="product__info"], main section');
+          if (target) target.insertBefore(b0, target.firstChild);
+          else document.body.appendChild(b0);
         }
+        // Re-apply ukrycie cen (Shoper Phoenix może je przywrócić)
+        document.querySelectorAll('[class*="price"]:not([class*="price-compare"]):not(#techtor-price0-banner)').forEach(function (el) {
+          if (el.closest('#techtor-price0-banner, #techtor-ask-modal')) return;
+          el.classList.add('techtor-hide');
+        });
         return;
       }
 
