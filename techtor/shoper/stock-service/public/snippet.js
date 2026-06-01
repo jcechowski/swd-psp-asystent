@@ -575,6 +575,42 @@
     console.log('[TECHTOR]', msg);
   }
 
+  // ── Cleanup wszystkich elementów TECHTOR ──
+  function cleanupAll() {
+    if (window._tInterval) { clearInterval(window._tInterval); window._tInterval = null; }
+    ['techtor-stock-warning', 'techtor-ask-overlimit', 'techtor-ask-modal', 'techtor-price0-banner'].forEach(function (id) {
+      var el = document.getElementById(id); if (el) el.remove();
+    });
+    document.querySelectorAll('.techtor-ask-btn, .techtor-unavailable-banner, .techtor-price0-banner').forEach(function (el) { el.remove(); });
+    document.querySelectorAll('[data-techtor-hidden]').forEach(function (el) {
+      el.classList.remove('techtor-hide');
+      el.style.display = ''; delete el.dataset.techtorHidden;
+    });
+    document.querySelectorAll('.techtor-hide').forEach(function (el) {
+      el.classList.remove('techtor-hide');
+    });
+    var oldCss = document.getElementById('techtor-unavailable-css');
+    if (oldCss) oldCss.remove();
+    document.querySelectorAll('[data-techtor-bound]').forEach(function (el) { delete el.dataset.techtorBound; });
+    // Przywróć oryginalne teksty
+    document.querySelectorAll('[data-orig-text]').forEach(function (el) {
+      el.textContent = el.dataset.origText;
+      el.style.color = '';
+      delete el.dataset.origText;
+    });
+  }
+
+  // ── Pełny restart (nowy produkt) ──
+  function fullRestart() {
+    dbg('=== RESTART (nowy produkt) ===');
+    runId = window._tRunId = (window._tRunId || 0) + 1;
+    cleanupAll();
+    getStockData(function (freshData) {
+      if (window._tRunId !== runId) return;
+      startLoop(freshData);
+    });
+  }
+
   // ── Init ──
   try { sessionStorage.removeItem('techtor_sd'); } catch(e) {}
   getStockData(function (stockData) {
@@ -582,29 +618,19 @@
     if (window._tRunId !== runId) return;
     dbg('Stock data loaded, starting loop [id=' + runId + ']');
     startLoop(stockData);
-
-    // Globalny rerun — SPA nawigacja
-    window._tRerun = function () {
-      dbg('=== RERUN (SPA) ===');
-      runId = window._tRunId = (window._tRunId || 0) + 1;
-      if (window._tInterval) { clearInterval(window._tInterval); window._tInterval = null; }
-      // Cleanup
-      ['techtor-stock-warning', 'techtor-ask-overlimit', 'techtor-ask-modal'].forEach(function (id) {
-        var el = document.getElementById(id); if (el) el.remove();
-      });
-      document.querySelectorAll('.techtor-ask-btn, .techtor-unavailable-banner').forEach(function (el) { el.remove(); });
-      document.querySelectorAll('[data-techtor-hidden]').forEach(function (el) {
-        el.classList.remove('techtor-hide');
-        el.style.display = ''; delete el.dataset.techtorHidden;
-      });
-      var oldCss = document.getElementById('techtor-unavailable-css');
-      if (oldCss) oldCss.remove();
-      document.querySelectorAll('[data-techtor-bound]').forEach(function (el) { delete el.dataset.techtorBound; });
-      sessionStorage.removeItem('techtor_sd');
-      getStockData(function (freshData) {
-        if (window._tRunId !== runId) return;
-        startLoop(freshData);
-      });
-    };
   });
+
+  // Globalny rerun — SPA nawigacja (wywoływany z img onload w opisie)
+  window._tRerun = fullRestart;
+
+  // Nasłuchuj zmianę URL — Shoper Phoenix SPA zmienia URL bez przeładowania
+  var lastUrl = location.href;
+  setInterval(function () {
+    if (location.href !== lastUrl) {
+      dbg('URL changed: ' + lastUrl + ' → ' + location.href);
+      lastUrl = location.href;
+      // Poczekaj aż Phoenix wyrenderuje nowy produkt
+      setTimeout(fullRestart, 300);
+    }
+  }, 250);
 })();
