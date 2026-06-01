@@ -280,32 +280,15 @@
       var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"], .product-detail__actions');
       if (!de && !qi && !buyArea && !isPrice0) return; // DOM jeszcze nie gotowy (price0 działa bez tych elementów)
 
-      // Pole "Dostępność" — szukamy po treści tekstu w całym DOM
+      // Pole "Dostępność" — szukamy elementu zawierającego tekst "dostępny"
       var availEl = null;
-      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-      while (walker.nextNode()) {
-        if (availEl) break;
-        var node = walker.currentNode;
-        if (/^\s*Dost[eę]pno[sś][cć]\s*:?\s*$/i.test(node.textContent)) {
-          // Znaleziono label "Dostępność" — wartość to następny element lub sibling
-          var parent = node.parentElement;
-          if (parent) {
-            var next = parent.nextElementSibling;
-            if (next) { availEl = next; }
-            else {
-              // Szukaj w dzieciach rodzica
-              var children = parent.parentElement ? parent.parentElement.children : [];
-              for (var ci = 0; ci < children.length; ci++) {
-                var txt = children[ci].textContent.trim().toLowerCase();
-                if (txt === 'dostępny' || txt === 'niedostępny' || txt === 'na zamówienie' || txt === 'zapytaj o dostępność') {
-                  availEl = children[ci];
-                  break;
-                }
-              }
-            }
-          }
+      document.querySelectorAll('dd, span, div, p').forEach(function (el) {
+        if (availEl) return;
+        var t = el.textContent.trim().toLowerCase();
+        if ((t === 'dostępny' || t === 'niedostępny' || t === 'na zamówienie' || t === 'zapytaj o dostępność') && el.children.length === 0) {
+          availEl = el;
         }
-      }
+      });
 
       // CSS helper (potrzebny dla overlimit w dostępnych i dla niedostępnych)
       if (!document.getElementById('techtor-unavailable-css')) {
