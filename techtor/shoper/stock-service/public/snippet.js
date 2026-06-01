@@ -395,35 +395,31 @@
         var q = parseInt(qi.getAttribute('value') || qi.value, 10) || 1;
         var overLimit = q > totalStock;
 
-        // Banner "Przekroczono ilość"
+        // Banner "Przekroczono ilość" — spójny styl z price0 banerem
         var banner = document.getElementById('techtor-stock-warning');
         if (!banner) {
           banner = document.createElement('div');
           banner.id = 'techtor-stock-warning';
-          banner.style.cssText = 'display:none;padding:14px 20px;margin:12px 0 16px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;color:#92400e;font-size:14px;font-weight:600;line-height:1.5;';
-          banner.innerHTML = '<div style="display:flex;align-items:center;gap:10px;">' +
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
-            '<span>Maksymalna dostępna ilość: <strong>' + totalStock + ' szt.</strong></span>' +
-            '</div>';
+          banner.style.cssText = 'display:none;margin:16px 0 20px;padding:20px 24px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;text-align:center;position:relative;z-index:100;';
+          banner.innerHTML =
+            '<div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:#fef3c7;margin-bottom:12px;">' +
+              '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+            '</div>' +
+            '<p style="margin:0 0 4px;font-size:16px;font-weight:700;color:#1f2937;">Brak wystarczającej ilości towaru</p>' +
+            '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;line-height:1.5;">W magazynie posiadamy <strong>' + totalStock + ' szt.</strong> Zapytaj o dostępność większej ilości.</p>';
+          var askOLBtn = document.createElement('button');
+          askOLBtn.className = 'techtor-ask-btn';
+          askOLBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#d97706;color:#fff;box-shadow:0 4px 14px rgba(217,119,6,0.25);transition:all 0.2s ease;';
+          askOLBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Zapytaj o dostępność';
+          askOLBtn.onmouseover = function () { askOLBtn.style.background = '#b45309'; };
+          askOLBtn.onmouseout = function () { askOLBtn.style.background = '#d97706'; };
+          askOLBtn.onclick = function () { showAskModal(sku, productName, parseInt(qi.getAttribute('value') || qi.value, 10) || 1); };
+          banner.appendChild(askOLBtn);
           var actionsEl = document.querySelector('.product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"]');
           if (actionsEl) actionsEl.parentNode.insertBefore(banner, actionsEl);
           else { var p = qi.closest('section, .product-info, .product-detail, [class*="product"]'); if (p) p.appendChild(banner); }
         }
         banner.style.display = overLimit ? 'block' : 'none';
-
-        // Przycisk "Zapytaj" przy overlimit
-        var askOL = document.getElementById('techtor-ask-overlimit');
-        if (overLimit && !askOL) {
-          askOL = document.createElement('button');
-          askOL.id = 'techtor-ask-overlimit';
-          askOL.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;margin:12px 0 16px;box-shadow:0 4px 14px rgba(220,38,38,0.25);width:100%;transition:all 0.2s ease;';
-          askOL.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Potrzebujesz więcej? Zapytaj o dostępność';
-          askOL.onmouseover = function () { askOL.style.background = '#b91c1c'; askOL.style.boxShadow = '0 6px 20px rgba(220,38,38,0.35)'; askOL.style.transform = 'translateY(-1px)'; };
-          askOL.onmouseout = function () { askOL.style.background = '#dc2626'; askOL.style.boxShadow = '0 4px 14px rgba(220,38,38,0.25)'; askOL.style.transform = ''; };
-          askOL.onclick = function () { showAskModal(sku, productName, parseInt(qi.getAttribute('value') || qi.value, 10) || 1); };
-          if (banner && banner.parentNode) banner.parentNode.insertBefore(askOL, banner.nextSibling);
-        }
-        if (askOL) askOL.style.display = overLimit ? 'flex' : 'none';
 
         // Zmiana natywnego pola "Dostępność"
         if (availEl) {
