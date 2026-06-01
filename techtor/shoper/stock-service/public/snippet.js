@@ -275,6 +275,7 @@
       var buyBtns = document.querySelectorAll('buy-button, [class*="buy-button"], .product-buy__button, button[type="submit"][class*="btn_primary"]');
       if (buyBtns.length === 0) buyBtns = document.querySelectorAll('.btn_primary');
       var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"], .product-detail__actions');
+      var availEl = document.querySelector('[data-availability], .product-availability__value, .availability__value, [class*="availability"] [class*="value"]');
 
       if (!de && !qi && !buyArea) return; // DOM jeszcze nie gotowy
 
@@ -331,6 +332,18 @@
           if (banner && banner.parentNode) banner.parentNode.insertBefore(askOL, banner.nextSibling);
         }
         if (askOL) askOL.style.display = overLimit ? 'flex' : 'none';
+
+        // Zmiana natywnego pola "Dostępność"
+        if (availEl) {
+          if (!availEl.dataset.origText) availEl.dataset.origText = availEl.textContent;
+          if (overLimit) {
+            availEl.textContent = 'zapytaj o dostępność';
+            availEl.style.color = '#b45309';
+          } else {
+            availEl.textContent = availEl.dataset.origText;
+            availEl.style.color = '';
+          }
+        }
 
         // Blokada koszyka
         buyBtns.forEach(function (bb) {
@@ -389,6 +402,13 @@
       }
 
       // ── NIEDOSTĘPNY (totalStock <= 0) ──
+
+      // Zmiana natywnego pola "Dostępność"
+      if (availEl) {
+        if (!availEl.dataset.origText) availEl.dataset.origText = availEl.textContent;
+        availEl.textContent = 'zapytaj o dostępność';
+        availEl.style.color = '#b45309';
+      }
 
       // Ukryj czas dostawy
       if (de) {
