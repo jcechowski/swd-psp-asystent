@@ -40,8 +40,20 @@
   }
 
   function getSku() {
+    // 1. Standardowy selektor
     var el = document.querySelector('[data-product-code="sku"]');
     if (el) return el.textContent.trim();
+    // 2. Szukaj wewnątrz web componentów (Shoper Phoenix)
+    var wc = document.querySelector('product-codes');
+    if (wc) {
+      var root = wc.shadowRoot || wc;
+      el = root.querySelector('[data-product-code="sku"]');
+      if (el) return el.textContent.trim();
+      // Fallback: szukaj w innerHTML
+      var m2 = wc.innerHTML.match(/data-product-code="sku"[^>]*>([^<]+)/);
+      if (m2) return m2[1].trim();
+    }
+    // 3. JSON w source
     var m = document.body.innerHTML.match(/"sku"\s*:\s*"([^"]+)"/);
     if (m) return m[1];
     return null;
