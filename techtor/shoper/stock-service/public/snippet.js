@@ -278,7 +278,7 @@
       var buyBtns = document.querySelectorAll('buy-button, [class*="buy-button"], .product-buy__button, button[type="submit"][class*="btn_primary"]');
       if (buyBtns.length === 0) buyBtns = document.querySelectorAll('.btn_primary');
       var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"], .product-detail__actions');
-      if (!de && !qi && !buyArea) return; // DOM jeszcze nie gotowy
+      if (!de && !qi && !buyArea && !isPrice0) return; // DOM jeszcze nie gotowy (price0 działa bez tych elementów)
 
       // Pole "Dostępność" — szukamy po labelu, bo Shoper Phoenix renderuje dynamicznie
       var availEl = null;
@@ -339,7 +339,8 @@
           availEl.style.color = '#b45309';
         }
         // Baner "Zapytaj o cenę"
-        if (buyArea && !buyArea.querySelector('.techtor-price0-banner')) {
+        var bannerTarget = buyArea || document.querySelector('.product-detail, .product-info, [class*="product-detail"], [class*="product__info"], .product__actions, main section');
+        if (bannerTarget && !bannerTarget.querySelector('.techtor-price0-banner')) {
           var b0 = document.createElement('div');
           b0.className = 'techtor-price0-banner';
           b0.style.cssText = 'margin:16px 0 20px;padding:20px 24px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;text-align:center;';
@@ -357,7 +358,7 @@
           askP.onmouseout = function () { askP.style.background = '#d97706'; };
           askP.onclick = function () { showAskModal(sku, productName, null, true); };
           b0.appendChild(askP);
-          buyArea.insertBefore(b0, buyArea.firstChild);
+          bannerTarget.insertBefore(b0, bannerTarget.firstChild);
         }
         return;
       }
