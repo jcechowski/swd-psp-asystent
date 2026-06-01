@@ -52,8 +52,9 @@
     return el ? el.textContent.trim() : '';
   }
 
-  function showAskModal(sku, productName, quantity) {
+  function showAskModal(sku, productName, quantity, priceInquiry) {
     if (document.getElementById('techtor-ask-modal')) return;
+    var modalTitle = priceInquiry ? 'Zapytaj o cenę i dostępność' : 'Zapytaj o dostępność';
 
     var overlay = document.createElement('div');
     overlay.id = 'techtor-ask-modal';
@@ -65,7 +66,7 @@
     overlay.innerHTML =
       '<div style="background:#fff;border-radius:16px;padding:28px;max-width:780px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:90vh;overflow-y:auto;">' +
         '<button id="techtor-ask-close" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#666;">&times;</button>' +
-        '<h3 style="margin:0 0 4px;font-size:18px;color:#1f2937;">Zapytaj o dostępność</h3>' +
+        '<h3 style="margin:0 0 4px;font-size:18px;color:#1f2937;">' + modalTitle + '</h3>' +
         '<form id="techtor-ask-form">' +
           '<div style="' + rowStyle + 'align-items:center;margin-bottom:16px;">' +
             '<p style="margin:0;font-size:13px;color:#6b7280;flex:1;">Produkt: <strong>' + productName + '</strong> (' + sku + ')</p>' +
@@ -120,7 +121,7 @@
           '</div>' +
           '<label style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;display:block;">Wiadomość</label>' +
           '<textarea name="message" rows="5" style="' + inputStyle + 'resize:vertical;">' +
-            'Dzień dobry,\nchciałbym zapytać o dostępność produktu ' + productName + ' (' + sku + ')' + (quantity ? ' w ilości ' + quantity + ' szt.' : '') + '.\nProszę o kontakt.' +
+            'Dzień dobry,\nchciałbym zapytać o ' + (priceInquiry ? 'aktualną cenę i ' : '') + 'dostępność produktu ' + productName + ' (' + sku + ')' + (quantity ? ' w ilości ' + quantity + ' szt.' : '') + '.' + (priceInquiry ? '\nProszę o przesłanie aktualnej oferty cenowej.' : '') + '\nProszę o kontakt.' +
           '</textarea>' +
           '<input name="_hp" type="text" style="position:absolute;left:-9999px;opacity:0;height:0;" tabindex="-1" autocomplete="off">' +
           '<button type="button" id="techtor-ask-send" onclick="window._tSendAsk&&window._tSendAsk()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px;transition:background 0.2s;">Wyślij zapytanie</button>' +
@@ -250,6 +251,7 @@
     var sku = null;
     var stockTechtor = 0;
     var totalStock = 0;
+    var isPrice0 = false;
     var productName = '';
 
     function applyState() {
@@ -265,8 +267,9 @@
         if (!sku) return; // czekaj
         stockTechtor = stockData[sku] || 0;
         totalStock = stockData[sku + '__total'] || 0;
+        isPrice0 = !!stockData[sku + '__price0'];
         productName = getProductName();
-        dbg('SKU: ' + sku + ' techtor=' + stockTechtor + ' total=' + totalStock);
+        dbg('SKU: ' + sku + ' techtor=' + stockTechtor + ' total=' + totalStock + ' price0=' + isPrice0);
       }
 
       // Znajdź elementy DOM (mogą pojawić się w różnym czasie)
@@ -296,6 +299,67 @@
         css.textContent =
           '.techtor-hide { display: none !important; opacity: 0 !important; pointer-events: none !important; }';
         document.head.appendChild(css);
+      }
+
+      // Ukryj InPost Pay gdy niedostępny lub cena 0
+      if (isPrice0 || totalStock <= 0) {
+        document.querySelectorAll('inpost-izi-button, INPOST-IZI-BUTTON').forEach(function (el) {
+          el.style.setProperty('display', 'none', 'important');
+        });
+      }
+
+      // ── BRAK CENY (price0) — najwyższy priorytet ──
+      if (isPrice0) {
+        // Ukryj ceny
+        document.querySelectorAll('[class*="price"]:not([class*="price-compare"]), .product-price, product-price').forEach(function (el) {
+          if (el.closest('#techtor-stock-warning, .techtor-unavailable-banner, .techtor-ask-btn')) return;
+          el.classList.add('techtor-hide');
+          el.dataset.techtorHidden = '1';
+        });
+        // Ukryj czas wysyłki
+        if (de) {
+          var deWrapper = de.closest('[class*="shipping"], [class*="delivery"], [data-module-name*="shipping"]') || de.parentElement;
+          (deWrapper || de).classList.add('techtor-hide');
+        }
+        // Ukryj stepper
+        if (qi) {
+          var qiWrapper = qi.closest('product-quantity, [class*="quantity"], .product-quantity');
+          (qiWrapper || qi).classList.add('techtor-hide');
+        }
+        // Ukryj koszyk
+        buyBtns.forEach(function (bb) {
+          bb.classList.add('techtor-hide');
+          var btn = bb.querySelector('.btn_primary') || (bb.classList.contains('btn_primary') ? bb : null);
+          if (btn) btn.classList.add('techtor-hide');
+        });
+        // Zmiana pola "Dostępność"
+        if (availEl) {
+          if (!availEl.dataset.origText) availEl.dataset.origText = availEl.textContent;
+          availEl.textContent = 'zapytaj o dostępność';
+          availEl.style.color = '#b45309';
+        }
+        // Baner "Zapytaj o cenę"
+        if (buyArea && !buyArea.querySelector('.techtor-price0-banner')) {
+          var b0 = document.createElement('div');
+          b0.className = 'techtor-price0-banner';
+          b0.style.cssText = 'margin:16px 0 20px;padding:20px 24px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;text-align:center;';
+          b0.innerHTML =
+            '<div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:#fef3c7;margin-bottom:12px;">' +
+              '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+            '</div>' +
+            '<p style="margin:0 0 4px;font-size:16px;font-weight:700;color:#1f2937;">Produkt chwilowo niedostępny</p>' +
+            '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;line-height:1.5;">Zapytaj o aktualną cenę i dostępność tego produktu.</p>';
+          var askP = document.createElement('button');
+          askP.className = 'techtor-ask-btn';
+          askP.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#d97706;color:#fff;box-shadow:0 4px 14px rgba(217,119,6,0.25);transition:all 0.2s ease;';
+          askP.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Zapytaj o produkt';
+          askP.onmouseover = function () { askP.style.background = '#b45309'; };
+          askP.onmouseout = function () { askP.style.background = '#d97706'; };
+          askP.onclick = function () { showAskModal(sku, productName, null, true); };
+          b0.appendChild(askP);
+          buyArea.insertBefore(b0, buyArea.firstChild);
+        }
+        return;
       }
 
       // ── DOSTĘPNY ──
