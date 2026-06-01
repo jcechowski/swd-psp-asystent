@@ -275,9 +275,19 @@
       var buyBtns = document.querySelectorAll('buy-button, [class*="buy-button"], .product-buy__button, button[type="submit"][class*="btn_primary"]');
       if (buyBtns.length === 0) buyBtns = document.querySelectorAll('.btn_primary');
       var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"], .product-detail__actions');
-      var availEl = document.querySelector('[data-availability], .product-availability__value, .availability__value, [class*="availability"] [class*="value"]');
-
       if (!de && !qi && !buyArea) return; // DOM jeszcze nie gotowy
+
+      // Pole "Dostępność" — szukamy po labelu, bo Shoper Phoenix renderuje dynamicznie
+      var availEl = null;
+      if (!availEl) {
+        document.querySelectorAll('dt, .label, [class*="label"]').forEach(function (el) {
+          if (availEl) return;
+          if (/Dost[eę]pno[sś][cć]/i.test(el.textContent)) {
+            var sibling = el.nextElementSibling;
+            if (sibling) availEl = sibling;
+          }
+        });
+      }
 
       // CSS helper (potrzebny dla overlimit w dostępnych i dla niedostępnych)
       if (!document.getElementById('techtor-unavailable-css')) {
