@@ -280,16 +280,31 @@
       var buyArea = document.querySelector('buy-button, .product-actions, [data-module-name="product_actions"], .product-buy, .product__actions, [class*="product-action"], form[action*="cart"], .product-detail__actions');
       if (!de && !qi && !buyArea && !isPrice0) return; // DOM jeszcze nie gotowy (price0 działa bez tych elementów)
 
-      // Pole "Dostępność" — szukamy po labelu, bo Shoper Phoenix renderuje dynamicznie
+      // Pole "Dostępność" — szukamy po treści tekstu w całym DOM
       var availEl = null;
-      if (!availEl) {
-        document.querySelectorAll('dt, .label, [class*="label"]').forEach(function (el) {
-          if (availEl) return;
-          if (/Dost[eę]pno[sś][cć]/i.test(el.textContent)) {
-            var sibling = el.nextElementSibling;
-            if (sibling) availEl = sibling;
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+      while (walker.nextNode()) {
+        if (availEl) break;
+        var node = walker.currentNode;
+        if (/^\s*Dost[eę]pno[sś][cć]\s*:?\s*$/i.test(node.textContent)) {
+          // Znaleziono label "Dostępność" — wartość to następny element lub sibling
+          var parent = node.parentElement;
+          if (parent) {
+            var next = parent.nextElementSibling;
+            if (next) { availEl = next; }
+            else {
+              // Szukaj w dzieciach rodzica
+              var children = parent.parentElement ? parent.parentElement.children : [];
+              for (var ci = 0; ci < children.length; ci++) {
+                var txt = children[ci].textContent.trim().toLowerCase();
+                if (txt === 'dostępny' || txt === 'niedostępny' || txt === 'na zamówienie' || txt === 'zapytaj o dostępność') {
+                  availEl = children[ci];
+                  break;
+                }
+              }
+            }
           }
-        });
+        }
       }
 
       // CSS helper (potrzebny dla overlimit w dostępnych i dla niedostępnych)
