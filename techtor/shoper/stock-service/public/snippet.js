@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  console.log('[TECHTOR] snippet.js START v4');
+  console.log('[TECHTOR] snippet.js START v5 — variant descriptions');
   // Auto-debug: pokaż raport po 5s jeśli nic nie zadziałało
   setTimeout(function() {
     var hasUI = document.querySelector('.techtor-unavailable-banner, .techtor-ask-btn, #techtor-stock-warning');
