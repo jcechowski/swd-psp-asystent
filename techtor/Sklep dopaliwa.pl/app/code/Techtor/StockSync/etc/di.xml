@@ -2,6 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <!-- Logger -->
     <virtualType name="TechtorStockSyncLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -9,4 +10,31 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Techtor\StockSync\Cron\MainSync">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorStockSyncLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\StockSync\Model\TarnawaReader">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorStockSyncLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\StockSync\Model\StockDataExporter">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorStockSyncLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- CLI commands -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="techtor_stock_sync" xsi:type="object">Techtor\StockSync\Console\Command\SyncCommand</item>
+                <item name="techtor_stock_status" xsi:type="object">Techtor\StockSync\Console\Command\StatusCommand</item>
+                <item name="techtor_stock_tarnawa" xsi:type="object">Techtor\StockSync\Console\Command\TarnawaStatsCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

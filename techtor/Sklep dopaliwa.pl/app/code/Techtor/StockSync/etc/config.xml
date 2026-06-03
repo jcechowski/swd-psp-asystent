@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <techtor_stocksync>
+            <general>
+                <enabled>0</enabled>
+                <source_code>default</source_code>
+            </general>
+            <tarnawa>
+                <enabled>1</enabled>
+                <scraper_dir>/root/projects/projekty/techtor/Scrapery/TARNAWA/output</scraper_dir>
+            </tarnawa>
+            <export>
+                <enabled>1</enabled>
+                <json_path>/var/www/dopaliwa/pub/media/stock-data.json</json_path>
+            </export>
+        </techtor_stocksync>
+    </default>
+</config>

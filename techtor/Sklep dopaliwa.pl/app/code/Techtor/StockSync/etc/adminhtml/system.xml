@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="techtor_stocksync" translate="label" sortOrder="30"
+                 showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Stock Sync (Orkiestrator)</label>
+            <tab>techtor</tab>
+            <resource>Techtor_StockSync::config</resource>
+
+            <group id="general" translate="label" sortOrder="10"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Ustawienia ogolne</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Wlacz StockSync</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Glowna synchronizacja stanow Firmao + Tarnawa → Magento (codziennie 6:00)</comment>
+                </field>
+                <field id="source_code" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>MSI Source Code</label>
+                    <comment>Kod zrodla MSI do aktualizacji (domyslnie "default")</comment>
+                </field>
+            </group>
+
+            <group id="tarnawa" translate="label" sortOrder="20"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Scraper Tarnawa (dostawca)</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Uwzgledniaj stany Tarnawa</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Jesli wylaczone, stock bedzie tylko z Firmao</comment>
+                </field>
+                <field id="scraper_dir" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Katalog output scrapera</label>
+                    <comment>Sciezka do katalogu z product.json (np. /root/projects/projekty/techtor/Scrapery/TARNAWA/output)</comment>
+                </field>
+            </group>
+
+            <group id="export" translate="label" sortOrder="30"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Eksport stock-data.json</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Eksportuj stock-data.json po kazdym syncu</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Plik JSON uzywany przez frontend do dynamicznego wyswietlania czasu dostawy</comment>
+                </field>
+                <field id="json_path" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Sciezka do pliku JSON</label>
+                    <comment>Domyslnie: /var/www/dopaliwa/pub/media/stock-data.json</comment>
+                </field>
+            </group>
+
+        </section>
+    </system>
+</config>
