@@ -7,38 +7,107 @@
             <label>Firmao ERP</label>
             <tab>techtor</tab>
             <resource>Techtor_Firmao::config</resource>
+
+            <!-- API -->
             <group id="general" translate="label" sortOrder="10"
                    showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Ustawienia API</label>
                 <field id="enabled" translate="label" type="select" sortOrder="10"
                        showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Wlacz synchronizacje</label>
+                    <label>Wlacz integracje Firmao</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="api_url" translate="label" type="text" sortOrder="20"
                        showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>URL API Firmao</label>
-                    <comment>np. https://system.firmao.pl/techtor</comment>
+                    <comment>np. https://system.firmao.pl/techtor/svc/v1</comment>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="login" translate="label" type="text" sortOrder="30"
                        showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Login</label>
+                    <label>Email (login)</label>
+                    <comment>Email konta API Firmao</comment>
                 </field>
                 <field id="password" translate="label" type="obscure" sortOrder="40"
                        showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Haslo</label>
+                    <label>Token API</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Token API Firmao (nie haslo konta!)</comment>
+                </field>
+                <field id="warehouse_id" translate="label" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>ID magazynu</label>
+                    <validate>validate-digits</validate>
+                    <comment>ID magazynu w Firmao (domyslnie 1)</comment>
                 </field>
             </group>
-            <group id="stock" translate="label" sortOrder="20"
+
+            <!-- Produkty -->
+            <group id="products" translate="label" sortOrder="20"
                    showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Synchronizacja stanow</label>
+                <label>Synchronizacja produktow</label>
                 <field id="sync_enabled" translate="label" type="select" sortOrder="10"
                        showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Synchronizuj stany magazynowe</label>
+                    <label>Synchronizuj produkty Firmao → Magento</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Codziennie o 5:00 — aktualizuje nazwy, opisy, atrybuty</comment>
+                </field>
+                <field id="auto_create" translate="label" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatycznie tworzenie nowych produktow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Jesli produkt z Firmao nie istnieje w Magento — utworz go (jako nieaktywny)</comment>
                 </field>
             </group>
+
+            <!-- Stany -->
+            <group id="stock" translate="label" sortOrder="30"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Synchronizacja stanow magazynowych</label>
+                <field id="sync_enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Synchronizuj stany Firmao → Magento</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Codziennie o 5:30 — aktualizuje currentStoreState → MSI</comment>
+                </field>
+            </group>
+
+            <!-- Ceny -->
+            <group id="prices" translate="label" sortOrder="40"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Synchronizacja cen</label>
+                <field id="sync_enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Synchronizuj ceny Firmao → Magento</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Codziennie o 5:15 — aktualizuje ceny sprzedazy i zakupu</comment>
+                </field>
+                <field id="sale_price_group" translate="label" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Grupa cenowa sprzedazy</label>
+                    <source_model>Techtor\Firmao\Model\Source\PriceGroup</source_model>
+                    <comment>Grupa cenowa z Firmao uzywana jako cena w sklepie (A=bazowa, B=hurt1, C=hurt2)</comment>
+                </field>
+                <field id="default_vat" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Domyslna stawka VAT (%)</label>
+                    <validate>validate-number</validate>
+                    <comment>Stawka VAT dla obliczen brutto (domyslnie 23)</comment>
+                </field>
+            </group>
+
+            <!-- Zamowienia -->
+            <group id="orders" translate="label" sortOrder="50"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Synchronizacja zamowien</label>
+                <field id="sync_enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Tworzenie PZ w Firmao po realizacji zamowienia</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Po zmianie statusu zamowienia na "Complete" — tworzy dokument PZ w Firmao</comment>
+                </field>
+            </group>
+
         </section>
     </system>
 </config>

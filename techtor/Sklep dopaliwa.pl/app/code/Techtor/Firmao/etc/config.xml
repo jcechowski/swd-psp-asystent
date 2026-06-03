@@ -5,13 +5,26 @@
         <techtor_firmao>
             <general>
                 <enabled>0</enabled>
-                <api_url/>
+                <api_url>https://system.firmao.pl/techtor/svc/v1</api_url>
                 <login/>
                 <password/>
+                <warehouse_id>1</warehouse_id>
             </general>
+            <products>
+                <sync_enabled>0</sync_enabled>
+                <auto_create>0</auto_create>
+            </products>
             <stock>
                 <sync_enabled>0</sync_enabled>
             </stock>
+            <prices>
+                <sync_enabled>0</sync_enabled>
+                <sale_price_group>A</sale_price_group>
+                <default_vat>23</default_vat>
+            </prices>
+            <orders>
+                <sync_enabled>0</sync_enabled>
+            </orders>
         </techtor_firmao>
     </default>
 </config>

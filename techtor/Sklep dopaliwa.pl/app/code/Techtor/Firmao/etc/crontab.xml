@@ -2,13 +2,19 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <!-- Sync produktow z Firmao — codziennie o 5:00 -->
+        <!-- Sync produktow — codziennie 5:00 -->
         <job name="techtor_firmao_sync_products"
              instance="Techtor\Firmao\Cron\SyncProducts"
              method="execute">
             <schedule>0 5 * * *</schedule>
         </job>
-        <!-- Sync stanow magazynowych — codziennie o 5:30 -->
+        <!-- Sync cen — codziennie 5:15 -->
+        <job name="techtor_firmao_sync_prices"
+             instance="Techtor\Firmao\Cron\SyncPrices"
+             method="execute">
+            <schedule>15 5 * * *</schedule>
+        </job>
+        <!-- Sync stanow magazynowych — codziennie 5:30 -->
         <job name="techtor_firmao_sync_stock"
              instance="Techtor\Firmao\Cron\SyncStock"
              method="execute">

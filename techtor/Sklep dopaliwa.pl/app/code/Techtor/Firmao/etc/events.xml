@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <!-- Po zmianie statusu zamowienia — jesli complete, tworz PZ w Firmao -->
+    <event name="sales_order_save_after">
+        <observer name="techtor_firmao_order_complete_sync"
+                  instance="Techtor\Firmao\Observer\OrderCompleteSync"/>
+    </event>
+
+</config>

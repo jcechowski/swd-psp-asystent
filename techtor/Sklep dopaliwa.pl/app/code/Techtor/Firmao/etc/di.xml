@@ -5,6 +5,7 @@
     <preference for="Techtor\Firmao\Api\FirmaoClientInterface"
                 type="Techtor\Firmao\Model\FirmaoClient"/>
 
+    <!-- Logger -->
     <virtualType name="TechtorFirmaoLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -16,6 +17,37 @@
     <type name="Techtor\Firmao\Model\FirmaoClient">
         <arguments>
             <argument name="logger" xsi:type="object">TechtorFirmaoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\Firmao\Cron\SyncProducts">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorFirmaoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\Firmao\Cron\SyncStock">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorFirmaoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\Firmao\Cron\SyncPrices">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorFirmaoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\Firmao\Observer\OrderCompleteSync">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorFirmaoLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- CLI commands -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="techtor_firmao_test" xsi:type="object">Techtor\Firmao\Console\Command\TestConnectionCommand</item>
+                <item name="techtor_firmao_sync_products" xsi:type="object">Techtor\Firmao\Console\Command\SyncProductsCommand</item>
+                <item name="techtor_firmao_sync_stock" xsi:type="object">Techtor\Firmao\Console\Command\SyncStockCommand</item>
+            </argument>
         </arguments>
     </type>
 </config>
