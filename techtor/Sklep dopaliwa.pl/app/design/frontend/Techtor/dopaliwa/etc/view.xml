@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+    <media>
+        <images module="Magento_Catalog">
+            <!-- Glowne zdjecie produktu -->
+            <image id="product_page_image_large" type="image">
+                <width>700</width>
+                <height>700</height>
+            </image>
+            <!-- Miniaturka w listingu -->
+            <image id="category_page_list" type="small_image">
+                <width>300</width>
+                <height>300</height>
+            </image>
+            <!-- Miniaturka w koszyku -->
+            <image id="cart_page_product_thumbnail" type="thumbnail">
+                <width>100</width>
+                <height>100</height>
+            </image>
+        </images>
+    </media>
+</view>

@@ -1,0 +1,20 @@
+# Magento 2 — na serwerze vendor/ jest ignorowany, tu trzymamy tylko custom code
+/vendor/
+/generated/
+/pub/static/
+/var/
+/node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+auth.json

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!-- Google Fonts: Inter -->
+        <css src="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+             src_type="url"/>
+        <!-- Favicon -->
+        <link src="Techtor_Theme::images/favicon.ico" rel="icon" type="image/x-icon"/>
+    </head>
+    <body>
+        <!-- Logo -->
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logo_file" xsi:type="string">images/logo.svg</argument>
+                <argument name="logo_img_width" xsi:type="number">200</argument>
+                <argument name="logo_img_height" xsi:type="number">50</argument>
+            </arguments>
+        </referenceBlock>
+
+        <!-- Copyright -->
+        <referenceBlock name="copyright">
+            <arguments>
+                <argument name="copyright" xsi:type="string">© 2026 dopaliwa.pl — TECHTOR. Wszelkie prawa zastrzezone.</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

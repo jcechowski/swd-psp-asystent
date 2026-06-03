@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- API Client -->
+    <preference for="Techtor\BaseLinker\Api\ClientInterface"
+                type="Techtor\BaseLinker\Model\Client"/>
+
+    <!-- Logger -->
+    <virtualType name="TechtorBaseLinkerLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Techtor\BaseLinker\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Techtor\BaseLinker\Model\Client">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorBaseLinkerLogger</argument>
+        </arguments>
+    </type>
+</config>

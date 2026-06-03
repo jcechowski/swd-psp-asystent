@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="techtor" translate="label" sortOrder="900">
+            <label>Techtor</label>
+        </tab>
+        <section id="techtor_baselinker" translate="label" sortOrder="10"
+                 showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>BaseLinker</label>
+            <tab>techtor</tab>
+            <resource>Techtor_BaseLinker::config</resource>
+            <group id="general" translate="label" sortOrder="10"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Ustawienia API</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Wlacz synchronizacje</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="api_token" translate="label" type="obscure" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Token</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Token API BaseLinker — znajdziesz w panel.baselinker.com > Moje konto > API</comment>
+                </field>
+                <field id="inventory_id" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Inventory ID</label>
+                    <comment>ID magazynu w BaseLinker (domyslnie 4433)</comment>
+                </field>
+            </group>
+            <group id="orders" translate="label" sortOrder="20"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Synchronizacja zamowien</label>
+                <field id="sync_enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Wysylaj zamowienia do BL</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_source_id" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Order Source ID</label>
+                    <comment>ID zrodla zamowien w BaseLinker</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

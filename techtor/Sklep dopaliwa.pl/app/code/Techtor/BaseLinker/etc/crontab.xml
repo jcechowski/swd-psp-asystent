@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <!-- Sync zamowien co 15 minut -->
+        <job name="techtor_baselinker_sync_orders"
+             instance="Techtor\BaseLinker\Cron\SyncOrders"
+             method="execute">
+            <schedule>*/15 * * * *</schedule>
+        </job>
+        <!-- Sync stanow magazynowych co godzine -->
+        <job name="techtor_baselinker_sync_stock"
+             instance="Techtor\BaseLinker\Cron\SyncStock"
+             method="execute">
+            <schedule>0 * * * *</schedule>
+        </job>
+    </group>
+</config>

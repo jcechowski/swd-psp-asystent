@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <techtor_baselinker>
+            <general>
+                <enabled>0</enabled>
+                <api_token/>
+                <inventory_id>4433</inventory_id>
+            </general>
+            <orders>
+                <sync_enabled>0</sync_enabled>
+                <order_source_id/>
+            </orders>
+        </techtor_baselinker>
+    </default>
+</config>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <techtor_dpd>
+                <active>0</active>
+                <title>DPD</title>
+                <name>DPD Kurier</name>
+                <price>14.99</price>
+                <free_shipping_threshold>500</free_shipping_threshold>
+                <sallowspecific>0</sallowspecific>
+                <model>Techtor\Shipping\Model\Carrier\Dpd</model>
+            </techtor_dpd>
+            <techtor_dhl>
+                <active>0</active>
+                <title>DHL</title>
+                <name>DHL Kurier</name>
+                <price>16.99</price>
+                <free_shipping_threshold>500</free_shipping_threshold>
+                <sallowspecific>0</sallowspecific>
+                <model>Techtor\Shipping\Model\Carrier\Dhl</model>
+            </techtor_dhl>
+        </carriers>
+    </default>
+</config>
