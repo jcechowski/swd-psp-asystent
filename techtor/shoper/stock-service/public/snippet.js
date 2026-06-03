@@ -265,6 +265,42 @@
     var totalStock = 0;
     var isPrice0 = false;
     var productName = '';
+    var lastVariantSku = null;
+
+    // ── Warianty: podmiana opisu/specs przy zmianie wariantu ──
+    function applyVariantData(currentSku) {
+      var dataEl = document.getElementById('techtor-variant-data');
+      if (!dataEl) return;
+      var descEl = document.getElementById('techtor-variant-description');
+      var specsEl = document.getElementById('techtor-variant-specs');
+      if (!descEl && !specsEl) return;
+
+      try {
+        var variants = JSON.parse(dataEl.getAttribute('data-variants') || '{}');
+        var vd = variants[currentSku];
+        if (!vd) return;
+
+        // Podmień opis
+        if (descEl && vd.description) {
+          descEl.innerHTML = vd.description;
+        }
+
+        // Podmień specyfikacje
+        if (specsEl && vd.specs && Object.keys(vd.specs).length > 0) {
+          var rows = '';
+          for (var k in vd.specs) {
+            rows += '<tr><td style="padding:6px 12px;border:1px solid #e5e7eb;color:#6b7280;font-size:13px;width:40%">' + k + '</td><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;font-size:13px">' + vd.specs[k] + '</td></tr>';
+          }
+          specsEl.innerHTML = '<table style="width:100%;border-collapse:collapse;margin:12px 0"><thead><tr><th colspan="2" style="padding:8px 12px;background:#f3f4f6;border:1px solid #e5e7eb;text-align:left;font-size:13px;font-weight:600">Specyfikacja techniczna</th></tr></thead><tbody>' + rows + '</tbody></table>';
+        } else if (specsEl) {
+          specsEl.innerHTML = '';
+        }
+
+        dbg('Variant switch → ' + currentSku + ' (' + (vd.name || '').substring(0, 40) + ')');
+      } catch (e) {
+        dbg('Variant parse error: ' + e.message);
+      }
+    }
 
     function applyState() {
       // Sprawdź czy nowszy run nie zastąpił tego
@@ -273,15 +309,25 @@
         return;
       }
 
-      // Znajdź SKU (raz)
-      if (!sku) {
-        sku = getSku();
-        if (!sku) return; // czekaj
+      // Czytaj SKU — odświeżaj przy każdym cyklu (Shoper zmienia SKU przy wyborze wariantu)
+      var currentSku = getSku();
+      if (!currentSku) return; // czekaj na DOM
+
+      // Wykryj zmianę wariantu
+      if (currentSku !== sku) {
+        sku = currentSku;
         stockTechtor = stockData[sku] || 0;
         totalStock = stockData[sku + '__total'] || 0;
         isPrice0 = !!stockData[sku + '__price0'];
         productName = getProductName();
-        dbg('SKU: ' + sku + ' techtor=' + stockTechtor + ' total=' + totalStock + ' price0=' + isPrice0);
+        if (lastVariantSku !== null) {
+          dbg('Variant changed: ' + lastVariantSku + ' → ' + sku);
+        } else {
+          dbg('SKU: ' + sku + ' techtor=' + stockTechtor + ' total=' + totalStock + ' price0=' + isPrice0);
+        }
+        lastVariantSku = sku;
+        // Podmień opis/specs wariantu
+        applyVariantData(sku);
       }
 
       // Znajdź elementy DOM (mogą pojawić się w różnym czasie)
