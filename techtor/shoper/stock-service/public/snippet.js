@@ -276,7 +276,7 @@
       if (!descEl && !specsEl) return;
 
       try {
-        var variants = JSON.parse(dataEl.getAttribute('data-variants') || '{}');
+        var variants = JSON.parse(dataEl.textContent || '{}');
         var vd = variants[currentSku];
         if (!vd) return;
 
