@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <!-- Po utworzeniu shipmentu — generuj etykiete + tracking -->
+    <event name="sales_order_shipment_save_after">
+        <observer name="techtor_shipping_shipment_label"
+                  instance="Techtor\Shipping\Observer\ShipmentSaveAfter"/>
+    </event>
+
+</config>

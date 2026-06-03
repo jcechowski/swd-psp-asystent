@@ -2,6 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <!-- Logger -->
     <virtualType name="TechtorShippingLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -9,4 +10,48 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <!-- LabelService — agregator generatorow etykiet -->
+    <type name="Techtor\Shipping\Model\LabelService">
+        <arguments>
+            <argument name="generators" xsi:type="array">
+                <item name="inpost" xsi:type="object">Techtor\Shipping\Model\Api\InPostClient</item>
+                <item name="dpd" xsi:type="object">Techtor\Shipping\Model\Api\DpdClient</item>
+                <item name="dhl" xsi:type="object">Techtor\Shipping\Model\Api\DhlClient</item>
+            </argument>
+            <argument name="logger" xsi:type="object">TechtorShippingLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- Logger injection -->
+    <type name="Techtor\Shipping\Model\Api\InPostClient">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorShippingLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\Shipping\Model\Api\DpdClient">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorShippingLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\Shipping\Model\Api\DhlClient">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorShippingLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\Shipping\Observer\ShipmentSaveAfter">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorShippingLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- CLI commands -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="techtor_shipping_generate_label" xsi:type="object">Techtor\Shipping\Console\Command\GenerateLabelCommand</item>
+                <item name="techtor_shipping_track" xsi:type="object">Techtor\Shipping\Console\Command\TrackCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

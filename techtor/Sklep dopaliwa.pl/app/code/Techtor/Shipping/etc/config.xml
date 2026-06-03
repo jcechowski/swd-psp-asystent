@@ -3,21 +3,62 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <carriers>
+            <!-- InPost -->
+            <techtor_inpost>
+                <active>0</active>
+                <title>InPost</title>
+                <price_locker_a>12.99</price_locker_a>
+                <price_locker_b>13.99</price_locker_b>
+                <price_locker_c>15.99</price_locker_c>
+                <price_courier>18.99</price_courier>
+                <heavy_threshold>30</heavy_threshold>
+                <heavy_surcharge>10</heavy_surcharge>
+                <free_shipping_threshold>500</free_shipping_threshold>
+                <sandbox>1</sandbox>
+                <api_token/>
+                <organization_id/>
+                <sender_name>TECHTOR dopaliwa.pl</sender_name>
+                <sender_email>biuro@techtor.pl</sender_email>
+                <sender_phone/>
+                <sallowspecific>0</sallowspecific>
+                <model>Techtor\Shipping\Model\Carrier\InPost</model>
+            </techtor_inpost>
+            <!-- DPD -->
             <techtor_dpd>
                 <active>0</active>
                 <title>DPD</title>
                 <name>DPD Kurier</name>
                 <price>14.99</price>
                 <free_shipping_threshold>500</free_shipping_threshold>
+                <api_url/>
+                <login/>
+                <api_password/>
+                <master_fid/>
+                <sender_name>TECHTOR</sender_name>
+                <sender_address/>
+                <sender_city/>
+                <sender_postcode/>
+                <sender_phone/>
+                <sender_email>biuro@techtor.pl</sender_email>
                 <sallowspecific>0</sallowspecific>
                 <model>Techtor\Shipping\Model\Carrier\Dpd</model>
             </techtor_dpd>
+            <!-- DHL -->
             <techtor_dhl>
                 <active>0</active>
                 <title>DHL</title>
                 <name>DHL Kurier</name>
                 <price>16.99</price>
                 <free_shipping_threshold>500</free_shipping_threshold>
+                <max_weight>31.5</max_weight>
+                <weight_table>1:12.99,5:14.99,10:18.99,20:22.99,31.5:28.99</weight_table>
+                <api_key/>
+                <account_number/>
+                <sender_name>TECHTOR</sender_name>
+                <sender_address/>
+                <sender_city/>
+                <sender_postcode/>
+                <sender_phone/>
                 <sallowspecific>0</sallowspecific>
                 <model>Techtor\Shipping\Model\Carrier\Dhl</model>
             </techtor_dhl>

@@ -3,7 +3,93 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="carriers">
-            <!-- DPD -->
+
+            <!-- ============ InPost ============ -->
+            <group id="techtor_inpost" translate="label" sortOrder="190"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>InPost Paczkomaty + Kurier (Techtor)</label>
+                <field id="active" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Wlacz</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tytul</label>
+                </field>
+                <!-- Ceny Paczkomat -->
+                <field id="price_locker_a" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Paczkomat gabaryt A (do 8 kg)</label>
+                    <validate>validate-number</validate>
+                </field>
+                <field id="price_locker_b" translate="label" type="text" sortOrder="31"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Paczkomat gabaryt B (do 19 kg)</label>
+                    <validate>validate-number</validate>
+                </field>
+                <field id="price_locker_c" translate="label" type="text" sortOrder="32"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Paczkomat gabaryt C (do 25 kg)</label>
+                    <validate>validate-number</validate>
+                </field>
+                <!-- Ceny Kurier -->
+                <field id="price_courier" translate="label" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Kurier InPost (cena bazowa)</label>
+                    <validate>validate-number</validate>
+                </field>
+                <field id="heavy_threshold" translate="label" type="text" sortOrder="41"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Prog ciezkiej paczki (kg)</label>
+                    <comment>Powyzej tej wagi doliczana jest doplata</comment>
+                </field>
+                <field id="heavy_surcharge" translate="label" type="text" sortOrder="42"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Doplata za ciezka paczke (PLN)</label>
+                </field>
+                <field id="free_shipping_threshold" translate="label" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Darmowa wysylka od (PLN)</label>
+                    <comment>0 = brak darmowej wysylki</comment>
+                </field>
+                <!-- API InPost ShipX -->
+                <field id="sandbox" translate="label" type="select" sortOrder="60"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Tryb Sandbox</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Wlacz sandbox na czas testow, wylacz na produkcji</comment>
+                </field>
+                <field id="api_token" translate="label" type="obscure" sortOrder="61"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Token ShipX</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="organization_id" translate="label" type="text" sortOrder="62"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Organization ID</label>
+                    <validate>validate-digits</validate>
+                </field>
+                <field id="sender_name" translate="label" type="text" sortOrder="70"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — nazwa</label>
+                </field>
+                <field id="sender_email" translate="label" type="text" sortOrder="71"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — email</label>
+                </field>
+                <field id="sender_phone" translate="label" type="text" sortOrder="72"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — telefon</label>
+                </field>
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Dostepne kraje</label>
+                    <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
+                </field>
+            </group>
+
+            <!-- ============ DPD ============ -->
             <group id="techtor_dpd" translate="label" sortOrder="200"
                    showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>DPD Kurier (Techtor)</label>
@@ -27,21 +113,53 @@
                 <field id="free_shipping_threshold" translate="label" type="text" sortOrder="50"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Darmowa wysylka od (PLN)</label>
-                    <comment>0 = brak darmowej wysylki</comment>
                 </field>
-                <field id="sallowspecific" translate="label" type="select" sortOrder="60"
+                <!-- API DPD -->
+                <field id="api_url" translate="label" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>URL API DPD</label>
+                </field>
+                <field id="login" translate="label" type="text" sortOrder="61"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Login DPD</label>
+                </field>
+                <field id="api_password" translate="label" type="obscure" sortOrder="62"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Haslo API DPD</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="master_fid" translate="label" type="text" sortOrder="63"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Master FID</label>
+                </field>
+                <field id="sender_name" translate="label" type="text" sortOrder="70"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — nazwa</label>
+                </field>
+                <field id="sender_address" translate="label" type="text" sortOrder="71"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — adres</label>
+                </field>
+                <field id="sender_city" translate="label" type="text" sortOrder="72"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — miasto</label>
+                </field>
+                <field id="sender_postcode" translate="label" type="text" sortOrder="73"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — kod pocztowy</label>
+                </field>
+                <field id="sender_phone" translate="label" type="text" sortOrder="74"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — telefon</label>
+                </field>
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Dostepne kraje</label>
                     <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="70"
-                       showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Konkretne kraje</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                    <can_be_empty>1</can_be_empty>
-                </field>
             </group>
-            <!-- DHL — analogiczna konfiguracja -->
+
+            <!-- ============ DHL ============ -->
             <group id="techtor_dhl" translate="label" sortOrder="210"
                    showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>DHL Kurier (Techtor)</label>
@@ -60,24 +178,60 @@
                 </field>
                 <field id="price" translate="label" type="text" sortOrder="40"
                        showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Cena wysylki (PLN)</label>
+                    <label>Cena bazowa (PLN)</label>
+                    <comment>Uzywana jesli weight_table jest pusta</comment>
+                </field>
+                <field id="weight_table" translate="label" type="textarea" sortOrder="41"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Tabela wag → cen</label>
+                    <comment>Format: maxKg:cena,maxKg:cena (np. 1:12.99,5:14.99,10:18.99,20:22.99,31.5:28.99)</comment>
+                </field>
+                <field id="max_weight" translate="label" type="text" sortOrder="42"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Max waga (kg)</label>
+                    <comment>Zamowienia powyzej tej wagi nie beda oferowaly DHL</comment>
                 </field>
                 <field id="free_shipping_threshold" translate="label" type="text" sortOrder="50"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Darmowa wysylka od (PLN)</label>
                 </field>
-                <field id="sallowspecific" translate="label" type="select" sortOrder="60"
+                <!-- API DHL -->
+                <field id="api_key" translate="label" type="obscure" sortOrder="60"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>DHL API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="account_number" translate="label" type="text" sortOrder="61"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Numer konta DHL</label>
+                </field>
+                <field id="sender_name" translate="label" type="text" sortOrder="70"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — nazwa</label>
+                </field>
+                <field id="sender_address" translate="label" type="text" sortOrder="71"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — adres</label>
+                </field>
+                <field id="sender_city" translate="label" type="text" sortOrder="72"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — miasto</label>
+                </field>
+                <field id="sender_postcode" translate="label" type="text" sortOrder="73"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — kod pocztowy</label>
+                </field>
+                <field id="sender_phone" translate="label" type="text" sortOrder="74"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Nadawca — telefon</label>
+                </field>
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Dostepne kraje</label>
                     <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="70"
-                       showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Konkretne kraje</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                    <can_be_empty>1</can_be_empty>
-                </field>
             </group>
+
         </section>
     </system>
 </config>
