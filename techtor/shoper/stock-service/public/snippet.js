@@ -296,6 +296,23 @@
           specsEl.innerHTML = '';
         }
 
+        // Wymuś przeliczenie wysokości accordion/view-more w Shoper Phoenix
+        var accordion = (descEl || specsEl).closest('h-accordion-content, [class*="accordion"]');
+        if (accordion) {
+          accordion.style.maxHeight = 'none';
+          accordion.style.height = 'auto';
+          accordion.style.overflow = 'visible';
+        }
+        // Szukaj parent view-more-less
+        var vml = (descEl || specsEl).closest('.view-more-less, [class*="view-more"]');
+        if (vml) {
+          vml.style.maxHeight = 'none';
+          vml.style.height = 'auto';
+          vml.style.overflow = 'visible';
+          var ctrl = vml.querySelector('.view-more-less__controls, [class*="read-more"]');
+          if (ctrl) ctrl.style.display = 'none';
+        }
+
         dbg('Variant switch → ' + currentSku + ' (' + (vd.name || '').substring(0, 40) + ')');
       } catch (e) {
         dbg('Variant parse error: ' + e.message);
