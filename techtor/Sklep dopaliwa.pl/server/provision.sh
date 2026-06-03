@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# dopaliwa.pl — Provisioning serwera Hetzner CX32
+# dopaliwa.pl — Provisioning serwera Hostinger VPS KVM2
 # Ubuntu 24.04 LTS | Magento 2.4.7
 # =============================================================================
 # Uzycie:  scp provision.sh root@<IP>:~ && ssh root@<IP> 'bash provision.sh'

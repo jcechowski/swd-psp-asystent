@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <!-- Dodaj kolumny BL do sales_order -->
+    <table name="sales_order">
+        <column xsi:type="int" name="bl_order_id" nullable="true"
+                comment="BaseLinker Order ID"/>
+        <column xsi:type="smallint" name="bl_synced" nullable="false" default="0"
+                comment="Czy zamowienie wyslane do BL (0=nie, 1=tak, 2=blad)"/>
+        <column xsi:type="varchar" name="bl_sync_error" nullable="true" length="500"
+                comment="Ostatni blad synchronizacji z BL"/>
+        <column xsi:type="timestamp" name="bl_synced_at" nullable="true"
+                comment="Data ostatniej synchronizacji z BL"/>
+        <index referenceId="IDX_SALES_ORDER_BL_ORDER_ID" indexType="btree">
+            <column name="bl_order_id"/>
+        </index>
+        <index referenceId="IDX_SALES_ORDER_BL_SYNCED" indexType="btree">
+            <column name="bl_synced"/>
+        </index>
+    </table>
+
+    <!-- Dodaj kolumny BL do sales_order_grid (widoczne w adminie) -->
+    <table name="sales_order_grid">
+        <column xsi:type="int" name="bl_order_id" nullable="true"
+                comment="BaseLinker Order ID"/>
+        <column xsi:type="smallint" name="bl_synced" nullable="false" default="0"
+                comment="Status sync BL"/>
+    </table>
+
+</schema>

@@ -11,7 +11,13 @@
             <orders>
                 <sync_enabled>0</sync_enabled>
                 <order_source_id/>
+                <new_order_status_id>0</new_order_status_id>
+                <sync_statuses>0</sync_statuses>
             </orders>
+            <stock>
+                <stock_sync_enabled>0</stock_sync_enabled>
+                <stock_source_code>default</stock_source_code>
+            </stock>
         </techtor_baselinker>
     </default>
 </config>

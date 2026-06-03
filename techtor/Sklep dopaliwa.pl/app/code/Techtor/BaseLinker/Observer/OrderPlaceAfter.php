@@ -6,15 +6,19 @@ namespace Techtor\BaseLinker\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Techtor\BaseLinker\Api\ClientInterface;
 use Techtor\BaseLinker\Model\Config;
+use Techtor\BaseLinker\Model\OrderPayloadBuilder;
 
 class OrderPlaceAfter implements ObserverInterface
 {
     public function __construct(
         private readonly ClientInterface $client,
         private readonly Config $config,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly OrderPayloadBuilder $payloadBuilder,
         private readonly LoggerInterface $logger
     ) {
     }
@@ -29,55 +33,32 @@ class OrderPlaceAfter implements ObserverInterface
         $order = $observer->getEvent()->getOrder();
 
         try {
-            $orderData = $this->buildOrderPayload($order);
+            $orderData = $this->payloadBuilder->build($order);
             $blOrderId = $this->client->createOrder($orderData);
-            $this->logger->info("Zamowienie {$order->getIncrementId()} wyslane do BL (ID: {$blOrderId})");
+
+            // Zapisz BL ID i status sync na zamowieniu
+            $order->setData('bl_order_id', $blOrderId);
+            $order->setData('bl_synced', 1);
+            $order->setData('bl_sync_error', null);
+            $order->setData('bl_synced_at', date('Y-m-d H:i:s'));
+            $this->orderRepository->save($order);
+
+            $this->logger->info(sprintf(
+                'Zamowienie %s → BL #%d',
+                $order->getIncrementId(),
+                $blOrderId
+            ));
         } catch (\Exception $e) {
-            // Nie blokuj zamowienia — loguj blad, cron ponowi probe
-            $this->logger->error(
-                "Blad sync zamowienia {$order->getIncrementId()} do BL: {$e->getMessage()}"
-            );
+            // Nie blokuj zamowienia — oznacz jako niezsynchronizowane, cron ponowi
+            $order->setData('bl_synced', 2); // 2 = blad
+            $order->setData('bl_sync_error', mb_substr($e->getMessage(), 0, 500));
+            $this->orderRepository->save($order);
+
+            $this->logger->error(sprintf(
+                'Blad sync zamowienia %s do BL: %s',
+                $order->getIncrementId(),
+                $e->getMessage()
+            ));
         }
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function buildOrderPayload(\Magento\Sales\Model\Order $order): array
-    {
-        $shippingAddress = $order->getShippingAddress();
-        $products = [];
-
-        foreach ($order->getAllVisibleItems() as $item) {
-            $products[] = [
-                'storage' => 'db',
-                'storage_id' => 0,
-                'name' => $item->getName(),
-                'sku' => $item->getSku(),
-                'quantity' => (int) $item->getQtyOrdered(),
-                'price_brutto' => (float) $item->getPriceInclTax(),
-                'tax_rate' => (float) $item->getTaxPercent(),
-                'weight' => (float) $item->getWeight(),
-            ];
-        }
-
-        return [
-            'order_source_id' => $this->config->getOrderSourceId(),
-            'order_status_id' => 0, // nowe zamowienie
-            'date_add' => (int) strtotime($order->getCreatedAt()),
-            'currency' => $order->getOrderCurrencyCode(),
-            'payment_method' => $order->getPayment()->getMethod(),
-            'paid' => $order->getTotalPaid() > 0 ? 1 : 0,
-            'email' => $order->getCustomerEmail(),
-            'phone' => $shippingAddress?->getTelephone() ?? '',
-            'delivery_fullname' => $shippingAddress?->getName() ?? '',
-            'delivery_address' => implode(' ', $shippingAddress?->getStreet() ?? []),
-            'delivery_city' => $shippingAddress?->getCity() ?? '',
-            'delivery_postcode' => $shippingAddress?->getPostcode() ?? '',
-            'delivery_country_code' => $shippingAddress?->getCountryId() ?? 'PL',
-            'delivery_price' => (float) $order->getShippingInclTax(),
-            'products' => $products,
-            'extra_field_1' => $order->getIncrementId(), // Magento order ID
-        ];
     }
 }

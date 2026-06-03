@@ -10,6 +10,8 @@
             <label>BaseLinker</label>
             <tab>techtor</tab>
             <resource>Techtor_BaseLinker::config</resource>
+
+            <!-- API -->
             <group id="general" translate="label" sortOrder="10"
                    showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Ustawienia API</label>
@@ -22,14 +24,17 @@
                        showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Token</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                    <comment>Token API BaseLinker — znajdziesz w panel.baselinker.com > Moje konto > API</comment>
+                    <comment>Token API BaseLinker — panel.baselinker.com > Moje konto > API</comment>
                 </field>
                 <field id="inventory_id" translate="label" type="text" sortOrder="30"
                        showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Inventory ID</label>
+                    <validate>validate-digits</validate>
                     <comment>ID magazynu w BaseLinker (domyslnie 4433)</comment>
                 </field>
             </group>
+
+            <!-- Zamowienia -->
             <group id="orders" translate="label" sortOrder="20"
                    showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Synchronizacja zamowien</label>
@@ -41,9 +46,40 @@
                 <field id="order_source_id" translate="label" type="text" sortOrder="20"
                        showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Order Source ID</label>
+                    <validate>validate-digits</validate>
                     <comment>ID zrodla zamowien w BaseLinker</comment>
                 </field>
+                <field id="new_order_status_id" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Status nowego zamowienia w BL</label>
+                    <validate>validate-digits</validate>
+                    <comment>ID statusu BL dla nowych zamowien (domyslnie 0). Sprawdz statusy: bin/magento techtor:bl:test</comment>
+                </field>
+                <field id="sync_statuses" translate="label" type="select" sortOrder="40"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Synchronizuj statusy BL → Magento</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Jesli wlaczone, zmiany statusow w BL beda odzwierciedlane w Magento</comment>
+                </field>
             </group>
+
+            <!-- Stock -->
+            <group id="stock" translate="label" sortOrder="30"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Synchronizacja stanow magazynowych</label>
+                <field id="stock_sync_enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Synchronizuj stany BL → Magento</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Aktualizuj MSI na podstawie stanow z magazynu BL (co godzine)</comment>
+                </field>
+                <field id="stock_source_code" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>MSI Source Code</label>
+                    <comment>Kod zrodla MSI do aktualizacji (domyslnie "default")</comment>
+                </field>
+            </group>
+
         </section>
     </system>
 </config>

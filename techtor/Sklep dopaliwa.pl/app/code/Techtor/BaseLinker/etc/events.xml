@@ -1,9 +1,17 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
     <!-- Po zlozeniu zamowienia — push do BaseLinker -->
     <event name="sales_order_place_after">
         <observer name="techtor_baselinker_order_place"
                   instance="Techtor\BaseLinker\Observer\OrderPlaceAfter"/>
     </event>
+
+    <!-- Po zmianie statusu zamowienia — sync statusu do BL -->
+    <event name="sales_order_save_after">
+        <observer name="techtor_baselinker_order_status_change"
+                  instance="Techtor\BaseLinker\Observer\OrderStatusChange"/>
+    </event>
+
 </config>

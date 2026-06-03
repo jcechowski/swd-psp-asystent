@@ -15,9 +15,41 @@
         </arguments>
     </virtualType>
 
+    <!-- Inject custom logger do wszystkich klas modulu -->
     <type name="Techtor\BaseLinker\Model\Client">
         <arguments>
             <argument name="logger" xsi:type="object">TechtorBaseLinkerLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\BaseLinker\Observer\OrderPlaceAfter">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorBaseLinkerLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\BaseLinker\Cron\SyncOrders">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorBaseLinkerLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\BaseLinker\Cron\SyncStock">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorBaseLinkerLogger</argument>
+        </arguments>
+    </type>
+    <type name="Techtor\BaseLinker\Cron\SyncStatuses">
+        <arguments>
+            <argument name="logger" xsi:type="object">TechtorBaseLinkerLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- CLI commands -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="techtor_bl_sync_orders" xsi:type="object">Techtor\BaseLinker\Console\Command\SyncOrdersCommand</item>
+                <item name="techtor_bl_sync_stock" xsi:type="object">Techtor\BaseLinker\Console\Command\SyncStockCommand</item>
+                <item name="techtor_bl_test_connection" xsi:type="object">Techtor\BaseLinker\Console\Command\TestConnectionCommand</item>
+            </argument>
         </arguments>
     </type>
 </config>

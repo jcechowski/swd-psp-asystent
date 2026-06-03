@@ -2,17 +2,23 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <!-- Sync zamowien co 15 minut -->
+        <!-- Retry niezsynchronizowanych zamowien — co 15 min -->
         <job name="techtor_baselinker_sync_orders"
              instance="Techtor\BaseLinker\Cron\SyncOrders"
              method="execute">
             <schedule>*/15 * * * *</schedule>
         </job>
-        <!-- Sync stanow magazynowych co godzine -->
+        <!-- Sync stanow magazynowych BL → Magento — co godzine -->
         <job name="techtor_baselinker_sync_stock"
              instance="Techtor\BaseLinker\Cron\SyncStock"
              method="execute">
             <schedule>0 * * * *</schedule>
+        </job>
+        <!-- Sync statusow zamowien BL → Magento — co 30 min -->
+        <job name="techtor_baselinker_sync_statuses"
+             instance="Techtor\BaseLinker\Cron\SyncStatuses"
+             method="execute">
+            <schedule>*/30 * * * *</schedule>
         </job>
     </group>
 </config>
