@@ -609,8 +609,51 @@
       }
     }
 
+    // ── Auto-wybór pierwszego wariantu (np. "1 mb" zamiast "Wybierz") ──
+    var variantAutoSelected = false;
+    function autoSelectFirstVariant() {
+      if (variantAutoSelected) return;
+      // Szukaj selectów wariantów (Shoper: select w sekcji opcji produktu)
+      var selects = document.querySelectorAll('select[name*="option"], select[name*="variant"], select[data-option], product-variants select, .product-options select, [class*="variant"] select, [class*="option"] select');
+      // Fallback: dowolny select z opcją "Wybierz" jako pierwszą
+      if (selects.length === 0) {
+        document.querySelectorAll('select').forEach(function (s) {
+          var first = s.options[0];
+          if (first && /wybierz/i.test(first.textContent)) {
+            selects = [s];
+          }
+        });
+        // NodeList → array fallback
+        if (selects instanceof NodeList && selects.length === 0) return;
+      }
+      if (!selects || selects.length === 0) return;
+
+      var changed = false;
+      [].forEach.call(selects, function (sel) {
+        // Sprawdź czy aktualnie "Wybierz" (pusta wartość lub pierwsza opcja)
+        if (sel.selectedIndex > 0) return; // już wybrany wariant
+        var firstOpt = sel.options[0];
+        if (!firstOpt || !/wybierz/i.test(firstOpt.textContent)) return;
+        // Wybierz pierwszą prawdziwą opcję (index 1 = np. "1 mb")
+        if (sel.options.length > 1) {
+          sel.selectedIndex = 1;
+          sel.value = sel.options[1].value;
+          // Dispatch events żeby Shoper przeliczył cenę
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+          sel.dispatchEvent(new Event('input', { bubbles: true }));
+          dbg('Auto-select variant: "' + sel.options[1].textContent.trim() + '"');
+          changed = true;
+        }
+      });
+      if (changed) variantAutoSelected = true;
+    }
+
     // Uruchom natychmiast + co 500ms (łapie elementy dorenderowane przez Shoper)
     applyState();
+    // Auto-wybór wariantu — z opóźnieniem żeby DOM zdążył się wyrenderować
+    setTimeout(autoSelectFirstVariant, 300);
+    setTimeout(autoSelectFirstVariant, 800);
+    setTimeout(autoSelectFirstVariant, 1500);
     window._tInterval = setInterval(applyState, 500);
   }
 
