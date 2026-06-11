@@ -500,8 +500,9 @@
             availEl.textContent = 'zapytaj o dostępność';
             availEl.style.color = '#b45309';
           } else {
-            availEl.textContent = availEl.dataset.origText;
-            availEl.style.color = '';
+            // Wymuszaj "dostępny" gdy stock > 0 (origText mógł być stary "Zapytaj")
+            availEl.textContent = 'dostępny';
+            availEl.style.color = '#16a34a';
           }
         }
 
