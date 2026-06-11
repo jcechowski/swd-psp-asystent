@@ -369,7 +369,11 @@
       document.querySelectorAll('dd, span, div, p').forEach(function (el) {
         if (availEl) return;
         var t = el.textContent.trim().toLowerCase();
-        if ((t === 'dostępny' || t === 'niedostępny' || t === 'na zamówienie' || t === 'zapytaj o dostępność') && el.children.length === 0) {
+        // Elastyczne dopasowanie — szukaj kluczowych słów (Shoper może mieć literówki: dostepność vs dostępność)
+        if (el.children.length === 0 && t.length < 40 && (
+          t.indexOf('dost') === 0 || t.indexOf('niedost') === 0 || t.indexOf('zapytaj') === 0 ||
+          t === 'na zamówienie' || t.indexOf('zamówienie') >= 0
+        )) {
           availEl = el;
         }
       });
