@@ -365,8 +365,8 @@
       if (!de && !qi && !buyArea && !isPrice0) return; // DOM jeszcze nie gotowy (price0 działa bez tych elementów)
 
       // Pole "Dostępność" — szukamy elementu zawierającego tekst "dostępny"
+      // Znajdź pole dostępności — pełne nazwy z Shoper (z wariantami pisowni ś/s)
       var availEl = null;
-      // Pełne nazwy dostępności z Shoper (z wariantami pisowni ś/s)
       var availNames = [
         'dostępny', 'dostepny',
         'niedostępny', 'niedostepny',
@@ -386,6 +386,19 @@
           availEl = el;
         }
       });
+      // Nakładka na dostępność — Shoper Phoenix re-renderuje textContent,
+      // więc nadpisujemy CSS overlay zamiast walczyć o textContent
+      if (availEl && !availEl.dataset.techtorOverlay) {
+        availEl.style.position = 'relative';
+        var overlay = document.createElement('span');
+        overlay.className = 'techtor-avail-overlay';
+        overlay.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;background:#fff;z-index:1;';
+        availEl.appendChild(overlay);
+        availEl.dataset.techtorOverlay = '1';
+        // MutationObserver — reaguj natychmiast na re-rendery Shoper
+        new MutationObserver(function () { setTimeout(applyState, 5); }).observe(availEl, { childList: true, characterData: true, subtree: true });
+      }
+      var availOverlay = availEl ? availEl.querySelector('.techtor-avail-overlay') : null;
 
       // CSS helper (potrzebny dla overlimit w dostępnych i dla niedostępnych)
       if (!document.getElementById('techtor-unavailable-css')) {
@@ -428,11 +441,7 @@
           if (btn) btn.classList.add('techtor-hide');
         });
         // Zmiana pola "Dostępność"
-        if (availEl) {
-          if (!availEl.dataset.origText) availEl.dataset.origText = availEl.textContent;
-          availEl.textContent = 'zapytaj o dostępność';
-          availEl.style.color = '#b45309';
-        }
+        if (availOverlay) { availOverlay.textContent = 'zapytaj o dostępność'; availOverlay.style.color = '#b45309'; }
         // Baner "Zapytaj o cenę" — stały kontener (id) odporny na rerender Shoper Phoenix
         if (!document.getElementById('techtor-price0-banner')) {
           var b0 = document.createElement('div');
@@ -508,14 +517,14 @@
 
         // Zmiana natywnego pola "Dostępność"
         if (availEl) {
-          if (!availEl.dataset.origText) availEl.dataset.origText = availEl.textContent;
-          if (overLimit) {
-            availEl.textContent = 'zapytaj o dostępność';
-            availEl.style.color = '#b45309';
-          } else {
-            // Wymuszaj "dostępny" gdy stock > 0 (origText mógł być stary "Zapytaj")
-            availEl.textContent = 'dostępny';
-            availEl.style.color = '#16a34a';
+          if (availOverlay) {
+            if (overLimit) {
+              availOverlay.textContent = 'zapytaj o dostępność';
+              availOverlay.style.color = '#b45309';
+            } else {
+              availOverlay.textContent = 'dostępny';
+              availOverlay.style.color = '#16a34a';
+            }
           }
         }
 
@@ -578,11 +587,7 @@
       // ── NIEDOSTĘPNY (totalStock <= 0) ──
 
       // Zmiana natywnego pola "Dostępność"
-      if (availEl) {
-        if (!availEl.dataset.origText) availEl.dataset.origText = availEl.textContent;
-        availEl.textContent = 'zapytaj o dostępność';
-        availEl.style.color = '#b45309';
-      }
+      if (availOverlay) { availOverlay.textContent = 'zapytaj o dostępność'; availOverlay.style.color = '#b45309'; }
 
       // Ukryj czas dostawy
       if (de) {
