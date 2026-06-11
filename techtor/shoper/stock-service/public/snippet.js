@@ -366,14 +366,23 @@
 
       // Pole "Dostępność" — szukamy elementu zawierającego tekst "dostępny"
       var availEl = null;
+      // Pełne nazwy dostępności z Shoper (z wariantami pisowni ś/s)
+      var availNames = [
+        'dostępny', 'dostepny',
+        'niedostępny', 'niedostepny',
+        'zapytaj o dostępność', 'zapytaj o dostepność',
+        'zapytaj o cenę i dostępność', 'zapytaj o cene i dostepność',
+        'na zamówienie', 'na zamowienie',
+        'spodziewana dostawa',
+        'dostępny na zamówienie', 'dostepny na zamowienie',
+        'brak informacji',
+        'trwale niedostępny', 'trwale niedostepny',
+        'wycofany z oferty',
+      ];
       document.querySelectorAll('dd, span, div, p').forEach(function (el) {
         if (availEl) return;
         var t = el.textContent.trim().toLowerCase();
-        // Elastyczne dopasowanie — szukaj kluczowych słów (Shoper może mieć literówki: dostepność vs dostępność)
-        if (el.children.length === 0 && t.length < 40 && (
-          t.indexOf('dost') === 0 || t.indexOf('niedost') === 0 || t.indexOf('zapytaj') === 0 ||
-          t === 'na zamówienie' || t.indexOf('zamówienie') >= 0
-        )) {
+        if (el.children.length === 0 && availNames.indexOf(t) >= 0) {
           availEl = el;
         }
       });
