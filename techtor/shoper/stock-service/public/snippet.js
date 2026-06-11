@@ -333,9 +333,18 @@
       // Wykryj zmianę wariantu
       if (currentSku !== sku) {
         sku = currentSku;
-        stockTechtor = stockData[sku] || 0;
-        totalStock = stockData[sku + '__total'] || 0;
-        isPrice0 = !!stockData[sku + '__price0'];
+        // Fallback na parent SKU: wariant WT019001000 → parent WT019000000 (pozycje 5-7 = długość → 000)
+        var lookupSku = sku;
+        if (stockData[sku] === undefined && sku && sku.length === 11 && sku[0] === 'W') {
+          var parentSku = sku.substring(0, 5) + '000' + sku.substring(8);
+          if (stockData[parentSku] !== undefined) {
+            lookupSku = parentSku;
+            dbg('Variant ' + sku + ' → parent ' + parentSku);
+          }
+        }
+        stockTechtor = stockData[lookupSku] || 0;
+        totalStock = stockData[lookupSku + '__total'] || 0;
+        isPrice0 = !!stockData[lookupSku + '__price0'];
         productName = getProductName();
         if (lastVariantSku !== null) {
           dbg('Variant changed: ' + lastVariantSku + ' → ' + sku);
@@ -611,50 +620,75 @@
 
     // ── Auto-wybór pierwszego wariantu (np. "1 mb" zamiast "Wybierz") ──
     var variantAutoSelected = false;
-    function autoSelectFirstVariant() {
-      if (variantAutoSelected) return;
-      // Szukaj selectów wariantów (Shoper: select w sekcji opcji produktu)
-      var selects = document.querySelectorAll('select[name*="option"], select[name*="variant"], select[data-option], product-variants select, .product-options select, [class*="variant"] select, [class*="option"] select');
-      // Fallback: dowolny select z opcją "Wybierz" jako pierwszą
-      if (selects.length === 0) {
-        document.querySelectorAll('select').forEach(function (s) {
-          var first = s.options[0];
-          if (first && /wybierz/i.test(first.textContent)) {
-            selects = [s];
-          }
-        });
-        // NodeList → array fallback
-        if (selects instanceof NodeList && selects.length === 0) return;
-      }
-      if (!selects || selects.length === 0) return;
+    var variantAttempts = 0;
+    var variantMaxAttempts = 30; // 30 × 500ms = 15s max
 
-      var changed = false;
-      [].forEach.call(selects, function (sel) {
-        // Sprawdź czy aktualnie "Wybierz" (pusta wartość lub pierwsza opcja)
-        if (sel.selectedIndex > 0) return; // już wybrany wariant
-        var firstOpt = sel.options[0];
-        if (!firstOpt || !/wybierz/i.test(firstOpt.textContent)) return;
-        // Wybierz pierwszą prawdziwą opcję (index 1 = np. "1 mb")
-        if (sel.options.length > 1) {
-          sel.selectedIndex = 1;
-          sel.value = sel.options[1].value;
-          // Dispatch events żeby Shoper przeliczył cenę
-          sel.dispatchEvent(new Event('change', { bubbles: true }));
-          sel.dispatchEvent(new Event('input', { bubbles: true }));
-          dbg('Auto-select variant: "' + sel.options[1].textContent.trim() + '"');
-          changed = true;
+    function findSelectsWithWybierz() {
+      var found = [];
+      // Szukaj WSZYSTKICH selectów na stronie
+      document.querySelectorAll('select').forEach(function (s) {
+        if (s.options.length > 1) {
+          var first = s.options[0];
+          if (first && /wybierz/i.test(first.textContent.trim()) && s.selectedIndex === 0) {
+            found.push(s);
+          }
         }
       });
-      if (changed) variantAutoSelected = true;
+      return found;
+    }
+
+    function triggerSelectChange(sel) {
+      // Metoda 1: natywny setter (obchodzi React/Vue/Angular)
+      var nativeSetter = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+      if (nativeSetter && nativeSetter.set) {
+        nativeSetter.set.call(sel, sel.options[1].value);
+      }
+      sel.selectedIndex = 1;
+      // Metoda 2: pełny zestaw eventów
+      sel.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+      sel.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+      // Metoda 3: MouseEvent (niektóre frameworki słuchają tylko tych)
+      try {
+        sel.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        sel.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+        sel.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      } catch(e) {}
+      // Metoda 4: focus/blur
+      sel.focus();
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+      sel.blur();
+    }
+
+    function autoSelectFirstVariant() {
+      if (variantAutoSelected) return;
+      variantAttempts++;
+      if (variantAttempts > variantMaxAttempts) {
+        dbg('Auto-select: brak selecta po ' + variantMaxAttempts + ' próbach');
+        variantAutoSelected = true; // przestań szukać
+        return;
+      }
+
+      var selects = findSelectsWithWybierz();
+      if (selects.length === 0) {
+        dbg('Auto-select: brak selecta z "Wybierz" (próba ' + variantAttempts + ')');
+        return; // spróbuj ponownie w następnym cyklu
+      }
+
+      selects.forEach(function (sel) {
+        var optText = sel.options[1].textContent.trim();
+        triggerSelectChange(sel);
+        dbg('Auto-select variant: "' + optText + '" (próba ' + variantAttempts + ')');
+      });
+      variantAutoSelected = true;
     }
 
     // Uruchom natychmiast + co 500ms (łapie elementy dorenderowane przez Shoper)
     applyState();
-    // Auto-wybór wariantu — z opóźnieniem żeby DOM zdążył się wyrenderować
-    setTimeout(autoSelectFirstVariant, 300);
-    setTimeout(autoSelectFirstVariant, 800);
-    setTimeout(autoSelectFirstVariant, 1500);
-    window._tInterval = setInterval(applyState, 500);
+    // Auto-wybór wariantu — w głównym loopie co 500ms
+    window._tInterval = setInterval(function () {
+      applyState();
+      if (!variantAutoSelected) autoSelectFirstVariant();
+    }, 500);
   }
 
   // ── Debug ──
