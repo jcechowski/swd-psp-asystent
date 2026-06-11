@@ -343,7 +343,8 @@
           }
         }
         stockTechtor = stockData[lookupSku] || 0;
-        totalStock = stockData[lookupSku + '__total'] || 0;
+        // Fallback: jeśli brak __total, użyj stock (zapobiega fałszywej niedostępności)
+        totalStock = stockData[lookupSku + '__total'] || stockData[lookupSku] || 0;
         isPrice0 = !!stockData[lookupSku + '__price0'];
         productName = getProductName();
         if (lastVariantSku !== null) {
@@ -395,8 +396,15 @@
         overlay.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;background:#fff;z-index:1;';
         availEl.appendChild(overlay);
         availEl.dataset.techtorOverlay = '1';
-        // MutationObserver — reaguj natychmiast na re-rendery Shoper
-        new MutationObserver(function () { setTimeout(applyState, 5); }).observe(availEl, { childList: true, characterData: true, subtree: true });
+        // MutationObserver — reaguj natychmiast na re-rendery Shoper (z guard przeciw pętli)
+        var _applyPending = false;
+        new MutationObserver(function (mutations) {
+          // Ignoruj zmiany w naszym overlay (zapobiega pętli)
+          var dominated = mutations.every(function (m) { return m.target.classList && m.target.classList.contains('techtor-avail-overlay'); });
+          if (dominated || _applyPending) return;
+          _applyPending = true;
+          setTimeout(function () { _applyPending = false; applyState(); }, 5);
+        }).observe(availEl, { childList: true, characterData: true, subtree: true });
       }
       var availOverlay = availEl ? availEl.querySelector('.techtor-avail-overlay') : null;
 
