@@ -1,6 +1,7 @@
 (function () {
   'use strict';
   console.log('[TECHTOR] snippet.js START v5 — variant descriptions');
+  function escapeHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
   // Auto-debug: pokaż raport po 5s jeśli nic nie zadziałało
   setTimeout(function() {
     var hasUI = document.querySelector('.techtor-unavailable-banner, .techtor-ask-btn, #techtor-stock-warning');
@@ -81,7 +82,7 @@
         '<h3 style="margin:0 0 4px;font-size:18px;color:#1f2937;">' + modalTitle + '</h3>' +
         '<form id="techtor-ask-form">' +
           '<div style="' + rowStyle + 'align-items:center;margin-bottom:16px;">' +
-            '<p style="margin:0;font-size:13px;color:#6b7280;flex:1;">Produkt: <strong>' + productName + '</strong> (' + sku + ')</p>' +
+            '<p style="margin:0;font-size:13px;color:#6b7280;flex:1;">Produkt: <strong>' + escapeHtml(productName) + '</strong> (' + escapeHtml(sku) + ')</p>' +
             '<div style="display:flex;align-items:center;gap:12px;flex:0 0 auto;">' +
               '<div style="flex:0 0 100px;">' +
                 '<label style="font-size:12px;font-weight:700;color:#1f2937;margin-bottom:4px;display:block;text-align:center;">Ilość (szt.)</label>' +
@@ -417,11 +418,24 @@
         document.head.appendChild(css);
       }
 
-      // Ukryj InPost Pay gdy niedostępny lub cena 0
-      if (isPrice0 || totalStock <= 0) {
-        document.querySelectorAll('inpost-izi-button, INPOST-IZI-BUTTON').forEach(function (el) {
-          el.style.setProperty('display', 'none', 'important');
-        });
+      // Ukryj InPost Pay — CSS rule odporny na SPA re-render Shoper Phoenix
+      // Ukrywa przy: niedostępny, cena 0, overlimit
+      var shouldHideInpost = isPrice0 || totalStock <= 0;
+      if (!shouldHideInpost && totalStock > 0) {
+        var qi2 = document.querySelector('h-input-stepper.product-quantity__input, .product-quantity__input, h-input-stepper, input[name="quantity"]');
+        var q2 = qi2 ? (parseInt(qi2.getAttribute('value') || qi2.value, 10) || 1) : 1;
+        if (q2 > totalStock) shouldHideInpost = true;
+      }
+      if (shouldHideInpost) {
+        if (!document.getElementById('techtor-inpost-hide')) {
+          var inpCss = document.createElement('style');
+          inpCss.id = 'techtor-inpost-hide';
+          inpCss.textContent = 'inpost-izi-button, INPOST-IZI-BUTTON { display: none !important; }';
+          document.head.appendChild(inpCss);
+        }
+      } else {
+        var oldInpCss = document.getElementById('techtor-inpost-hide');
+        if (oldInpCss) oldInpCss.remove();
       }
 
       // ── BRAK CENY (price0) — najwyższy priorytet ──
@@ -484,13 +498,7 @@
 
       // ── DOSTĘPNY ──
       if (totalStock > 0) {
-        if (de) {
-          if (stockTechtor > 0) {
-            de.textContent = '24 godziny'; de.style.color = '';
-          } else {
-            de.textContent = '48 godzin'; de.style.color = '#b45309';
-          }
-        }
+        // Czas wysyłki kontrolowany przez delivery_id z PIM — snippet nie nadpisuje
 
         if (!qi) return; // stepper jeszcze nie wyrenderowany
 
@@ -508,7 +516,7 @@
               '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
             '</div>' +
             '<p style="margin:0 0 4px;font-size:16px;font-weight:700;color:#1f2937;">Brak wystarczającej ilości towaru</p>' +
-            '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;line-height:1.5;">W magazynie posiadamy <strong>' + totalStock + ' szt.</strong> Zapytaj o dostępność większej ilości.</p>';
+            '<p id="techtor-stock-qty" style="margin:0 0 16px;font-size:13px;color:#6b7280;line-height:1.5;">W magazynie posiadamy <strong>' + totalStock + ' szt.</strong> Zapytaj o dostępność większej ilości.</p>';
           var askOLBtn = document.createElement('button');
           askOLBtn.className = 'techtor-ask-btn';
           askOLBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#d97706;color:#fff;box-shadow:0 4px 14px rgba(217,119,6,0.25);transition:all 0.2s ease;';
@@ -522,6 +530,9 @@
           else { var p = qi.closest('section, .product-info, .product-detail, [class*="product"]'); if (p) p.appendChild(banner); }
         }
         banner.style.display = overLimit ? 'block' : 'none';
+        // Aktualizuj ilość w banerze przy zmianie wariantu
+        var qtyEl = document.getElementById('techtor-stock-qty');
+        if (qtyEl) qtyEl.innerHTML = 'W magazynie posiadamy <strong>' + totalStock + ' szt.</strong> Zapytaj o dostępność większej ilości.';
 
         // Zmiana natywnego pola "Dostępność"
         if (availEl) {
@@ -564,11 +575,8 @@
             // W granicach stanu — pokaż i ustaw czas
             deTarget.classList.remove('techtor-hide');
             delete deTarget.dataset.techtorHidden;
-            if (stockTechtor > 0 && q <= stockTechtor) {
-              de.textContent = '24 godziny'; de.style.color = '';
-            } else {
-              de.textContent = '48 godzin'; de.style.color = '#b45309';
-            }
+            // Czas wysyłki kontrolowany przez delivery_id z PIM — snippet nie nadpisuje
+            de.style.color = '';
           }
         }
 
