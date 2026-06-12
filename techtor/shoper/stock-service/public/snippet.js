@@ -600,55 +600,26 @@
         return;
       }
 
-      // ── NIEDOSTĘPNY (totalStock <= 0) ──
+      // ── ZAPYTAJ O DOSTĘPNOŚĆ (totalStock <= 0) ──
+      // Koszyk ODBLOKOWANY — klient może zamówić. Baner informacyjny.
 
       // Zmiana natywnego pola "Dostępność"
       if (availOverlay) { availOverlay.textContent = 'zapytaj o dostępność'; availOverlay.style.color = '#b45309'; }
 
-      // Ukryj czas dostawy
-      if (de) {
-        var deWrapper = de.closest('[class*="shipping"], [class*="delivery"], [data-module-name*="shipping"]') || de.parentElement;
-        (deWrapper || de).classList.add('techtor-hide');
-        (deWrapper || de).dataset.techtorHidden = '1';
-      }
+      // Stepper i buy buttons zostają WIDOCZNE (klient może zamówić)
 
-      // Ukryj stepper
-      if (qi) {
-        var qiWrapper = qi.closest('product-quantity, [class*="quantity"], .product-quantity');
-        (qiWrapper || qi).classList.add('techtor-hide');
-        (qiWrapper || qi).dataset.techtorHidden = '1';
-      }
-
-      // Ukryj buy buttons
-      buyBtns.forEach(function (bb) {
-        bb.classList.add('techtor-hide');
-        bb.dataset.techtorHidden = '1';
-        var btn = bb.querySelector('.btn_primary') || (bb.classList.contains('btn_primary') ? bb : null);
-        if (btn) { btn.classList.add('techtor-hide'); btn.dataset.techtorHidden = '1'; }
-      });
-
-      // Baner "Produkt niedostępny" + przycisk "Zapytaj" (raz)
-      if (buyArea && !buyArea.querySelector('.techtor-unavailable-banner')) {
+      // Baner informacyjny "Zapytaj o dostępność" (raz) — NIE blokuje zakupu
+      if (buyArea && !buyArea.querySelector('.techtor-ask-banner')) {
         var banner = document.createElement('div');
-        banner.className = 'techtor-unavailable-banner';
-        banner.style.cssText = 'margin:16px 0 20px;padding:20px 24px;border-radius:12px;background:linear-gradient(135deg,#fef2f2 0%,#fff1f2 100%);border:1px solid #fecaca;text-align:center;';
+        banner.className = 'techtor-ask-banner';
+        banner.style.cssText = 'margin:16px 0 12px;padding:16px 20px;border-radius:12px;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:1px solid #fde68a;text-align:center;';
 
         banner.innerHTML =
-          '<div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:#fee2e2;margin-bottom:12px;">' +
-            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
-          '</div>' +
-          '<p style="margin:0 0 4px;font-size:16px;font-weight:700;color:#1f2937;">Produkt chwilowo niedostępny</p>' +
-          '<p style="margin:0 0 16px;font-size:13px;color:#6b7280;line-height:1.5;">Zostaw dane — powiadomimy Cię, gdy pojawi się w magazynie.</p>';
+          '<div style="display:flex;align-items:center;justify-content:center;gap:10px;">' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+            '<span style="font-size:14px;font-weight:600;color:#92400e;">Zapytaj o dostępność — czas realizacji może być dłuższy</span>' +
+          '</div>';
 
-        var askBtn = document.createElement('button');
-        askBtn.className = 'techtor-ask-btn';
-        askBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:30px;border:none;cursor:pointer;font-weight:700;font-size:15px;background:#dc2626;color:#fff;box-shadow:0 4px 14px rgba(220,38,38,0.25);transition:all 0.2s ease;';
-        askBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Zapytaj o dostępność';
-        askBtn.onmouseover = function () { askBtn.style.background = '#b91c1c'; askBtn.style.boxShadow = '0 6px 20px rgba(220,38,38,0.35)'; askBtn.style.transform = 'translateY(-1px)'; };
-        askBtn.onmouseout = function () { askBtn.style.background = '#dc2626'; askBtn.style.boxShadow = '0 4px 14px rgba(220,38,38,0.25)'; askBtn.style.transform = ''; };
-        askBtn.onclick = function () { showAskModal(sku, productName); };
-
-        banner.appendChild(askBtn);
         buyArea.insertBefore(banner, buyArea.firstChild);
       }
     }
