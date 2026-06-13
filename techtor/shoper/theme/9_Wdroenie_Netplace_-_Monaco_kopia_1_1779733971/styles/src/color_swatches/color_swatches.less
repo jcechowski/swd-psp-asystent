@@ -1,0 +1,31 @@
+.color-swatches {
+    box-sizing: content-box;
+    width: @colorSwatchesWidth;
+
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    gap: @colorSwatchesGap;
+
+    &_s {
+        width: @colorSwatchesSWidth;
+    }
+
+    h-color-swatches-show-more, h-show-more-button {
+        grid-column-start: 1;
+        grid-column-end: calc(@colorSwatchesNumberOfColumns + 1);
+    }
+
+    &__color-item {
+        &:focus-visible {
+            outline: 2px solid @colorSwatchesColorItemOutlineColor;
+            outline-offset: 0.125rem;
+        }
+    }
+}
+
+.color-swatches-show-more {
+    .link();
+    .font-size(12);
+}

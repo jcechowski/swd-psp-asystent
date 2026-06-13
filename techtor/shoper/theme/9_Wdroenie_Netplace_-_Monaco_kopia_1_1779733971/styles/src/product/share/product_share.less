@@ -1,0 +1,31 @@
+.product-share {
+    &-modal {
+        &__product-name {
+            color: @productShareModalProductNameColor;
+        }
+
+        &__social {
+            &-icons {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: @productShareModalSocialIconsGap;
+                margin-bottom: @productShareModalSocialIconsMarginBottom;
+    
+                @media screen and (max-width: @breakPointXs) {
+                    gap: @productShareModalSocialIconsGapMobile;
+                }
+            }
+
+            &-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                padding: @productShareModalSocialIconPadding;
+                border: @productShareModalSocialIconBorderWidth @productShareModalSocialIconBorderStyle @productShareModalSocialIconBorderColor;
+                border-radius: @productShareModalSocialIconBorderRadius;
+            }
+        }
+    }
+}

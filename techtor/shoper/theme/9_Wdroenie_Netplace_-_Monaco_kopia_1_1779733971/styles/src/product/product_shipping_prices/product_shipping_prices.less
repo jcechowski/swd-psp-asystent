@@ -1,0 +1,52 @@
+.product-shipping-prices {
+    .font-size(@productShippingPricesFontSize);
+    .line-height(@productShippingPricesLineHeight);
+    display: flex;
+    align-items: center;
+
+    &__icon {
+        margin-right: @productShippingPricesIconMarginRight;
+    }
+
+    &-modal {
+        &__shipping {
+            padding: @productShippingPricesModalShippingPadding;
+    
+            &_secondary {
+                background-color: @productShippingPricesModalShippingSecondaryBgColor;
+            }
+    
+            &-details {
+                display: flex;
+                justify-content: space-between;
+    
+                .font-size(@productShippingPricesModalShippingDetailsFontSize);
+                .line-height(@productShippingPricesModalShippingDetailsLineHeight);
+                
+                color: @productShippingPricesModalShippingDetailsColor;
+            }
+
+            &-price {
+                font-weight: @productShippingPricesModalShippingPriceFontWeight;
+
+                &_secondary {
+                    color: @productShippingPricesModalShippingPriceSecondaryColor;
+                }
+            }
+    
+            &-description {
+                .font-size(@productShippingPricesModalShippingDescriptionFontSize);
+                .line-height(@productShippingPricesModalShippingDescriptionLineHeight);
+    
+                color: @productShippingPricesModalShippingDescriptionColor;
+            }
+        }
+    }
+}
+
+.select-shipping-prices {
+    &__select {
+        max-width: 100%;
+        width: @selectShippingPricesSelectWidth;
+    }
+}

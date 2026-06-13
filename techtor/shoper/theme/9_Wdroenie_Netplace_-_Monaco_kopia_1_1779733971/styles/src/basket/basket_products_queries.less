@@ -1,0 +1,33 @@
+.basket-products {
+    container-type: inline-size;
+}
+
+@container (max-width: 1190px) {
+    .basket-product {
+        &__info {
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+    }
+
+}
+
+@container (max-width: 576px) {
+    .basket-product {
+        column-gap: @globalSpacing;
+
+        &__prices {
+            flex: 1 0 calc(100% - 50px - 1rem);
+            margin-top: 1rem;
+            background-color: @neutralColors100;
+            align-items: flex-start;
+            padding: 0.5rem;
+            margin-left: calc(50px + 1rem);
+            border-radius: 5px;
+        }
+
+        &__name {
+            width: 100%;
+        }
+    }
+}

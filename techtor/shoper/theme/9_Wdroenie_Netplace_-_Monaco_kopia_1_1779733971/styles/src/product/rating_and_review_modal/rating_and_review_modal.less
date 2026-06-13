@@ -1,0 +1,22 @@
+.rating-and-review-modal {
+    &__product {
+        @media (max-width: (@breakPointXs - 1)) {
+            flex-direction: column;
+        }
+
+        &-image-wrapper {
+            max-width: @ratingAndReviewModalProductImageWrapperMaxWidth;
+
+            @media (max-width: (@breakPointXs - 1)) {
+                margin-bottom: @ratingAndReviewModalProductImageWrapperMarginBottom;
+            }
+        }
+
+        &-name {
+            .pixel-to-rem(font-size, @ratingAndReviewModalProductNameFontSize);
+            .pixel-to-rem(line-height, @ratingAndReviewModalProductNameLineHeight);
+
+            color: @ratingAndReviewModalProductNameColor;
+        }
+    }
+}

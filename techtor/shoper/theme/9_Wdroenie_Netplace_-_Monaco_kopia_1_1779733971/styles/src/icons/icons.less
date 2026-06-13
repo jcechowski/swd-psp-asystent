@@ -1,0 +1,90 @@
+.icon {
+    fill: transparent;
+    stroke: @iconColor;
+
+    .icon-m();
+
+    &_l {
+        .icon-l();
+    }
+
+    &_xl {
+        .icon-xl();
+    }
+
+    &_xxl {
+        .icon-xxl();
+    }
+
+    &_xxxl {
+        .icon-xxxl();
+    }
+
+    &_clickable {
+        cursor: pointer;
+    }
+
+    &_filled {
+        fill: @iconColor;
+    }
+
+    &_no-stroke {
+        stroke: transparent;
+    }
+
+    &_secondary-color {
+        stroke: @globalFontColorSecondary;
+    }
+
+    &_tertiary-color {
+        stroke: @globalFontColorTertiary;
+    }
+
+    &_link {
+        fill: transparent;
+        stroke: @iconVariantLinkColor;
+    }
+
+    &_success {
+        fill: transparent;
+        stroke: @iconVariantSuccessColor;
+
+        &-filled {
+            stroke: @neutralColors0;
+            background-color: @iconVariantSuccessColor;
+            border-radius: 50%;
+            vertical-align: middle;
+            padding: 0.5rem;
+            box-shadow: 0 0 0px 6px @successColors50;
+        }
+    }
+
+    &_error {
+        fill: transparent;
+        stroke: @iconVariantErrorColor;
+
+        &-filled {
+            stroke: @neutralColors0;
+            background-color: @iconVariantErrorColor;
+            border-radius: 50%;
+            vertical-align: middle;
+            padding: 0.5rem;
+            box-shadow: 0 0 0px 6px @errorColors50;
+        }
+    }
+
+    &_promo {
+        fill: transparent;
+        stroke: @iconVariantPromoColor;
+        background-color: @iconVariantPromoBgColor;
+        .pixel-to-rem(padding, @iconVariantPromoPadding);
+        .pixel-to-rem(border-radius, @iconVariantPromoBorderRadius);
+        vertical-align: middle;
+    }
+}
+
+h-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}

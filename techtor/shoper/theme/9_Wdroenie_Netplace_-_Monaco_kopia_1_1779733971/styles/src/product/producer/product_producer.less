@@ -1,0 +1,13 @@
+.product-producer {
+    &__link {
+        .pixel-to-rem(font-size, @productProducerLinkSize);
+        color: @productProducerLinkColor;
+        &::after {
+            display: none;
+        }
+    }
+
+    &__image {
+        max-height: 24px;
+    }
+}

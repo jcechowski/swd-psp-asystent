@@ -1,0 +1,47 @@
+@media (max-width: (@breakPointXs - 1)) {
+    .hidden-xs-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: @breakPointXs) and (max-width: (@breakPointSm - 1)) {
+    .hidden-sm-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: @breakPointSm) and (max-width: (@breakPointMd - 1)) {
+    .hidden-md-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: @breakPointMd) and (max-width: (@breakPointLg - 1)) {
+    .hidden-lg-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: @breakPointLg) and (max-width: (@breakPointXl - 1)) {
+    .hidden-xl-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: @breakPointXl) and (max-width: (@breakPointXxl - 1)) {
+    .hidden-xxl-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: @breakPointXxl) {
+    .hidden-xxxl-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: (@breakPointXs)) {
+    .visible-xs-only {
+        display: none !important;
+    }
+}

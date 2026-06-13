@@ -1,0 +1,55 @@
+.comment {
+    &:not(:last-child) {
+        margin-bottom: @commentMarginBottom;
+        padding-bottom: @commentPaddingBottom;
+        border-bottom: @commentBorderBottom;
+    }
+
+    &_secondary {
+        max-width: @commentSecondaryMaxWidth;
+    }
+
+    &__header {
+        margin-bottom: @commentHeaderMarginBottom;
+        display: flex;
+        align-items: center;
+        column-gap: @commentHeaderColumnGap;
+    }
+
+    &__avatar {
+        .font-size(@commentHeaderAvatarFontSize);
+        .line-height(@commentHeaderAvatarLineHeight);
+        font-weight: @commentHeaderAvatarFontWeight;
+        color: @commentHeaderAvatarColor;
+
+        .pixel-to-rem(width, @commentHeaderAvatarSize);
+        .pixel-to-rem(height, @commentHeaderAvatarSize);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: @commentHeaderAvatarBackgroundColor;
+        .pixel-to-rem(border-radius, @commentHeaderAvatarBorderRadius);
+    }
+
+    &__author {
+        .font-size(@commentAuthorFontSizePx);
+        .line-height(@commentAuthorLineHeightPx);
+        font-weight: @commentAuthorFontWeight;
+        color: @commentAuthorColor;
+
+        &:not(:last-child) {
+            margin-bottom: 0;
+        }
+    }
+
+    &__date {
+        .font-size(@commentDateFontSizePx);
+        color: @commentDateColor;
+    }
+
+    &__content {
+        .font-size(@commentContentFontSizePx);
+        color: @commentContentColor;
+    }
+}

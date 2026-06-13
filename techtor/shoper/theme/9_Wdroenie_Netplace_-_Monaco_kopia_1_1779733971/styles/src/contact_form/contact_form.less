@@ -1,0 +1,24 @@
+.contact-form {
+    max-width: @contactFormMaxWidth;
+    margin: 0;
+
+    &__description {
+        .font-size(@contactFormDescriptionFontSizeInPx);
+        .line-height(@contactFormDescriptionLineHeightInPx);
+
+        margin: @contactFormDescriptionMarginTop 0 @contactFormDescriptionMarginBottom;
+        padding: @contactFormDescriptionPaddingVertical @contactFormDescriptionPaddingHorizontal;
+    }
+
+    &__input {
+        max-width: @contactFormInputMaxWidth;
+    }
+
+    &__button {
+        width: @contactFormButtonWidth;
+    }
+
+    .form-container {
+        max-width: @contactFormContainerMaxWidth;
+    }
+}

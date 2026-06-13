@@ -1,0 +1,28 @@
+.blog-articles-list-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @blogArticlesListTagsGapMobile;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &-mobile {
+            .pixel-to-rem(padding-bottom, @blogArticlesListTagsHeaderMobilePaddingBottom);
+        }
+    }
+
+    &__tag {
+        color: @blogArticlesListTagsTagColor;
+        text-decoration: none;
+
+        &:hover {
+            color: @blogArticlesListTagsTagColorHover;
+        }
+
+        &_current {
+            border: @blogArticlesListTagsTagCurrentBorder;
+        }
+    }
+}

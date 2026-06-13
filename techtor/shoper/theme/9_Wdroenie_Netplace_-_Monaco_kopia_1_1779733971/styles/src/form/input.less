@@ -1,0 +1,120 @@
+.input {
+    transition: @inputTransition;
+
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    border: @inputBorderWidth @inputBorderStyle @inputBorderColor;
+    border-radius: ~'@{inputBorderRadius}px';
+    column-gap: @inputWrapperGutter;
+    color: @globalFontColor;
+    -webkit-text-fill-color: @globalFontColor;
+    background-color: @inputBackgroundColor;
+
+    .padding-to-unit(@inputPaddingTopM, @inputPaddingRightM, @inputPaddingBottomM, @inputPaddingLeftM);
+    .font-size(@inputFontSizeInPxS);
+    .line-height(@inputLineHeightInPxS);
+
+    &:hover {
+        border-color: @inputBorderColorHover;
+    }
+
+    &:focus-within {
+        outline: 2px solid @inputOutlineColorFocus;
+        outline-offset: 0.125rem;
+    }
+
+    &__icon {
+        .font-size(@inputIconFontSizeInPxS);
+        .line-height(@inputIconLineHeightInPxS);
+
+        stroke: @inputIconColor;
+    }
+
+    &__control,
+    input {
+        width: 100%;
+
+        outline: 0;
+
+        background-color: @inputBackgroundColor;
+
+        .font-size(@inputFontSizeInPxS);
+        .line-height(@inputLineHeightInPxS);
+    }
+
+    &_l {
+        .padding-to-unit(@inputPaddingTopL, @inputPaddingRightL, @inputPaddingBottomL, @inputPaddingLeftL);
+    }
+
+    &_s {
+        .padding-to-unit(@inputPaddingTopS, @inputPaddingRightS, @inputPaddingBottomS, @inputPaddingLeftS);
+    }
+
+    &_xs {
+        .pixel-to-rem(width, @inputWidthXs);
+        .padding-to-unit(@inputPaddingTopXs, @inputPaddingRightXs, @inputPaddingBottomXs, @inputPaddingLeftXs);
+        .pixel-to-rem(font-size, @inputFontSizeXs);
+        .pixel-to-rem(line-height, @inputLineHeightXs);
+    }
+
+    &_text-center {
+        text-align: center;
+    }
+
+    &_no-arrows[type='number'] {
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        -moz-appearance: textfield;
+    }
+
+    &_with-button {
+        .padding-top-to-unit(@inputPaddingTopWithButton);
+        .padding-bottom-to-unit(@inputPaddingBottomWithButton);
+        .padding-right-to-unit(@inputPaddingRightWithButton);
+    }
+
+    &_disabled {
+        border-color: @inputBorderColorDisabled;
+        background-color: @inputBackgroundColorDisabled;
+        color: @inputColorDisabled;
+
+        pointer-events: none;
+
+        .input {
+            &__control {
+                background-color: @inputBackgroundColorDisabled;
+                color: @inputColorDisabled;
+
+                input {
+                    background-color: @inputBackgroundColorDisabled;
+                }
+            }
+
+            &__icon {
+                stroke: @inputColorDisabled;
+            }
+        }
+    }
+
+    &_error {
+        border-color: @inputBorderColorError;
+        box-shadow: @inputBoxShadowError;
+
+        .control__input {
+            color: @inputColorError;
+        }
+    }
+
+    &__copy-btn {
+        cursor: pointer;
+        border: @inputCopyBtnBorder;
+        text-decoration: @inputCopyBtnTextDecoration;
+        color: @inputCopyBtnColor;
+        font-weight: @inputCopyBtnFontWeight;
+    }
+}

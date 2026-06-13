@@ -1,0 +1,21 @@
+.bundle-items {
+    display: flex;
+    flex-direction: column;
+    padding: @bundleItemsPadding;
+    gap: @bundleItemsGap;
+    background-color: @bundleItemsBgColor;
+    border: @bundleItemsBorderWidth @bundleItemsBorderStyle @bundleItemsBorderColor;
+    .pixel-to-rem(border-radius, @bundleItemsBorderRadius);
+
+    &__plus {
+        .h2();
+        text-align: center;
+        .weight-semibold();
+        color: @bundleItemsPlusColor;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+    }
+}

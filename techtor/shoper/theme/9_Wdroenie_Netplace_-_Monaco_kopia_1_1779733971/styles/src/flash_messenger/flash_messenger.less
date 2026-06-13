@@ -1,0 +1,44 @@
+.flash-messenger {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    .pixel-to-rem(row-gap, @flashMessengerRowGap);
+
+    z-index: 1;
+
+    &_fixed {
+        .padding-to-unit(
+            0,
+            @flashMessengerFixedPaddingHorizontal,
+            @flashMessengerFixedPaddingBottom,
+            @flashMessengerFixedPaddingHorizontal
+        );
+
+        .pixel-to-rem(max-width, @flashMessengerFixedMaxWidth);
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        z-index: 100;
+    }
+}
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .flash-messenger {
+        &_fixed {
+            .padding-to-unit(
+                0,
+                @flashMessengerFixedPaddingHorizontalMobile,
+                0,
+                @flashMessengerFixedPaddingHorizontalMobile
+            );
+
+            max-width: none;
+            bottom: unset;
+            right: unset;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+    }
+}

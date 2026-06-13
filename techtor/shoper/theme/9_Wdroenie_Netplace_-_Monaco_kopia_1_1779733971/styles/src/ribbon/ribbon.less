@@ -1,0 +1,28 @@
+.ribbon {
+    display: inline-block;
+    background-color: @ribbonBgColor;
+    color: @ribbonTextColor;
+    .padding-to-unit(@ribbonVerticalPadding, @ribbonHorizontalPadding, @ribbonVerticalPadding, @ribbonHorizontalPadding);
+    .size-xs();
+    font-weight: @ribbonFontWeight;
+
+    &_primary {
+        background-color: @ribbonBgColorPromo;
+        color: @ribbonTextColorPromo;
+    }
+
+    &_secondary {
+        background-color: @ribbonBgColorSecondary;
+        color: @ribbonTextColorSecondary;
+    }
+
+    &_absolute {
+        position: absolute;
+        top: @ribbonTopPosition;
+        left: @ribbonLeftPosition;
+    }
+
+    &_rounded-corners {
+        border-radius: @ribbonBorderRadius;
+    }
+}

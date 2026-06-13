@@ -1,0 +1,47 @@
+.contact-info {
+    &__wrapper {
+        padding: @contactInfoPaddingVertical @contactInfoPaddingHorizontal;
+        font-style: @contactInfoFontStyle;
+    }
+
+    &__logo-section {
+        margin-bottom: @contactInfoLogoSectionMarginBottom;
+    }
+
+    &__header {
+        margin-bottom: @contactInfoHeaderMarginBottom;
+    }
+
+    &__logo-text {
+        font-weight: @contactInfoLogoTextFontWeight;
+    }
+
+    &__details {
+        .font-size(@contactInfoDetailsFontSize);
+        display: flex;
+        gap: @contactInfoDetailsIconMarginRight;
+
+        &:not(:last-child) {
+            margin-bottom: @contactInfoDetaisGap;
+        }
+
+        &-phone {
+            &:not(:last-child) {
+                margin-bottom: @contactInfoDetailsPhoneMarginBottom;
+            }
+        }
+
+        &-icon {
+            flex-shrink: 0;
+        }
+    }
+
+    &__link {
+        text-decoration: none;
+        .link-decorate-appearance(@contactInfoLinkColor, @contactInfoLinkColor, @contactInfoLinkColor);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

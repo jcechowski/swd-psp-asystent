@@ -1,0 +1,30 @@
+.image {
+    display: flex;
+
+    &_block {
+        display: block;
+    }
+
+    &_rounded {
+        border-radius: @imageRoundedBorderRadiusInPx;
+    }
+
+    &_s {
+        aspect-ratio: 1/1;
+        min-width: @imageSMobileMinWidth;
+        min-height: @imageSMobileMinHeight;
+        width: @imageSMobileWidth;
+        height: @imageSMobileHeight;
+    }
+}
+
+@media screen and (min-width: @breakPointSm) {
+    .image {
+        &_s {
+            min-width: @imageSMinWidth;
+            min-height: @imageSMinHeight;
+            width: @imageSWidth;
+            height: @imageSHeight;
+        }
+    }
+}

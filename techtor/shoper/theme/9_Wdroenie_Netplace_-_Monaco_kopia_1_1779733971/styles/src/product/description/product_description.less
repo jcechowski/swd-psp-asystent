@@ -1,0 +1,14 @@
+.product-description {
+    &__content {
+        display: block;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .product-description {
+        &__header {
+            .pixel-to-rem(margin-bottom, @productDescriptionHeaderMarginBottomMobile);
+        }
+    }
+}

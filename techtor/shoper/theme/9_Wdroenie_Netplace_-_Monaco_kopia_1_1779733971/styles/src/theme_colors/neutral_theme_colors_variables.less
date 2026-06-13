@@ -1,0 +1,60 @@
+:root {
+    --neutralColor: @neutralColor;
+    --neutralColors0: @neutralColors0;
+    --neutralColors10: @neutralColors10;
+    --neutralColors20: @neutralColors20;
+    --neutralColors50: @neutralColors50;
+    --neutralColors100: @neutralColors100;
+    --neutralColors200: @neutralColors200;
+    --neutralColors300: @neutralColors300;
+    --neutralColors400: @neutralColors400;
+    --neutralColors500: @neutralColors500;
+    --neutralColors600: @neutralColors600;
+    --neutralColors700: @neutralColors700;
+    --neutralColors800: @neutralColors800;
+    --neutralColors900: @neutralColors900;
+    --neutralColors1000: @neutralColors1000;
+}
+
+@neutralColor: #8c98a8;
+
+@hueNeutral: hue(@neutralColor);
+@saturationNeutral: saturation(@neutralColor);
+
+@invertNeutralColors: 'false';
+
+.generate-neutral-colors() when (@invertNeutralColors = 'false') {
+    @neutralColors0: mix(hsl(@hueNeutral, @saturationNeutral, 100%), transparent, 100);
+    @neutralColors10: mix(hsl(@hueNeutral, @saturationNeutral, 99%), transparent, 100);
+    @neutralColors20: mix(hsl(@hueNeutral, @saturationNeutral, 98%), transparent, 100);
+    @neutralColors50: mix(hsl(@hueNeutral, @saturationNeutral, 95%), transparent, 100);
+    @neutralColors100: mix(hsl(@hueNeutral, @saturationNeutral, 90%), transparent, 100);
+    @neutralColors200: mix(hsl(@hueNeutral, @saturationNeutral, 80%), transparent, 100);
+    @neutralColors300: mix(hsl(@hueNeutral, @saturationNeutral, 70%), transparent, 100);
+    @neutralColors400: mix(hsl(@hueNeutral, @saturationNeutral, 60%), transparent, 100);
+    @neutralColors500: mix(hsl(@hueNeutral, @saturationNeutral, 50%), transparent, 100);
+    @neutralColors600: mix(hsl(@hueNeutral, @saturationNeutral, 40%), transparent, 100);
+    @neutralColors700: mix(hsl(@hueNeutral, @saturationNeutral, 30%), transparent, 100);
+    @neutralColors800: mix(hsl(@hueNeutral, @saturationNeutral, 20%), transparent, 100);
+    @neutralColors900: mix(hsl(@hueNeutral, @saturationNeutral, 10%), transparent, 100);
+    @neutralColors1000: mix(hsl(@hueNeutral, @saturationNeutral, 0%), transparent, 100);
+}
+
+.generate-neutral-colors() when (@invertNeutralColors = 'true') {
+    @neutralColors0: mix(hsl(@hueNeutral, @saturationNeutral, 0%), transparent, 100);
+    @neutralColors10: mix(hsl(@hueNeutral, @saturationNeutral, 10%), transparent, 100);
+    @neutralColors20: mix(hsl(@hueNeutral, @saturationNeutral, 20%), transparent, 100);
+    @neutralColors50: mix(hsl(@hueNeutral, @saturationNeutral, 30%), transparent, 100);
+    @neutralColors100: mix(hsl(@hueNeutral, @saturationNeutral, 40%), transparent, 100);
+    @neutralColors200: mix(hsl(@hueNeutral, @saturationNeutral, 50%), transparent, 100);
+    @neutralColors300: mix(hsl(@hueNeutral, @saturationNeutral, 60%), transparent, 100);
+    @neutralColors400: mix(hsl(@hueNeutral, @saturationNeutral, 70%), transparent, 100);
+    @neutralColors500: mix(hsl(@hueNeutral, @saturationNeutral, 80%), transparent, 100);
+    @neutralColors600: mix(hsl(@hueNeutral, @saturationNeutral, 90%), transparent, 100);
+    @neutralColors700: mix(hsl(@hueNeutral, @saturationNeutral, 95%), transparent, 100);
+    @neutralColors800: mix(hsl(@hueNeutral, @saturationNeutral, 98%), transparent, 100);
+    @neutralColors900: mix(hsl(@hueNeutral, @saturationNeutral, 99%), transparent, 100);
+    @neutralColors1000: mix(hsl(@hueNeutral, @saturationNeutral, 100%), transparent, 100);
+}
+
+.generate-neutral-colors();

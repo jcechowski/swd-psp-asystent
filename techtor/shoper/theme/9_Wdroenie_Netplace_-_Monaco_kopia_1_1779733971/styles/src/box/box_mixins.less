@@ -1,0 +1,16 @@
+.box() {
+    .padding-to-unit(@boxPadding, @boxPadding, @boxPadding, @boxPadding);
+    border-radius: @boxBorderRadius;
+    border: @boxBorderWidth @boxBorderStyle @boxBorderColor;
+}
+
+.box-header() {
+    .size-xs();
+    .weight-semibold();
+    color: @boxHeaderTitleColor;
+}
+
+.box-content() {
+    .size-xs();
+    color: @boxDescriptionColor;
+}

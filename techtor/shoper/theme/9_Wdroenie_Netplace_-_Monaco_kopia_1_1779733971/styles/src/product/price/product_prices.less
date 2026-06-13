@@ -1,0 +1,32 @@
+.product-prices {
+    display: flex;
+    flex-direction: column;
+    .pixel-to-rem(gap, @productPriceRowSpacing);
+
+    &__header {
+        display: flex;
+        .pixel-to-rem(gap, @productPriceRowSpacing);
+    }
+}
+
+@media screen and (max-width: @breakPointXs) {
+    .product-prices {
+        .pixel-to-rem(gap, @productPriceRowSpacingMobile);
+
+        &__row {
+            &_info {
+                .font-size(@productPriceRowFontSizeInPxMobile);
+                .line-height(@productPriceRowLineHeightInPxMobile);
+
+                &-margin-top {
+                    .pixel-to-rem(margin-top, @productPriceRowInfoNotFirstOfTypeMarginTopInPxMobile);
+                }
+            }
+
+            &_alert {
+                .font-size(@productPriceRowFontSizeInPxMobile);
+                .line-height(@productPriceRowLineHeightInPxMobile);
+            }
+        }
+    }
+}

@@ -1,0 +1,50 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline-color: var(--brandColors700);
+}
+
+:-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus,
+:-webkit-autofill:active,
+:-internal-autofill-selected {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+}
+
+html {
+    font-family: 'DM Sans', sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+pre {
+    white-space: pre-line;
+}
+
+a {
+    outline-offset: 0.25rem;
+}
+
+ul,
+ol {
+    list-style-type: none;
+
+    a {
+        outline-offset: -1px;
+    }
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.visible-hidden {
+    visibility: hidden;
+}

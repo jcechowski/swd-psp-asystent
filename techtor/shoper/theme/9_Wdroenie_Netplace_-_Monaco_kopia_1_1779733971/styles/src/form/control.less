@@ -1,0 +1,132 @@
+.control {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+
+    &_row {
+        flex-direction: row;
+        column-gap: @globalSpacing;
+    }
+
+    &:not(:last-child) {
+        .margin-bottom-to-unit(@controlSpacing);
+    }
+
+    &_no-margin {
+        &:not(:last-child) {
+            margin-bottom: 0;
+        }
+    }
+
+    &__label {
+        display: flex;
+        align-items: center;
+
+        .margin-bottom-to-unit(@controlLabelMarginBottom);
+    }
+
+    &__content {
+        display: flex;
+        max-width: 100%;
+
+        &_auto {
+            width: auto;
+        }
+    }
+
+    &__additional-content {
+        .margin-top-to-unit(@controlAdditionalContentMarginTop);
+
+        &_type {
+            &-text {
+                color: @controlAdditionalTextContentColor;
+
+                .font-size(@controlAdditionalTextContentFontSizeInPxXs);
+            }
+        }
+
+        &_with-indent {
+            margin-left: calc(~'@{checkboxSize} + @{checkboxGutter}');
+        }
+
+        &_with-border {
+            border-left: @controlAdditionalContentBorder;
+
+            .pixel-to-rem(padding-left, @controlAdditionalContentBorderPaddingLeft);
+            .pixel-to-rem(margin-left, @controlAdditionalContentBorderMarginLeft);
+        }
+
+        button {
+            height: fit-content;
+        }
+    }
+
+    &__element {
+        flex-basis: @controlElementFullWidth;
+        width: @controlElementFullWidth;
+
+        &_auto {
+            flex-basis: auto;
+        }
+
+        &_full {
+            flex-basis: @controlElementFullWidth;
+            width: @controlElementFullWidth;
+        }
+
+        &_three-quarters {
+            flex-basis: @controlElementThreeQuartersWidth;
+            width: @controlElementThreeQuartersWidth;
+        }
+
+        &_half {
+            flex-basis: @controlElementHafWidth;
+            width: @controlElementHafWidth;
+        }
+
+        &_quarter {
+            flex-basis: @controlElementQuarterWidth;
+            width: @controlElementQuarterWidth;
+
+            @media screen and (max-width: @breakPointXs) {
+                flex-basis: @controlElementHafWidth;
+                width: @controlElementHafWidth;
+            }
+        }
+
+        &_flex {
+            display: flex;
+            gap: @controlElementFlexGap;
+        }
+
+        &_radio-box {
+            display: flex;
+            flex-wrap: wrap;
+            flex-basis: auto;
+            gap: @controlRadioBoxGap;
+
+            .control {
+                width: auto;
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__errors {
+        color: @controlErrorColor;
+
+        .font-size(@controlErrorFontSizeInPxXs);
+        .margin-top-to-unit(@controlErrorsMarginTop);
+        .line-height(@controlErrorLineHeightInPxXs);
+    }
+}
+
+input[name='email_verify'] {
+    overflow: hidden;
+    height: 0;
+    width: 0;
+    position: fixed;
+    top: -500px;
+    left: -500px;
+}

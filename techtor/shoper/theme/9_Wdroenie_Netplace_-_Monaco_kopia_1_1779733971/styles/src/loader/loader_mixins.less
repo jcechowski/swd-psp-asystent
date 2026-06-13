@@ -1,0 +1,19 @@
+.loader-decorate_size(@width, @height, @borderWidth) {
+    width: @width;
+    height: @height;
+    border-width: @borderWidth;
+}
+
+.loader-decorate_text(@fontSize, @lineHeight) {
+    .font-size(@fontSize);
+    .line-height(@lineHeight);
+}
+
+.loader-decorate-appearance-spinner(@loaderBorderStyle, @loaderTrackColor, @loaderMarkColor) {
+    border: @loaderBorderStyle @loaderTrackColor;
+
+    border-left-color: @loaderMarkColor;
+    border-top-color: @loaderMarkColor;
+
+    border-radius: @loaderBorderRadius;
+}

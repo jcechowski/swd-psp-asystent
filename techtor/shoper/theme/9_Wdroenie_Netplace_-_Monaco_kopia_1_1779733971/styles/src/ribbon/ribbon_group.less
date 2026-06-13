@@ -1,0 +1,19 @@
+.ribbon-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: @ribbonsGap;
+  z-index: 1;
+
+  &_absolute {
+    position: absolute;
+    top: @ribbonTopPosition;
+    left: @ribbonLeftPosition;
+  }
+}
+
+.ribbons__ribbon-group {
+  flex-direction: row;
+  margin-bottom: @globalSpacing;
+  flex-wrap: wrap;
+}

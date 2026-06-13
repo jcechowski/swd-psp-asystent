@@ -1,0 +1,32 @@
+.newsletter__container {
+    container-type: inline-size;
+}
+
+@container (min-width: 451px) {
+    .newsletter__container {
+        newsletter-form {
+            .newsletter__controls-wrapper {
+                display: flex;
+
+                .newsletter__submit-button {
+                    width: initial;
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+
+    .newsletter__control-errors_inline {
+        display: none;
+    }
+}
+
+@container (max-width: 450px) {
+    .newsletter__container .control__element_flex {
+        display: block;
+    }
+
+    .newsletter__control-errors_block {
+        display: none;
+    }
+}

@@ -1,0 +1,41 @@
+*[is-stock] {
+    position: relative;
+}
+
+.product-variants {
+    position: relative;
+    display: block;
+
+    &_error {
+        .color-swatches {
+            border: @productVariantsErrorBorder;
+        }
+
+        .control__element_radio-box {
+            border: @productVariantsErrorBorder;
+        }
+    }
+
+    .select-toggler {
+        &__layout {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            align-items: center;
+        }
+
+        &__name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-shrink: 1;
+            min-width: 0;
+        }
+
+        &__addon {
+            white-space: nowrap;
+            flex-shrink: 0;
+            .pixel-to-rem(margin-left, 4);
+        }
+    }
+}

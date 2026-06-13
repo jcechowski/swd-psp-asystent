@@ -1,0 +1,48 @@
+.masonry-grid {
+    gap: @masonryGridGap;
+    width: 100%;
+
+    &__item {
+        break-inside: avoid;
+        margin-bottom: @masonryGridGap;
+        width: 100%;
+    }
+
+    @media screen and (min-width: (@breakPointXs)) {
+        gap: @masonryGridGapBreakpointXs;
+
+        &__item {
+            margin-bottom: @masonryGridGapBreakpointXs;
+        }
+    }
+
+    @media screen and (min-width: (@breakPointLg)) {
+        gap: @masonryGridGapBreakpointLg;
+
+        &__item {
+            margin-bottom: @masonryGridGapBreakpointLg;
+        }
+    }
+
+    .generate-masonry-grid(12, xs);
+
+    @media screen and (min-width: @breakPointXs) {
+        .generate-masonry-grid(12, sm);
+    }
+
+    @media screen and (min-width: @breakPointSm) {
+        .generate-masonry-grid(12, md);
+    }
+
+    @media screen and (min-width: @breakPointMd) {
+        .generate-masonry-grid(12, lg);
+    }
+
+    @media screen and (min-width: @breakPointLg) {
+        .generate-masonry-grid(12, xl);
+    }
+
+    @media screen and (min-width: @breakPointXl) {
+        .generate-masonry-grid(12, xxl);
+    }
+}

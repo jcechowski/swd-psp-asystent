@@ -1,0 +1,55 @@
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: @tabBorderRadius;
+
+    &__tab {
+        .font-size(@tabFontSize);
+        .line-height(@lineHeightInPxS);
+        color: @tabColor;
+        background-color: @tabBackgroundColor;
+
+        .pixel-to-rem(padding-top, @tabPaddingVertical);
+        .pixel-to-rem(padding-bottom, @tabPaddingVertical);
+        .pixel-to-rem(padding-left, @tabPaddingHorizontal);
+        .pixel-to-rem(padding-right, @tabPaddingHorizontal);
+
+        cursor: pointer;
+
+        border: @tabBorder;
+
+        &[selected] {
+            .weight-semibold();
+
+            color: @tabSelectedColor;
+
+            border: @tabSelectedBorder;
+            border-radius: @tabBorderRadius;
+
+            background-color: @tabSelectedBackgroundColor;
+
+            &:hover {
+                color: @tabSelectedColor;
+            }
+        }
+
+        &:hover {
+            color: @tabHoverColor;
+            border-color: @tabHoverColor;
+        }
+
+        &:first-child {
+            &:not(&:last-child) {
+                border-radius: @tabBorderRadius 0 0 @tabBorderRadius;
+                border-right: none;
+            }
+        }
+
+        &:last-child {
+            &:not(&:first-child) {
+                border-radius: 0 @tabBorderRadius @tabBorderRadius 0;
+                border-left: none;
+            }
+        }
+    }
+}

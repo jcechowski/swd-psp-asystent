@@ -1,0 +1,99 @@
+.list {
+    &__content {
+        &_unordered {
+            list-style-type: none;
+        }
+
+        &_disc {
+            list-style-type: disc;
+            list-style-position: inside;
+        }
+
+        &_all-lines-indent-disc {
+            list-style-type: none;
+            list-style-position: outside;
+
+            > li {
+                display: flex;
+
+                &:before {
+                    content: "•";
+                    display: table-cell;
+                    padding-right: 0.75rem
+                }
+            }
+        }
+
+        &_ordered {
+            list-style-type: none;
+            counter-reset: list;
+            li::before {
+                counter-increment: list;
+                content: counter(list) + '. ';
+            }
+        }
+    }
+
+    &__title {
+        .font-size(@listTitleFontSizeInPxS);
+        .line-height(@listTitleLineHeightInPxS);
+        .weight-semibold();
+    }
+
+    &__item {
+        .font-size(@listItemFontSizeInPxS);
+        .line-height(@listItemLineHeightInPxS);
+        .list-decorate-appearance();
+
+        &_error {
+            .weight-semibold();
+            .list-decorate-appearance(@listItemColorError, @listItemStrokeColorError);
+        }
+
+        &_checked {
+            .list-decorate-appearance(@listItemColorChecked, @listItemStrokeColorChecked);
+        }
+
+        &_secondary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &:not(:last-child) {
+                margin-bottom: @listItemSecondaryMarginBottom;
+            }
+        }
+
+        &_secondary {
+            .font-size(@listItemSecondaryFontSizeInPx);
+            .line-height(@listItemSecondaryLineHeightInPx);
+            .list-decorate-appearance(@listItemSecondaryColor, @listItemSecondaryColor);
+
+            &:not(:last-child) {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__item_feature {
+        display: flex;
+        column-gap: @listItemFeatureGap;
+        padding: @listItemFeaturePadding;
+
+        &:nth-child(odd) {
+            background-color: @listItemFeatureBackgroundColor;
+        }
+    }
+
+    &__feature-item {
+        &-label {
+            flex: 0 1 50%;
+            text-align: right;
+            color: @listItemFeatureColor;
+        }
+
+        &-value {
+            flex: 1 0 50%;
+        }
+    }
+}

@@ -1,0 +1,59 @@
+.basket-gift-cards {
+    display: flex;
+    flex-direction: column;
+    row-gap: @globalSpacing;
+
+    &__action-button {
+        .size-s();
+        text-decoration: underline;
+        padding: 0;
+        user-select: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        &_left {
+            align-self: flex-start;
+        }
+    }
+
+    &__list {
+        display: grid;
+        row-gap: @globalSpacing;
+    }
+
+    &__list-item-wrapper {
+        flash-messenger:has(flash-message) {
+            display: block;
+            margin-block-start: @globalSpacing;
+        }
+    }
+
+    &__list-item {
+        padding: @globalSpacing;
+        border: 1px solid @neutralColors200;
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-start;
+        column-gap: @globalSpacing * 0.75;
+    }
+
+    &__info {
+        flex: 1;
+        display: grid;
+    }
+
+    &__image {
+        width: 95px;
+    }
+
+    &__description-line {
+        .size-xs();
+        color: @neutralColors700;
+
+        &_main {
+            .size-s();
+            color: @neutralColors900;
+        }
+    }
+}

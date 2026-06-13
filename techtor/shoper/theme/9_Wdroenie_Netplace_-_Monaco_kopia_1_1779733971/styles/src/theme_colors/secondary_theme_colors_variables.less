@@ -1,0 +1,54 @@
+:root {
+    --secondaryColor: @secondaryColor;
+    --secondaryColors10: @secondaryColors10;
+    --secondaryColors20: @secondaryColors20;
+    --secondaryColors50: @secondaryColors50;
+    --secondaryColors100: @secondaryColors100;
+    --secondaryColors200: @secondaryColors200;
+    --secondaryColors300: @secondaryColors300;
+    --secondaryColors400: @secondaryColors400;
+    --secondaryColors500: @secondaryColors500;
+    --secondaryColors600: @secondaryColors600;
+    --secondaryColors700: @secondaryColors700;
+    --secondaryColors800: @secondaryColors800;
+    --secondaryColors900: @secondaryColors900;
+}
+
+@secondaryColor: #d6302d;
+
+@hueSecondary: hue(@secondaryColor);
+@saturationSecondary: saturation(@secondaryColor);
+
+@invertSecondaryColors: 'false';
+
+.generate-secondary-colors() when (@invertSecondaryColors = 'false') {
+    @secondaryColors10: mix(hsl(@hueSecondary, @saturationSecondary, 99%), transparent, 100);
+    @secondaryColors20: mix(hsl(@hueSecondary, @saturationSecondary, 98%), transparent, 100);
+    @secondaryColors50: mix(hsl(@hueSecondary, @saturationSecondary, 95%), transparent, 100);
+    @secondaryColors100: mix(hsl(@hueSecondary, @saturationSecondary, 90%), transparent, 100);
+    @secondaryColors200: mix(hsl(@hueSecondary, @saturationSecondary, 80%), transparent, 100);
+    @secondaryColors300: mix(hsl(@hueSecondary, @saturationSecondary, 70%), transparent, 100);
+    @secondaryColors400: mix(hsl(@hueSecondary, @saturationSecondary, 60%), transparent, 100);
+    @secondaryColors500: mix(hsl(@hueSecondary, @saturationSecondary, 50%), transparent, 100);
+    @secondaryColors600: mix(hsl(@hueSecondary, @saturationSecondary, 40%), transparent, 100);
+    @secondaryColors700: mix(hsl(@hueSecondary, @saturationSecondary, 30%), transparent, 100);
+    @secondaryColors800: mix(hsl(@hueSecondary, @saturationSecondary, 20%), transparent, 100);
+    @secondaryColors900: mix(hsl(@hueSecondary, @saturationSecondary, 10%), transparent, 100);
+}
+
+.generate-secondary-colors() when (@invertSecondaryColors = 'true') {
+    @secondaryColors10: mix(hsl(@hueSecondary, @saturationSecondary, 10%), transparent, 100);
+    @secondaryColors20: mix(hsl(@hueSecondary, @saturationSecondary, 20%), transparent, 100);
+    @secondaryColors50: mix(hsl(@hueSecondary, @saturationSecondary, 30%), transparent, 100);
+    @secondaryColors100: mix(hsl(@hueSecondary, @saturationSecondary, 40%), transparent, 100);
+    @secondaryColors200: mix(hsl(@hueSecondary, @saturationSecondary, 50%), transparent, 100);
+    @secondaryColors300: mix(hsl(@hueSecondary, @saturationSecondary, 60%), transparent, 100);
+    @secondaryColors400: mix(hsl(@hueSecondary, @saturationSecondary, 70%), transparent, 100);
+    @secondaryColors500: mix(hsl(@hueSecondary, @saturationSecondary, 80%), transparent, 100);
+    @secondaryColors600: mix(hsl(@hueSecondary, @saturationSecondary, 90%), transparent, 100);
+    @secondaryColors700: mix(hsl(@hueSecondary, @saturationSecondary, 95%), transparent, 100);
+    @secondaryColors800: mix(hsl(@hueSecondary, @saturationSecondary, 98%), transparent, 100);
+    @secondaryColors900: mix(hsl(@hueSecondary, @saturationSecondary, 99%), transparent, 100);
+}
+
+.generate-secondary-colors();

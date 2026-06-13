@@ -1,0 +1,224 @@
+.product-tile {
+    container-type: inline-size;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+
+    &__content {
+        flex-grow: 1;
+    }
+
+    &__row {
+        &:not(:last-child) {
+            margin-bottom: @productTileRowMargin;
+        }
+    }
+
+    &__image {
+        position: relative;
+        text-align: center;
+        .weight-semibold();
+
+        a {
+            display: grid;
+            margin-inline: auto;
+            .image {
+                grid-area: none;
+            }
+        }
+
+        img {
+            object-fit: contain;
+        }
+
+        &_primary {
+            opacity: 1;
+            transition: @productTimeImageTransition;
+        }
+        &_secondary {
+            opacity: 0;
+            transition: @productTimeImageTransition;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            &_primary,
+            &_secondary {
+                transition: none;
+            }
+        }
+    }
+
+    &__favourites {
+        position: absolute;
+        right: @productTileFavouritesRightPos;
+        bottom: @productTileFavouritesBottomPos;
+    }
+
+    &__codes {
+        .font-size(@productTileCodeFontSize);
+        color: @productTileCodeColor;
+    }
+
+    &__name {
+        .font-size(@productTileNameFontSize);
+        .weight-semibold();
+        color: @productTileNameColor;
+        line-height: 1.4;
+        word-break: break-word;
+
+        &_fixed-height {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            height: @productTileNameHeight;
+            overflow-y: hidden;
+        }
+    }
+
+    &__code {
+        &:not(:last-child) {
+            &::after {
+                content: '|';
+                margin-left: 0.25rem;
+            }
+        }
+    }
+
+    &__producer {
+        .font-size(@productTileProducerFontSize);
+        text-transform: uppercase;
+    }
+
+    &__info {
+        .font-size(@productTileInfoFontSize);
+        color: @productTileInfoColor;
+    }
+
+    &__footer {
+        &-btn {
+            &:not(:last-child) {
+                margin-bottom: @productTileFooterButtonMargin;
+            }
+        }
+    }
+
+    &__availability {
+        .pixel-to-rem(margin-top, @gridGutter * 0.5);
+        .font-size(@productTileAvailabilityFontSize);
+
+        color: @productTileAvailabilityColor;
+        display: block;
+
+        &-value {
+            font-weight: @fontWeightSemibold;
+
+            &_inactive {
+                color: @productTileAvailabilityErrorColor;
+            }
+        }
+    }
+
+    &__price {
+        display: flex;
+        align-items: center;
+        .pixel-to-rem(gap, @gridGutter * 0.25);
+    }
+
+    &__unit-price {
+        display: flex;
+    }
+
+    &__regular-price {
+        display: flex;
+        .pixel-to-rem(gap, @gridGutter * 0.25);
+    }
+
+    &__lowest-price {
+        display: flex;
+        .pixel-to-rem(gap, @gridGutter * 0.25);
+    }
+}
+
+@container (max-width: 284px) {
+    .product-tile {
+        &__price,
+        &__regular-price,
+        &__lowest-price {
+            display: block;
+        }
+    }
+
+    .price__label {
+        display: block;
+    }
+}
+
+.set-product-tile-height() when (@productTileHeight = photoDependent) {
+    .product-tile {
+        &__image {
+            img {
+                max-height: @productTileImageHeight;
+            }
+        }
+    }
+}
+
+.set-product-tile-height() when (@productTileHeight = fixed) {
+    .product-tile {
+        &__image {
+            img {
+                height: @productTileImageHeight;
+            }
+        }
+    }
+}
+
+.set-product-tile-height() when (@productTileHeight = cover) {
+    .product-tile {
+        &__image {
+            img {
+                height: @productTileImageHeight;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+.set-product-tile-height();
+
+@media screen and (min-width: @breakPointSm) {
+    .product-tile {
+        &__price {
+            &_secondary {
+                justify-content: flex-end;
+            }
+        }
+
+        &__unit-price {
+            &_secondary {
+                justify-content: flex-end;
+            }
+        }
+
+        &__lowest-price {
+            &_secondary {
+                justify-content: flex-end;
+            }
+        }
+    }
+}
+
+.splide.is-active {
+    .splide__slide .product-tile {
+        container-type: inline-size;
+    }
+}
+
+.splide__slide .product-tile {
+    container-type: normal;
+}
+
+.tile-grid_products .product-tile {
+    height: fit-content;
+}

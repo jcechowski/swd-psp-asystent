@@ -1,0 +1,60 @@
+.featured-product {
+    display: grid;
+    grid-template-columns: @featuredProductGridTemplateColumns;
+    gap: @featuredProductGap;
+    align-items: @featuredProductAlignItems;
+    justify-items: @featuredProductJustifyItems;
+    align-content: @featuredProductAlignContent;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: @featuredProductContentGap;
+    }
+
+    &__head-bar {
+        display: flex;
+        flex-direction: @featuredProductHeadbarDisplayDirection;
+        align-items: center;
+        gap: @featuredProductHeadBarGap;
+        .size-s();
+    }
+
+    &__rating {
+        display: flex;
+        gap: @featuredProductRatingGap;
+        align-items: @featuredProductRatingAlignItems;
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: @featuredProductActionsAlignItems;
+        gap: @featuredProductActionsGap;
+    }
+
+    &__buy-show-actions {
+        flex: @featuredProductBuyShowActionsFlex;
+    }
+
+    &__prices {
+        .product-price {
+            &__lowest-historical-price {
+                display: block;
+            }
+        }
+    }
+
+    &__availability {
+        &_flex {
+            display: flex;
+            align-items: center;
+            gap: @featuredProductAvailabilityFlexGap;
+
+            .product-availability__description_unavailable,
+            .product-availability__image-and-description {
+                padding-top: 0;
+            }
+        }
+    }
+}

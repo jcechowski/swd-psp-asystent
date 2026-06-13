@@ -1,0 +1,205 @@
+.countdown-timer {
+    display: grid;
+    position: relative;
+    min-width: 100%;
+    max-width: ~'calc(100vw - (@{gridGutterRem} * 2))';
+    background-image: var(--background-url);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: @countDownTimerPaddingMobile;
+    overflow: hidden;
+
+    @media (min-width: @breakPointXs) {
+        padding: @countDownTimerPadding;
+    }
+
+    &_small {
+        min-height: @countDownTimerHeightSmall;
+    }
+    &_medium {
+        min-height: @countDownTimerHeightMedium;
+    }
+    &_large {
+        min-height: @countDownTimerHeightLarge;
+    }
+
+    &__position {
+        &_top-left {
+            justify-content: start;
+            align-content: start;
+        }
+        &_top-center {
+            justify-content: center;
+            align-content: start;
+        }
+        &_top-right {
+            justify-content: end;
+            align-content: start;
+        }
+        &_center-left {
+            justify-content: start;
+            align-content: center;
+        }
+        &_center {
+            justify-content: center;
+            align-content: center;
+        }
+        &_center-right {
+            justify-content: end;
+            align-content: center;
+        }
+        &_bottom-left {
+            justify-content: start;
+            align-content: end;
+        }
+        &_bottom-center {
+            justify-content: center;
+            align-content: end;
+        }
+        &_bottom-right {
+            justify-content: end;
+            align-content: end;
+        }
+    }
+
+    &__active,
+    &__ended {
+        display: grid;
+        z-index: 1;
+    }
+
+    &__ended {
+        .countdown-timer__button {
+            margin-top: @countDownTimerContainerGap;
+        }
+    }
+
+    &__header {
+        word-break: break-word;
+    }
+
+    &__header,
+    &__description,
+    &__countdown {
+        width: 100%;
+        max-width: @countDownTimerContentMaxWidth;
+    }
+
+    &__header {
+        color: inherit;
+        margin: 0;
+        width: fit-content;
+        .weight-bold();
+    }
+
+    &__description {
+        .font-size(@countDownTimerDescriptionFontSize);
+        &_below {
+            margin-bottom: @countDownTimerContainerGap;
+        }
+    }
+
+    &__button {
+        width: fit-content;
+    }
+
+    &__countdown {
+        display: flex;
+        align-items: flex-start;
+        gap: @countDownTimerUnitGapMobile;
+        margin-inline: inherit;
+        margin-block: @countDownTimerContainerGap;
+        width: fit-content;
+        flex-wrap: wrap;
+
+        &:has(.countdown-timer__separator) {
+            gap: @countDownTimerUnitWithSeparatorGapMobile;
+        }
+
+        @media (min-width: @breakPointXs) {
+            gap: @countDownTimerUnitGap;
+
+            &:has(.countdown-timer__separator) {
+                gap: @countDownTimerUnitWithSeparatorGap;
+            }
+        }
+    }
+
+    &__unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: @globalSpacing * 0.25;
+        min-width: @countDownTimerUnitMinWidthMobile;
+        @media (min-width: @breakPointXs) {
+            min-width: @countDownTimerUnitMinWidth;
+        }
+
+        &_with-background {
+            background-color: var(--timeUnitBackgroundColor);
+            border-radius: ~'calc(var(--borderRadius) * 1%)';
+            min-width: @countDownTimerUnitMinWidthMobile;
+            padding: @countDownTimerUnitValuePaddingMobile;
+
+            @media (min-width: @breakPointXs) {
+                min-width: @countDownTimerUnitMinWidth;
+                padding: @countDownTimerUnitValuePadding;
+            }
+
+            * {
+                color: var(--textColor, inherit);
+            }
+        }
+    }
+
+    &__value {
+        text-align: center;
+        margin-inline: auto;
+        word-break: break-word;
+        .font-size(@countDownTimerUnitValueFontSizeMobile);
+        @media (min-width: @breakPointXs) {
+            .font-size(@countDownTimerUnitValueFontSize);
+        }
+
+        &_with-background {
+            display: block;
+            background-color: var(--timeUnitBackgroundColor);
+            border-radius: ~'calc(var(--borderRadius) * 1%)';
+            padding: @countDownTimerUnitValuePaddingMobile;
+            color: var(--textColor, inherit);
+
+            @media (min-width: @breakPointXs) {
+                padding: @countDownTimerUnitValuePadding;
+            }
+        }
+    }
+
+    &__label {
+        text-align: center;
+        .font-size(@countDownTimerUnitLabelFontSizeMobile);
+        @media (min-width: @breakPointXs) {
+            .font-size(@countDownTimerUnitLabelFontSize);
+        }
+    }
+
+    &__separator {
+        text-align: center;
+        width: @countDownTimerSeparatorWidth;
+        padding-top: @countDownTimerUnitValuePaddingMobile;
+        .font-size(@countDownTimerUnitValueFontSizeMobile);
+
+        @media (min-width: @breakPointXs) {
+            padding-top: @countDownTimerUnitValuePadding;
+            .font-size(@countDownTimerUnitValueFontSize);
+        }
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-color: var(--overlayBackgroundColor);
+    }
+}

@@ -1,0 +1,130 @@
+.special-tile-size(mobile, tile, 1, 1);
+.special-tile-size(mobile, 2horizontal, 1, 2);
+.special-tile-size(mobile, 2vertical, 2, 1);
+.special-tile-size(mobile, square, 2, 2);
+
+.special-tile-size(tablet, tile, 1, 1);
+.special-tile-size(tablet, 2horizontal, 1, 2);
+.special-tile-size(tablet, 2vertical, 2, 1);
+.special-tile-size(tablet, square, 2, 2);
+
+.special-tile-size(laptop, tile, 1, 1);
+.special-tile-size(laptop, 2horizontal, 1, 2);
+.special-tile-size(laptop, 2vertical, 2, 1);
+.special-tile-size(laptop, square, 2, 2);
+
+.special-tile-size(desktop, tile, 1, 1);
+.special-tile-size(desktop, 2horizontal, 1, 2);
+.special-tile-size(desktop, 2vertical, 2, 1);
+.special-tile-size(desktop, square, 2, 2);
+
+.tile-grid {
+    display: grid;
+    gap: @tileGridGap;
+    width: 100%;
+
+    .special-tile {
+        container-type: inline-size;
+        display: flex;
+        height: auto;
+
+        &__image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        a {
+            display: flex;
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .desktop-only,
+    .laptop-only,
+    .tablet-only,
+    .mobile-only {
+        display: none;
+    }
+
+    @media screen and (max-width: @breakPointSm) {
+        .mobile-only {
+            display: flex;
+        }
+    }
+
+    @media screen and (min-width: @breakPointSm) and (max-width: @breakPointMd) {
+        .tablet-only {
+            display: flex;
+        }
+    }
+
+    @media screen and (min-width: @breakPointMd) and (max-width: @breakPointXl) {
+        .laptop-only {
+            display: flex;
+        }
+    }
+
+    @media screen and (min-width: @breakPointXl) {
+        .desktop-only {
+            display: flex;
+        }
+    }
+
+    @media screen and (min-width: (@breakPointXs)) {
+        gap: @tileGridGapBreakpointXs;
+    }
+
+    @media screen and (min-width: (@breakPointLg)) {
+        gap: @tileGridGapBreakpointLg;
+    }
+
+    &_l {
+        gap: @tileGridLGap;
+
+        @media screen and (min-width: (@breakPointXs)) {
+            gap: @tileGridLGapBreakpointXs;
+        }
+
+        @media screen and (min-width: (@breakPointLg)) {
+            gap: @tileGridLGapBreakpointLg;
+        }
+    }
+
+    .generate-tile-grid(12, xs);
+
+    @media screen and (min-width: @breakPointXs) {
+        .generate-tile-grid(12, sm);
+    }
+
+    @media screen and (min-width: @breakPointSm) {
+        .generate-tile-grid(12, md);
+    }
+
+    @media screen and (min-width: @breakPointMd) {
+        .generate-tile-grid(12, lg);
+    }
+
+    @media screen and (min-width: @breakPointLg) {
+        .generate-tile-grid(12, xl);
+    }
+
+    @media screen and (min-width: @breakPointXl) {
+        .generate-tile-grid(12, xxl);
+    }
+
+    &_products {
+        column-gap: @tileGridProductColumnGap;
+        row-gap: @tileGridProductRowGap;
+        padding-inline: @tileGridPadding;
+        @media screen and (min-width: (@breakPointXs + 1)) {
+            padding-bottom: @tileGridProductPaddingBottom;
+        }
+        @media screen and (min-width: (@breakPointMd + 1)) {
+            column-gap: @tileGridProductColumnGapMd;
+            padding-inline: 0;
+        }
+    }
+}

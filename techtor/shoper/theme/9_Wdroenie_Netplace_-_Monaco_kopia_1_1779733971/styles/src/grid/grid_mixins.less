@@ -1,0 +1,182 @@
+
+.generate-spacing(@iterationsNumber, @breakPointName, @iteration: 0) when (@iteration =< @iterationsNumber) {
+    .mt-@{breakPointName}-@{iteration} {
+        margin-top: @spacing * @iteration;
+    }
+
+    .mr-@{breakPointName}-@{iteration} {
+        margin-right: @spacing * @iteration;
+    }
+
+    .ml-@{breakPointName}-@{iteration} {
+        margin-left: @spacing * @iteration;
+    }
+
+    .mb-@{breakPointName}-@{iteration} {
+        margin-bottom: @spacing * @iteration;
+    }
+
+    .pt-@{breakPointName}-@{iteration} {
+        padding-top: @spacing* @iteration;
+    }
+
+    .pr-@{breakPointName}-@{iteration} {
+        padding-right: @spacing* @iteration;
+    }
+
+    .pl-@{breakPointName}-@{iteration} {
+        padding-left: @spacing* @iteration;
+    }
+
+    .pb-@{breakPointName}-@{iteration} {
+        padding-bottom: @spacing* @iteration;
+    }
+
+    .m-all-@{breakPointName}-@{iteration} {
+        margin: @spacing * @iteration;
+    }
+
+    .p-all-@{breakPointName}-@{iteration} {
+        padding: @spacing * @iteration;
+    }
+
+    .generate-spacing(@iterationsNumber, @breakPointName, (@iteration + 1));
+}
+
+.generate-col(@iterationsNumber, @breakPointName, @iteration: 0) when (@iteration =< @iterationsNumber) {
+    .grid__col_@{breakPointName}-@{iteration} {
+        flex: 1 0 (@iteration / @gridSize) * 100%;
+        max-width: (@iteration / @gridSize) * 100%;
+    }
+
+    .grid__col_@{breakPointName}-auto {
+        flex: 0 0 auto;
+        max-width: initial;
+    }
+
+    .grid__col_@{breakPointName}-grow {
+        flex: 1 0;
+        max-width: initial;
+    }
+
+    .generate-col(@iterationsNumber, @breakPointName, (@iteration + 1));
+}
+
+.generate-order(@iterationsNumber, @breakPointName, @iteration: 0) when (@iteration =< @iterationsNumber) {
+    .grid__col_order-@{breakPointName}-@{iteration} {
+        order: @iteration;
+    }
+
+    .generate-order(@iterationsNumber, @breakPointName, (@iteration + 1));
+}
+
+.generate-container-alignments(@breakPointName) {
+    .grid {
+        &_@{breakPointName}-hleft {
+            align-items: flex-start;
+        }
+
+        &_@{breakPointName}-hcenter {
+            align-items: center;
+        }
+
+        &_@{breakPointName}-hright {
+            align-items: flex-end;
+        }
+    }
+}
+
+.generate-row-alignments(@breakPointName) {
+    .grid {
+        &__row {
+            &_@{breakPointName}-vtop {
+                align-items: flex-start;
+            }
+
+            &_@{breakPointName}-vcenter {
+                align-items: center;
+            }
+
+            &_@{breakPointName}-vbottom {
+                align-items: flex-end;
+            }
+
+            &_@{breakPointName}-vstretch {
+                align-items: stretch;
+                min-height: 100%;
+            }
+
+            &_@{breakPointName}-vbaseline {
+                align-items: baseline;
+                min-width: 100%;
+            }
+
+            &_@{breakPointName}-hleft {
+                justify-content: flex-start;
+            }
+
+            &_@{breakPointName}-hcenter {
+                justify-content: center;
+            }
+
+            &_@{breakPointName}-hbetween {
+                justify-content: space-between;
+            }
+
+            &_@{breakPointName}-haround {
+                justify-content: space-around;
+            }
+
+            &_@{breakPointName}-hevenly {
+                justify-content: space-evenly;
+            }
+
+            &_@{breakPointName}-hright {
+                justify-content: flex-end;
+            }
+        }
+    }
+}
+
+.generate-col-alignments(@breakPointName) {
+    .grid {
+        &__col {
+            &_@{breakPointName}-hleft {
+                justify-items: start;
+            }
+
+            &_@{breakPointName}-hcenter {
+                justify-items: center;
+            }
+
+            &_@{breakPointName}-hright {
+                justify-items: end;
+            }
+
+            &_@{breakPointName}-vtop {
+                align-content: start;
+            }
+
+            &_@{breakPointName}-vcenter {
+                align-content: center;
+            }
+
+            &_@{breakPointName}-vbottom {
+                align-content: end;
+            }
+
+            &_@{breakPointName}-vbetween {
+                align-content: space-between;
+            }
+        }
+    }
+}
+
+.generate-f-grid(@iterationsNumber, @iteration: 0) when (@iteration =< @iterationsNumber) {
+    .f-grid-@{iteration} {
+        flex: 1 1 (@iteration / @gridSize) * 100%;
+        max-width: (@iteration / @gridSize) * 100%;
+    }
+
+    .generate-f-grid(@iterationsNumber, (@iteration + 1));
+}

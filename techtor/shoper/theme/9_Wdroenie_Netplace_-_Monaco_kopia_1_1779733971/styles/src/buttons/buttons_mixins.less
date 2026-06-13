@@ -1,0 +1,13 @@
+.btn-decorate-appearance (@bgColor: transparent, @color: @btnColorPrimary, @borderColor:  transparent) {
+    background-color: @bgColor;
+    color: @color;
+    border-color: @borderColor;
+    fill: @color;
+    stroke: @color;
+}
+
+.btn-decorate-size (@fontSize, @paddingT, @paddingR, @paddingB, @paddingL, @lineHeight) {
+    .font-size(@fontSize);
+    .line-height(@lineHeight);
+    .padding-to-unit(@paddingT, @paddingR, @paddingB, @paddingL);
+}

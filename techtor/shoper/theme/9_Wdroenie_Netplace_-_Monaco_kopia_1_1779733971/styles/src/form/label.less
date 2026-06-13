@@ -1,0 +1,37 @@
+.label {
+    .size-s();
+    color: @labelColor;
+    cursor: pointer;
+
+    &__optional {
+        color: @labelOptionalColor;
+        .font-size(@labelOptionalFontSizeInPx);
+    }
+
+    &_disabled {
+        color: @labelDisabledColor;
+        pointer-events: none;
+    }
+
+    &_vcenter {
+        display: inline-flex;
+        align-items: center;
+        column-gap: 0.5rem;
+    }
+
+    &_required {
+        position: relative;
+        .pixel-to-rem(padding-left, @labelRequiredAsteriskPaddingLeftInPx);
+    }
+
+    &__asterisk {
+        position: absolute;
+        .pixel-to-rem(top, @labelRequiredAsteriskPaddingOffsetTopInPx);
+        .pixel-to-rem(left, @labelRequiredAsteriskPaddingOffsetLeftInPx);
+
+        color: @labelRequiredAsteriskColor;
+        vertical-align: text-top;
+
+        .font-size(@labelRequiredAsteriskSize);
+    }
+}

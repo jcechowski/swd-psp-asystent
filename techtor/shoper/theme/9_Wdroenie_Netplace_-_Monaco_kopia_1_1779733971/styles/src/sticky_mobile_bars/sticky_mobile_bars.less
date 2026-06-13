@@ -1,0 +1,92 @@
+.sticky-mobile-bars {
+    position: fixed;
+    bottom: 0;
+    width: 100dvw;
+    z-index: 1;
+    transition: transform 0.3s ease-in-out;
+    background-color: @globalBodyBackgroundColor;
+
+    &_active {
+        background-color: inherit;
+    }
+
+    &__menu {
+        padding: @stickyMobileBarsMenuPadding;
+        border-top: @stickyMobileBarsMenuBorderTop;
+
+        &-container {
+            background-color: @globalBodyBackgroundColor;
+        }
+    }
+
+    &__buy-button {
+        padding: @stickyMobileBarsBuyButtonPadding;
+        display: block;
+
+        &-container {
+            position: relative;
+            z-index: -1;
+            background-color: @globalBodyBackgroundColor;
+            box-shadow: @stickyMobileBarsBuyButtonBoxShadow;
+        }
+
+        &_hidden {
+            display: none;
+        }
+    }
+
+    &__total-and-pay {
+        padding: @stickyMobileBarsTotalAndPayPadding;
+        border-top: @stickyMobileBarsTotalAndPayBorderTop;
+
+        &-container {
+            background-color: @globalBodyBackgroundColor;
+        }
+    }
+}
+
+.sticky-menu {
+    display: flex;
+
+    &__item {
+        flex: 1 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.fade {
+    &-transition {
+        &-end, &-start {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        &-end {
+            transform: translateY(0);
+        }
+
+        &-start {
+            transform: translateY(20dvh);
+        }
+    }
+}
+
+.sticky-total-and-pay {
+    &-transition {
+        &-end, &-start {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        &-end {
+            opacity: 1;
+            transform: scale(1);
+
+        }
+
+        &-start {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+    }
+}

@@ -6,7 +6,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      ALLOWED_ORIGINS: "https://techtor.pl,https://www.techtor.pl"
+      ALLOWED_ORIGINS: "https://techtor.pl,https://www.techtor.pl,https://sklep367797.shoparena.pl"
       NOTIFY_EMAIL: "biuro@techtor.pl"
       SMTP_HOST: "smtp.gmail.com"
       SMTP_PORT: "587"

@@ -1,0 +1,28 @@
+.product-rating {
+    &__content {
+        display: flex;
+        align-items: center;
+        gap: @productRatingGap;
+        color: @productRatingColor;
+    }
+
+    &__element {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &__numbers {
+        gap: @globalSpacing * 0.25;
+    }
+
+    &__score {
+        .weight-semibold();
+    }
+
+    &__score,
+    &__number-of-votes,
+    &__vote-link,
+    &__no-vote {
+        .font-size(@productRatingFontSize);
+    }
+}

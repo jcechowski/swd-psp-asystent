@@ -1,0 +1,30 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: @neutralColors900;
+    z-index: 1;
+    opacity: 0.4;
+}
+
+.backdrop {
+    &-opacity-transition {
+        &-start {
+            .backdrop {
+                opacity: 0;
+            }
+        }
+
+        &-end {
+            .backdrop {
+                opacity: 0.4;
+            }
+        }
+    }
+}
+
+.backdrop_language-and-currency {
+    z-index: 2147483640; /* Cookiebot sets 2147483631, so we need to be above that */
+}

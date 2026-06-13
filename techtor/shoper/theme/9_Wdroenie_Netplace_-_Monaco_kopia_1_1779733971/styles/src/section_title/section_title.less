@@ -1,0 +1,23 @@
+.section-title {
+    .h1();
+    font-weight: @sectionTitleFontWeight;
+
+    &_secondary {
+        .font-size(@sectionTitleSecondaryFontSize);
+        .line-height(@sectionTitleSecondaryLineHeight);
+    }
+
+    &_inline {
+        display: inline;
+    }
+
+    &_s {
+        .h2();
+        font-weight: @sectionTitleFontWeight;
+    }
+
+    &_xs {
+        .font-size(@sectionTitleFontSizeXS);
+        .line-height(@sectionTitleLineHeightXS);
+    }
+}

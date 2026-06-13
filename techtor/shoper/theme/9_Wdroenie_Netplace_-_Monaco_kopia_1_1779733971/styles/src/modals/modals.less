@@ -1,0 +1,108 @@
+.modal {
+    transition: @modalOpenTransition;
+    will-change: @modalChangeableProperties;
+
+    &_visible {
+        transition: @modalCloseTransition;
+    }
+
+    &_show-scale-start,
+    &_hide-scale-end {
+        opacity: 0;
+        transform: translate3d(-2rem, 0, 0);
+    }
+
+    &_show-scale-end,
+    &_hide-scale-start {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    &__container {
+        .shadow-l();
+
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        width: @modalWidthM;
+        max-width: 100%;
+
+        background-color: @modalContainerBgColor;
+        border-radius: @modalContainerBorderRadius;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        flex: 0 0 auto;
+        column-gap: @modalGutter;
+
+        padding: @modalSpacing @modalSpacing @modalSpacing * 0.5;
+
+        &_center {
+            justify-content: center;
+        }
+    }
+
+    &__title {
+        .pixel-to-rem(font-size, @modalTitleFontSize);
+        .pixel-to-rem(line-height, @modalTitleLineHeight);
+        .weight-semibold();
+        color: @modalTitleColor;
+    }
+
+    &__body {
+        .scrollable();
+        overscroll-behavior: none;
+        overflow-y: auto;
+        padding: 0 @modalSpacing;
+
+        .input,
+        .input input {
+            background-color: @modalContainerInputBgColor;
+        }
+
+        .textarea textarea {
+            background-color: @modalContainerTextareaBgColor;
+        }
+
+        .checkbox__label {
+            background-color: @modalContainerCheckboxBgColor;
+        }
+    }
+
+    &__footer {
+        display: flex;
+        padding: @modalSpacing;
+        justify-content: flex-end;
+        column-gap: @modalGutter;
+    }
+
+    &_language-and-currency {
+        z-index: 2147483641; /* Cookiebot sets 2147483631, so we need to be above that */
+    }
+}
+
+h-modal-close {
+    display: inline-flex;
+}
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .modal {
+        &__header {
+            padding: @modalSpacing * 0.5;
+        }
+
+        &__body {
+            padding: 0 @modalSpacing * 0.5;
+        }
+
+        &__footer {
+            gap: @modalGutter;
+            padding: @modalSpacing * 0.5;
+        }
+    }
+}

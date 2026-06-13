@@ -1,0 +1,130 @@
+.switch {
+    display: inline-flex;
+    column-gap: @switchGutter;
+
+    &__control {
+        position: relative;
+        display: inline-flex;
+        flex: 0 0 auto;
+
+        transition: background-color 0.2s ease-in, box-shadow 0.15s ease-in, border-color 0.15s ease-in;
+        background-color: @switchLabelBgColor;
+        border-radius: @switchControlBorderRadius;
+
+        .pixel-to-rem(width, @switchControlWidth);
+        .pixel-to-rem(height, @switchControlHeight);
+        .pixel-to-rem(border-radius, @switchControlBorderRadius);
+
+        user-select: none;
+    }
+
+    &__description {
+        color: @checkboxDescriptionColor;
+        .size-s();
+    }
+
+    &_disabled {
+        .switch__label {
+            background-color: @switchLabelDisabledBgColor;
+            border: none;
+
+            &:hover {
+                box-shadow: none;
+            }
+        }
+
+        .switch__input:checked + .switch__label {
+            background-color: @switchLabelDisabledBgColor;
+
+            &::after {
+                border-color: @switchLabelDisabledBgColor;
+            }
+        }
+
+        label[for] {
+            cursor: default;
+        }
+    }
+
+    &__input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        user-select: none;
+        clip: rect(1px, 1px, 1px, 1px);
+
+        &:checked {
+            + .switch__label {
+                border-color: @switchCheckedHandleColor;
+                background-color: @checkboxCheckedBgColor;
+
+                &::after {
+                    border-color: @switchCheckedHandleColor;
+                    transform: translate3d(@switchHandlePositionEnd, 0, 0);
+                }
+            }
+        }
+
+        &:focus,
+        &:active {
+            + .switch__label {
+                &::after {
+                    box-shadow: @switchFocusBoxShadow;
+                }
+            }
+
+            &:checked {
+                + .switch__label {
+                    &::after {
+                        box-shadow: @checkedSwitchFocusBoxShadow;
+                    }
+                }
+            }
+        }
+    }
+
+    &__label {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+
+        .pixel-to-rem(border-radius, @switchLabelBorderRadius);
+
+        transition: background-color 0.15s ease-out;
+
+        &::after {
+            content: '';
+
+            position: absolute;
+            display: block;
+
+            left: 0;
+            top: 0;
+
+            .pixel-to-rem(width, @switchHandleWidth);
+            .pixel-to-rem(height, @switchHandleHeight);
+
+            will-change: box-shadow;
+
+            .pixel-to-rem(border-radius, @switchHandleBorderRadius);
+
+            transform: translate3d(0, 0, 0);
+        }
+
+        &::after {
+            border: 1px solid @switchLabelBgColor;
+
+            transition: transform 0.13s ease-in, box-shadow 0.2s ease-in 0.08s, border-color 0.15s ease-in;
+
+            background-color: @switchHandleBgColor;
+        }
+    }
+
+    &_error {
+        .switch__content {
+            color: @switchErrorColor;
+        }
+    }
+}

@@ -1,0 +1,131 @@
+.checkbox {
+    display: inline-flex;
+    column-gap: @checkboxGutter;
+
+    &__control {
+        position: relative;
+        display: inline-flex;
+        flex: 0 0 auto;
+
+        width: @checkboxSize;
+        height: @checkboxSize;
+
+        border-radius: ~'@{checkboxBorderRadius}px';
+        transition: box-shadow 0.15s ease-in;
+
+        user-select: none;
+
+        &:active,
+        &:focus {
+            box-shadow: @checkboxActiveBoxShadow;
+        }
+    }
+
+    &__description {
+        color: @checkboxDescriptionColor;
+        .size-s();
+    }
+
+    &_disabled {
+        .checkbox__label {
+            background-color: @checkboxLabelDisabledBgColor;
+            border: none;
+
+            &:hover {
+                box-shadow: none;
+            }
+        }
+
+        .checkbox__input:checked + .checkbox__label {
+            background-color: @checkboxLabelDisabledBgColor;
+        }
+
+        label[for] {
+            cursor: not-allowed;
+        }
+    }
+
+    &__input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        user-select: none;
+        clip: rect(1px, 1px, 1px, 1px);
+
+        &:checked {
+            + .checkbox__label {
+                border-color: @checkboxCheckedBorderColor;
+                background-color: @checkboxCheckedBgColor;
+
+                &::after {
+                    border-color: @checkboxCheckedTickColor;
+                }
+            }
+
+            + [data-check-more] {
+                &::before {
+                    content: attr(data-check-less);
+                }
+            }
+        }
+
+        &:focus,
+        &:active {
+            + .checkbox__label {
+                outline: 2px solid @checkboxOutlineColor;
+                outline-offset: 0.125rem;
+            }
+        }
+
+        &_partially-checked:not(:checked) {
+            + .checkbox__label {
+                &::after {
+                    top: 15%;
+
+                    transform: rotate(0);
+                    border-width: 0 0 @checkboxTickSize 0;
+                    border-color: @checkboxPartiallyCheckedTickColor;
+                }
+            }
+        }
+    }
+
+    &__label {
+        width: 100%;
+        height: 100%;
+
+        transition: background-color 0.2s ease-in, box-shadow 0.15s ease-in, border-color 0.15s ease-in;
+        background-color: @checkboxLabelBgColor;
+        border: @checkboxLabelBorder;
+        border-radius: ~'@{checkboxBorderRadius}px';
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: @checkboxHoverBoxShadow;
+            border-color: @checkboxHoverBorderColor;
+        }
+
+        &::after {
+            content: '';
+
+            position: absolute;
+            left: 5px;
+            top: 5px;
+
+            width: 55%;
+            height: 40%;
+
+            transform: rotate(-52deg);
+            border-width: 0 0 @checkboxTickSize @checkboxTickSize;
+            border-style: solid;
+            border-color: transparent;
+        }
+    }
+
+    &_error {
+        .checkbox__content {
+            color: @checkboxErrorColor;
+        }
+    }
+}

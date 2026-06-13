@@ -1,0 +1,17 @@
+.filter-control {
+    display: flex;
+    justify-content: space-between;
+
+    &:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+
+    &_empty {
+        opacity: 0.5;
+    }
+
+    &__counter {
+        .size-s();
+        color: @globalFontColor;
+    }
+}

@@ -1,0 +1,51 @@
+:root {
+    --globalBodyBackgroundColor: @globalBodyBackgroundColor;
+    --globalFontColor: @globalFontColor;
+    --globalFontColorSecondary: @globalFontColorSecondary;
+    --globalFontColorTertiary: @globalFontColorTertiary;
+}
+
+@globalFontFamilyName: @baseFontFamilyName;
+@globalBodyFontFamilyName: @globalFontFamilyName;
+@globalButtonFontFamilyName: @globalFontFamilyName;
+@globalInputFontFamilyName: @globalFontFamilyName;
+
+@globalBaseFontSize: @baseFontSize;
+@globalFontColor: @neutralColors800;
+@fontColorLightness: hsvvalue(@globalFontColor);
+
+.generate-font-colors() when (@fontColorLightness > 75) {
+    @globalFontColorSecondary: darken(@globalFontColor, 20%);
+    @globalFontColorTertiary: darken(@globalFontColor, 30%);
+}
+.generate-font-colors() when (@fontColorLightness <= 75) {
+    @globalFontColorSecondary: lighten(@globalFontColor, 20%);
+    @globalFontColorTertiary: lighten(@globalFontColor, 30%);
+}
+
+.generate-font-colors();
+
+@globalBodyBackgroundColor: #fff;
+
+@globalSpacing: 1rem;
+@globalBorderRadius: 2;
+
+@sizeXsName: xs;
+@sizeSName: s;
+@sizeMName: m;
+@sizeLName: l;
+@sizeXlName: xl;
+@sizeXxlName: xxl;
+
+@scrollBarBgColorDefault: @neutralColors100;
+@scrollBarThumbColorDefault: @neutralColors400;
+
+@scrollBarWidthDefault: 6px;
+@scrollBarHeightDefault: 6px;
+
+@scrollBarTrackBgHoverDefault: @neutralColors400;
+@scrollBarThumbBgHoverDefault: @neutralColors400;
+
+@bodyPaddingHorizontal: @globalSpacing;
+
+

@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch"
   },
   "dependencies": {
     "express": "^4.21.0",
     "nodemailer": "^6.9.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "typescript": "^6.0.3"
   }
 }

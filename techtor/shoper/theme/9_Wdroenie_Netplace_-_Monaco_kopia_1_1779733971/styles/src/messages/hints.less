@@ -1,0 +1,18 @@
+.hint {
+    .message-decorate();
+    width: fit-content;
+
+    &__content {
+        max-width: @messageContentMaxWidth;
+        background-color: @hintContentBackgroundColor;
+        color: @hintContentColor;
+        display: block;
+        .pixel-to-rem(padding, @hintContentPadding);
+        .size-xs();
+        .line-height(@lineHeightInPxXxs);
+    }
+}
+
+h-hint-content {
+    display: none;
+}

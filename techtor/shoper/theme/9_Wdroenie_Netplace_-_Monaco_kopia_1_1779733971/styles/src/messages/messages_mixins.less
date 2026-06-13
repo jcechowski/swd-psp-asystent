@@ -1,0 +1,30 @@
+.message-decorate
+    (
+    @borderRadius: @messageContentBorderRadius,
+    @margin: @messageContentMargin,
+    @messageContentAnimationDuration: @messageContentAnimationDuration,
+    @messageContentTransition: @messageContentTransition
+    ) {
+    &__content {
+        .pixel-to-rem(border-radius, @messageContentBorderRadius);
+        .pixel-to-rem(margin, @messageContentMargin);
+
+        z-index: @messageZIndex;
+
+        animation: revealMessage @messageContentAnimationDuration;
+        transition: @messageContentTransition;
+    }
+
+    &_removed {
+        opacity: 0;
+    }
+}
+
+@keyframes revealMessage {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,88 @@
+.font-size (@fontSize, @unit: 'rem') {
+    @rem: (@fontSize / @baseFontSize);
+    font-size: ~'@{rem}@{unit}';
+}
+
+.line-height (@lineHeight, @unit: 'rem') {
+    @rem: (@lineHeight / @baseFontSize);
+    line-height: ~'@{rem}@{unit}';
+}
+
+.size-xl () {
+    .font-size(@fontSizeInPxXl);
+    .line-height(@lineHeightInPxXl);
+}
+
+.size-l () {
+    .font-size(@fontSizeInPxL);
+    .line-height(@lineHeightInPxL);
+}
+
+.size-m () {
+    .font-size(@fontSizeInPxM);
+    .line-height(@lineHeightInPxM);
+}
+
+.size-s (@fontSize: @fontSizeInPxS, @lineHeight: @lineHeightInPxS) {
+    .font-size(@fontSizeInPxS);
+    .line-height(@lineHeightInPxS);
+}
+
+.size-xs () {
+    .font-size(@fontSizeInPxXS);
+    .line-height(@lineHeightInPxXS);
+}
+
+.weight-extrabold () {
+    font-weight: @fontWeightExtrabold;
+}
+
+.weight-bold () {
+    font-weight: @fontWeightBold;
+}
+
+.weight-semibold () {
+    font-weight: @fontWeightSemibold;
+}
+
+.weight-medium () {
+    font-weight: @fontWeightMedium;
+}
+
+.weight-normal () {
+    font-weight: @fontWeightNormal;
+}
+
+.generate-font-color-modifier(@colorName) {
+    // manually generate lightest color, value 50
+    @lightestColorValue: 50;
+    @lightestColorVariableName: ~'@{colorName}Colors@{lightestColorValue}';
+
+    .color_@{colorName}-@{lightestColorValue} {
+        color: @@lightestColorVariableName;
+    }
+
+    // loop 9 times to generate color values 900-100
+    .iterate (@index) when (@index > 0) {
+        @iterationColorVariableName: ~'@{colorName}Colors@{index}';
+
+        .color_@{colorName}-@{index} {
+            color: @@iterationColorVariableName;
+        }
+
+        .iterate(@index - 100);
+    }
+    .iterate(900);
+
+    .color_main {
+        color: @globalFontColor;
+    }
+
+    .color_secondary {
+        color: @globalFontColorSecondary;
+    }
+
+    .color_tertiary {
+        color: @globalFontColorTertiary;
+    }
+}

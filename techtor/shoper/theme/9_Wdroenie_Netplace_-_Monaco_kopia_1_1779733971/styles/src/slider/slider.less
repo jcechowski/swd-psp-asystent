@@ -1,0 +1,84 @@
+@sliderSize: 24px;
+
+.slider {
+    &__arrow {
+        &_centered-with-content {
+            position: absolute;
+            z-index: 1;
+
+            &-left{
+                top: 50%;
+                left: 0;
+                transform: translate3d(0, -50%, 0);
+
+                @media screen and (max-width: (@breakPointSm - 1)) {
+                    top: 50%;
+                    left: 0.5rem;
+                    transform: translate3d(0px, -50%, 0);
+                }
+            }
+
+            &-right{
+                top: 50%;
+                right: 0;
+                transform: translate3d(0, -50%, 0);
+
+                @media screen and (max-width: (@breakPointSm - 1)) {
+                    top: 50%;
+                    right: 0.5rem;
+                    transform: translate3d(0px, -50%, 0);
+                }
+            }
+        }
+
+        &_centered-with-pagination{
+            position: absolute;
+            z-index: 1;
+
+            &-left {
+                top: 50%;
+                left: 0.5rem;
+                transform: translate3d(0px, -50%, 0);
+            }
+
+            &-right {
+                top: 50%;
+                right: 0.5rem;
+                transform: translate3d(0px, -50%, 0);
+            }
+
+            &-up {
+                top: 0;
+                transform: translate3d(-50%, 0, 0);
+                left: 50%;
+            }
+
+            &-down {
+                bottom: 0;
+                transform: translate3d(-50%, 0, 0);
+                left: 50%;
+            }
+        }
+
+        &_secondary {
+            background-color: @neutralColors50;
+            width: @sliderSize;
+            height: @sliderSize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            flex: 0 0 @sliderSize;
+
+            &:hover {
+                background-color: @neutralColors100;
+            }
+        }
+
+        &_inactive {
+            opacity: 0.2;
+            cursor: default;
+        }
+    }
+}

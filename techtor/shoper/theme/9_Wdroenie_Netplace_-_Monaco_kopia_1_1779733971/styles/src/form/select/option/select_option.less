@@ -1,0 +1,98 @@
+.select-option {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .padding-to-unit(@selectOptionPaddingVerticalInPx, @selectOptionPaddingHorizontalInPx, @selectOptionPaddingVerticalInPx, @selectOptionPaddingHorizontalInPx);
+
+    .font-size(@selectOptionFontSizeInPx);
+    .line-height(@selectOptionLineHeightInPx);
+
+    &_no-wrap {
+        flex-wrap: nowrap;
+    }
+
+    &[selected] {
+        .weight-semibold();
+
+        color: @selectOptionSelectedColor;
+
+        .icon {
+            stroke: @selectOptionSelectedColor;
+
+            @media screen and (max-width: @breakPointXs) {
+                .pixel-to-rem(margin-left, 8);
+            }
+        }
+    }
+
+    &[disabled] {
+        color: @selectOptionDisabledColor;
+
+        &:not([clickable]):hover {
+            cursor: not-allowed;
+            background-color: @selectOptionBgColor;
+
+            .select-option__content {
+                color: @selectOptionDisabledColor;
+            }
+        }
+    }
+
+    &:hover {
+        background-color: @selectOptionHoverBgColor;
+        cursor: pointer;
+    }
+
+    &_with-link {
+        padding: 0;
+
+        .select-option__content {
+            .select-option__link {
+                display: block;
+
+                width: 100%;
+                .padding-to-unit(@selectOptionPaddingVerticalInPx, @selectOptionPaddingHorizontalInPx, @selectOptionPaddingVerticalInPx, @selectOptionPaddingHorizontalInPx);
+
+                color: @selectOptionWithLinkLinkColor;
+                text-decoration: none;
+
+                &:hover {
+                    color: @selectOptionHoverColor;
+                }
+
+                &_active {
+                    .weight-semibold();
+
+                    color: @selectOptionSelectedColor;
+
+                    &:hover {
+                        color: @selectOptionSelectedColor;
+                    }
+                }
+            }
+        }
+
+        &-and-dev-select-placeholder-flag {
+            gap: 8px;
+            .padding-to-unit(@selectOptionPaddingVerticalInPx, @selectOptionPaddingHorizontalInPx, @selectOptionPaddingVerticalInPx, @selectOptionPaddingHorizontalInPx);
+
+            .select-option__content {
+                .select-option__link {
+                    padding: 0;
+                }
+            }
+        }
+    }
+
+    &__additional-value {
+        white-space: nowrap;
+    }
+}
+
+@media screen and (max-width: @breakPointXs) {
+    .select-option {
+        flex-wrap: nowrap;
+        .padding-to-unit(@selectOptionMobilePaddingVerticalInPx, @selectOptionMobilePaddingHorizontalInPx, @selectOptionMobilePaddingVerticalInPx, @selectOptionMobilePaddingHorizontalInPx);
+    }
+}

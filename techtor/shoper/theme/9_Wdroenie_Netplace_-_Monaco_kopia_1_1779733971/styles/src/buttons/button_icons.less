@@ -1,0 +1,103 @@
+.btn-icon {
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: @baseFontFamilyName;
+    text-decoration: none;
+
+    border: ~'@{btnBorderWidth}px' @btnBorderStyle @btnBorderColor;
+    border-radius: ~'@{btnBorderRadius}px';
+
+    user-select: none;
+    cursor: pointer;
+
+    .weight-semibold();
+    .line-height(@btnLineHeight);
+    .btn-decorate-size(@btnFontSizeInPxM, @btnIconPaddingM, @btnIconPaddingM, @btnIconPaddingM, @btnIconPaddingM, @lineHeightInPxM);
+
+    &_l {
+        .btn-decorate-size(@btnFontSizeInPxL, @btnIconPaddingL, @btnIconPaddingL, @btnIconPaddingL, @btnIconPaddingL, @lineHeightInPxL);
+    }
+
+    &_s {
+        .btn-decorate-size(@btnFontSizeInPxS, @btnIconPaddingS, @btnIconPaddingS, @btnIconPaddingS, @btnIconPaddingS, @lineHeightInPxS);
+    }
+
+    &_xs {
+        .btn-decorate-size(@btnFontSizeInPxXS, @btnIconPaddingXs, @btnIconPaddingXs, @btnIconPaddingXs, @btnIconPaddingXs, @lineHeightInPxXS);
+    }
+
+    &_primary {
+        .btn-decorate-appearance(@btnBgColorPrimary, @btnColorPrimary);
+
+        &:hover {
+            background-color: @btnBgColorPrimaryHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorPrimaryDisabled, @btnColorPrimaryDisabled);
+            pointer-events: none;
+        }
+    }
+
+    &_secondary {
+        .btn-decorate-appearance(@btnBgColorSecondary, @btnColorSecondary);
+
+        &:hover {
+            background-color: @btnBgColorSecondaryHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorSecondaryDisabled, @btnColorSecondaryDisabled);
+            pointer-events: none;
+        }
+    }
+
+    &_outline {
+        .btn-decorate-appearance(@btnBgColorOutline, @btnColorOutline, @btnBorderColorOutline);
+        border-width: ~'@{btnBorderWidthOutline}px';
+
+        &:hover {
+            color: @btnColorOutlineHover;
+            border-color: @btnBorderColorOutlineHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorOutlineDisabled, @btnColorOutlineDisabled, @btnBorderColorOutline);
+            pointer-events: none;
+        }
+    }
+
+    &_ghost {
+        .btn-decorate-appearance(@btnBgColorGhost, @btnColorGhost);
+
+        &:hover {
+            color: @btnColorGhostHover;
+            background-color: @btnBgColorGhostHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorGhostDisabled, @btnColorGhostDisabled);
+            pointer-events: none;
+        }
+    }
+
+    &_join-right {
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    &_join-left {
+        border-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    &__icon {
+        stroke: inherit;
+    }
+}

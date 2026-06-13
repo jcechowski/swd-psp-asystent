@@ -1,0 +1,20 @@
+.file-picker {
+    .pixel-to-rem(min-height, @filePickerButtonAppearanceHeight);
+    display: inline-block;
+
+    &__label {
+        .file-picker-button-appearance-with-border();
+        color: @filePickerColor;
+        cursor: pointer;
+
+        .file-picker-icon {
+            .pixel-to-rem(margin-right, @filePickerLabelIconMargin);
+        }
+    }
+
+    &_error {
+        .file-picker__label {
+            border: @filePickerErrorBorder;
+        }
+    }
+}

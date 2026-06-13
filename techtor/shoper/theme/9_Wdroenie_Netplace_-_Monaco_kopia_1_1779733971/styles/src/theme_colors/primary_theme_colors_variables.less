@@ -1,0 +1,53 @@
+:root {
+    --primaryColor: @primaryColor;
+    --primaryColors10: @primaryColors10;
+    --primaryColors20: @primaryColors20;
+    --primaryColors50: @primaryColors50;
+    --primaryColors100: @primaryColors100;
+    --primaryColors200: @primaryColors200;
+    --primaryColors300: @primaryColors300;
+    --primaryColors400: @primaryColors400;
+    --primaryColors500: @primaryColors500;
+    --primaryColors600: @primaryColors600;
+    --primaryColors700: @primaryColors700;
+    --primaryColors800: @primaryColors800;
+    --primaryColors900: @primaryColors900;
+}
+
+@primaryColor: #464fe5;
+
+@huePrimary: hsvhue(@primaryColor);
+@saturationPrimary: hsvsaturation(@primaryColor);
+
+@invertPrimaryColors: 'false';
+
+.generate-primary-colors() when (@invertPrimaryColors = 'false') {
+    @primaryColors10: mix(hsl(@huePrimary, @saturationPrimary, 99%), transparent, 100);
+    @primaryColors20: mix(hsl(@huePrimary, @saturationPrimary, 98%), transparent, 100);
+    @primaryColors50: mix(hsl(@huePrimary, @saturationPrimary, 95%), transparent, 100);
+    @primaryColors100: mix(hsl(@huePrimary, @saturationPrimary, 90%), transparent, 100);
+    @primaryColors200: mix(hsl(@huePrimary, @saturationPrimary, 80%), transparent, 100);
+    @primaryColors300: mix(hsl(@huePrimary, @saturationPrimary, 70%), transparent, 100);
+    @primaryColors400: mix(hsl(@huePrimary, @saturationPrimary, 60%), transparent, 100);
+    @primaryColors500: mix(hsl(@huePrimary, @saturationPrimary, 50%), transparent, 100);
+    @primaryColors600: mix(hsl(@huePrimary, @saturationPrimary, 40%), transparent, 100);
+    @primaryColors700: mix(hsl(@huePrimary, @saturationPrimary, 30%), transparent, 100);
+    @primaryColors800: mix(hsl(@huePrimary, @saturationPrimary, 20%), transparent, 100);
+    @primaryColors900: mix(hsl(@huePrimary, @saturationPrimary, 10%), transparent, 100);
+}
+.generate-primary-colors() when (@invertPrimaryColors = 'true') {
+    @primaryColors10: mix(hsl(@huePrimary, @saturationPrimary, 10%), transparent, 100);
+    @primaryColors20: mix(hsl(@huePrimary, @saturationPrimary, 20%), transparent, 100);
+    @primaryColors50: mix(hsl(@huePrimary, @saturationPrimary, 30%), transparent, 100);
+    @primaryColors100: mix(hsl(@huePrimary, @saturationPrimary, 40%), transparent, 100);
+    @primaryColors200: mix(hsl(@huePrimary, @saturationPrimary, 50%), transparent, 100);
+    @primaryColors300: mix(hsl(@huePrimary, @saturationPrimary, 60%), transparent, 100);
+    @primaryColors400: mix(hsl(@huePrimary, @saturationPrimary, 70%), transparent, 100);
+    @primaryColors500: mix(hsl(@huePrimary, @saturationPrimary, 80%), transparent, 100);
+    @primaryColors600: mix(hsl(@huePrimary, @saturationPrimary, 90%), transparent, 100);
+    @primaryColors700: mix(hsl(@huePrimary, @saturationPrimary, 95%), transparent, 100);
+    @primaryColors800: mix(hsl(@huePrimary, @saturationPrimary, 98%), transparent, 100);
+    @primaryColors900: mix(hsl(@huePrimary, @saturationPrimary, 99%), transparent, 100);
+}
+
+.generate-primary-colors();

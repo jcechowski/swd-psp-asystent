@@ -1,0 +1,307 @@
+@keyframes splide-loading {
+    0% {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(1turn);
+    }
+}
+.splide__track--draggable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.splide__track--fade > .splide__list > .splide__slide {
+    margin: 0 !important;
+    opacity: 0;
+    z-index: 0;
+}
+.splide__track--fade > .splide__list > .splide__slide.is-active {
+    opacity: 1;
+    z-index: 1;
+}
+.splide--rtl {
+    direction: rtl;
+}
+.splide__track--ttb > .splide__list {
+    display: block;
+}
+.splide__container {
+    box-sizing: border-box;
+    position: relative;
+}
+.splide__list {
+    backface-visibility: hidden;
+    display: -ms-flexbox;
+    display: flex;
+    height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.splide__arrow[disabled] {
+    display: none;
+}
+.splide.is-initialized:not(.is-active) .splide__list {
+    display: block;
+}
+.splide__pagination {
+    -ms-flex-align: center;
+    align-items: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-pack: center;
+    justify-content: center;
+    pointer-events: none;
+    .pixel-to-rem(gap, @splidePaginationGap);
+    .pixel-to-rem(margin-top, @splidePaginationMarginTopSmall);
+
+    @media (min-width: @breakPointSm) {
+        .pixel-to-rem(margin-top, @splidePaginationMarginTop);
+    }
+}
+.splide__pagination li {
+    display: inline-block;
+    line-height: 1;
+    list-style-type: none;
+    margin: 0;
+    pointer-events: auto;
+}
+.splide__progress__bar {
+    width: 0;
+}
+.splide {
+    position: relative;
+    // visibility: hidden;
+}
+.splide.is-initialized,
+.splide.is-rendered {
+    visibility: visible;
+}
+.splide__slide {
+    backface-visibility: hidden;
+    box-sizing: border-box;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    list-style-type: none !important;
+    margin: 0;
+    position: relative;
+}
+.splide__slide img {
+    vertical-align: bottom;
+}
+.splide__spinner {
+    animation: splide-loading 1s linear infinite;
+    border: 2px solid #999;
+    border-left-color: transparent;
+    border-radius: 50%;
+    bottom: 0;
+    contain: strict;
+    display: inline-block;
+    height: 20px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+}
+.splide__sr {
+    clip: rect(0 0 0 0);
+    border: 0;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.splide__toggle:not(.is-active) .splide__toggle__play {
+    display: flex;
+}
+.splide__toggle.is-active .splide__toggle__play,
+.splide__toggle__pause {
+    display: none;
+}
+.splide__toggle.is-active .splide__toggle__pause {
+    display: flex;
+}
+.splide__track {
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+    width: 100%;
+}
+.splide__pagination__page {
+    background: @splidePaginationDotBgColor;
+    border: 0;
+    border-radius: @splidePaginationDotBorderRadius;
+    display: inline-block;
+    padding: 0;
+    position: relative;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    width: @splidePaginationDotSize;
+    height: @splidePaginationDotSize;
+    cursor: pointer;
+}
+
+.splide__pagination__page.is-active {
+    background: @splidePaginationDotActiveBgColor;
+    cursor: default;
+}
+
+.splide {
+    &__arrow, &__toggle {
+        transition: box-shadow 0.2s ease-in;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .pixel-to-rem(width, @splideArrowSizeSmall);
+        .pixel-to-rem(height, @splideArrowSizeSmall);
+        background: @splideArrowBackgroundColor;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: @splideArrowHoverBoxShadow;
+        }
+
+        @media (min-width: @breakPointSm) {
+            .pixel-to-rem(width, @splideArrowSize);
+            .pixel-to-rem(height, @splideArrowSize);
+        }
+    }
+
+    &__slide-number {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        background-color: @splideSliderNumberBgColor;
+        padding: @splideSliderNumberPadding;
+        border-radius: @splideSliderBorderRadius;
+        color: @splideSliderColor;
+        font-weight: @splideSliderFontWeight;
+        .font-size(@fontSizeInPxS);
+        display: none;
+    }
+}
+
+.slider {
+    @media (min-width: @breakPointSm) {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    &__content {
+        width: 100%;
+        position: relative;
+
+        &_with-arrows {
+            &-desktop {
+                @media screen and (min-width: (@breakPointXl - 1)) {
+                    padding: 0 3.5rem;
+                }
+
+                &-below {
+                    display: flex;
+                    flex-direction: column;
+
+                    @media screen and (min-width: (@breakPointXl - 1)) {
+                        padding: 0;
+                    }
+                }
+            }
+    
+            &-laptop {
+                @media screen and (min-width: (@breakPointMd - 1)) and (max-width: @breakPointXl) {
+                    padding: 0 3.5rem;
+                }
+
+                &-below {
+                    display: flex;
+                    flex-direction: column;
+
+                    @media screen and (min-width: (@breakPointMd - 1)) and (max-width: @breakPointXl) {
+                        padding: 0;
+                    }
+                }
+            }
+    
+            &-tablet {
+                @media screen and (min-width: (@breakPointSm - 1)) and (max-width: @breakPointMd) {
+                    padding: 0 3.5rem;
+                }
+
+                &-below {
+                    display: flex;
+                    flex-direction: column;
+
+                    @media screen and (min-width: (@breakPointSm - 1)) and (max-width: @breakPointMd) {
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .splide__arrows {
+        &-position-container {
+            display: flex;
+            justify-content: end;
+            column-gap: @globalSpacing;
+            margin-top: @globalSpacing * 2;
+        }
+
+        @media (max-width: (@breakPointSm - 1)) {
+            position: relative;
+            .pixel-to-rem(width, @splideArrowsContainerWidthMobile);
+            .pixel-to-rem(height, @splideArrowSizeSmall);
+            margin-bottom: @globalSpacing;
+            margin-left: auto;
+            margin-top: @globalSpacing;
+        }
+    }
+
+    &_has-pagination {
+        @media (min-width: @breakPointSm) {
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+}
+
+@media (max-width: (@breakPointXs - 1)) {
+    .splide {
+        &__slide-number {
+            display: block;
+        }
+    }
+}
+
+@media (max-width: (@breakPointMd)) {
+    .splide:not(.is-active) {
+        .splide__track {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+}
+
+.splide:not(.is-active):not(.product-gallery__slider) {
+    .loader-mask();
+
+    .splide__slide {
+        flex-shrink: 1;
+
+        &:not(:first-child) {
+            display: none;
+        }
+    }
+}
+
+h-slider {
+    display: block;
+}

@@ -1,0 +1,46 @@
+.product-price {
+    &__base-price {
+        display: flex;
+        align-items: flex-end;
+        .pixel-to-rem(gap, @gridGutter * 0.25);
+        .pixel-to-rem(margin-bottom, @productPriceBasePriceMarginBottom);
+    }
+
+    &__final-price {
+        display: flex;
+        .pixel-to-rem(gap, @gridGutter * 0.25);
+    }
+
+    &__unit-price {
+        display: flex;
+        margin-bottom: @globalSpacing;
+    }
+
+    &__regular-price {
+        display: flex;
+        .pixel-to-rem(gap, @gridGutter * 0.25);
+        margin-top: @globalSpacing;
+    }
+
+    &__lowest-historical-price {
+        display: flex;
+        .pixel-to-rem(gap, @gridGutter * 0.25);
+    }
+
+    &__shipping-cost-info {
+        color: @productPriceRowInfoColor;
+        margin-top: @globalSpacing;
+    }
+
+    &__special-offer-duration {
+        margin-bottom: @globalSpacing;
+    }
+
+    &__price-outside-loyalty-program {
+        margin-top: @globalSpacing;
+
+        &-link {
+            display: block;
+        }
+    }
+}

@@ -1,0 +1,41 @@
+.address-card {
+    border: 1px solid @neutralColors300;
+    padding: @globalSpacing;
+    border-radius: 4px;
+    font-style: normal;
+    .size-s();
+}
+
+.basket-addresses {
+    &__form-teaser {
+        position: relative;
+        overflow: hidden;
+        padding-left: @globalSpacing;
+        padding-right: @globalSpacing;
+
+        &::after {
+            content: '';
+            display: block;
+            box-shadow: 0px 0px 10px 1px @neutralColors600;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        &-blur {
+            filter: blur(1px);
+            height: 250px;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        &-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+        }
+    }
+}

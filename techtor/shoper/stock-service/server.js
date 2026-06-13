@@ -19,18 +19,32 @@ app.use(express.json());
 // ── Snippet hash — automatyczne wersjonowanie ──────────────────────────────
 let snippetHash = '';
 let snippetContent = '';
+let widgetHash = '';
+let widgetContent = '';
+
 function loadSnippet() {
   try {
     snippetContent = fs.readFileSync(path.join(__dirname, 'public', 'snippet.js'), 'utf-8');
     snippetHash = crypto.createHash('md5').update(snippetContent).digest('hex').slice(0, 8);
-    console.log(`Snippet loaded: hash=${snippetHash}, size=${snippetContent.length}B`);
   } catch (e) {
     console.error('Snippet load error:', e.message);
   }
 }
+
+function loadWidget() {
+  try {
+    widgetContent = fs.readFileSync(path.join(__dirname, 'public', 'widget.js'), 'utf-8');
+    widgetHash = crypto.createHash('md5').update(widgetContent).digest('hex').slice(0, 8);
+  } catch (e) {
+    console.error('Widget load error:', e.message);
+  }
+}
+
 loadSnippet();
-// Reload co 60s (łapie zmiany z volume mount)
-setInterval(loadSnippet, 60000);
+loadWidget();
+console.log(`Snippet: hash=${snippetHash}, size=${snippetContent.length}B | Widget: hash=${widgetHash}, size=${widgetContent.length}B`);
+// Reload co 60s
+setInterval(() => { loadSnippet(); loadWidget(); }, 60000);
 
 // ── CORS ────────────────────────────────────────────────────────────────────
 app.options('*', (req, res) => {
@@ -66,6 +80,19 @@ app.get(/^\/(v\d+\/)?snippet\.js$/, cors, (req, res) => {
   res.set('ETag', `"${snippetHash}"`);
   loadSnippet();
   res.send(snippetContent);
+});
+
+// ── Widget v3 — natywny Event Bus (zastępuje snippet.js) ──────────────────────
+app.get(/^\/(v\d+\/)?widget\.js$/, cors, (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('CDN-Cache-Control', 'no-store');
+  res.set('Cloudflare-CDN-Cache-Control', 'no-store');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  res.set('Content-Type', 'application/javascript; charset=utf-8');
+  res.set('ETag', `"${widgetHash}"`);
+  loadWidget();
+  res.send(widgetContent);
 });
 
 // ── Loader HTML — iframe w opisie produktu ładuje snippet na parent ──────────

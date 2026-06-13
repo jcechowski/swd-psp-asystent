@@ -1,0 +1,29 @@
+.blik-modal {
+    &__input-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: @globalSpacing;
+        background-color: @blikModalInputContainerBg;
+        padding: @globalSpacing;
+        margin-bottom: @globalSpacing;
+    }
+
+    &__input {
+        border: none;
+        background-color: inherit !important;
+
+        input {
+            padding: 0;
+            background-color: transparent !important;
+            border:none;
+            margin-bottom: 0;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 10px;
+            text-align: center;
+            width: 150px;
+        }
+    }
+}

@@ -1,0 +1,73 @@
+.basket-module {
+    width: 100%;
+    display: block;
+    border: 1px solid @neutralColors200;
+    background-color: @globalBodyBackgroundColor;
+    border-radius: 5px;
+
+    &_processing {
+        .loader-mask();
+    }
+
+    &_error {
+        border-color: @errorColors500;
+    }
+
+    &__content {
+        padding: @globalSpacing;
+
+        &_secondary {
+            background-color: @neutralColors50;
+        }
+
+        &_tertiary {
+            background-color: @neutralColors50;
+            padding: @globalSpacing * 0.5 @globalSpacing;
+            color: @globalFontColor;
+        }
+
+        &_quaternary {
+            @media screen and (max-width: @breakPointSm) {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        &_pt-0 {
+            padding-top: 0;
+        }
+
+        &_pb-0 {
+            padding-bottom: 0;
+        }
+
+        &_pl-0 {
+            padding-left: 0;
+        }
+
+        &_pr-0 {
+            padding-right: 0;
+        }
+    }
+}
+
+main.context-25,
+main.context-26,
+main.context-27,
+main.context-28,
+main.context-30 {
+    //background-color: @neutralColors100;
+    padding-top: @globalSpacing * 2;
+    padding-bottom: @globalSpacing * 2;
+}
+
+@media (max-width: @breakPointLg) {
+    main.context-25,
+    main.context-26,
+    main.context-27,
+    main.context-28,
+    main.context-30 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

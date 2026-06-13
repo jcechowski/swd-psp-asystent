@@ -1,0 +1,17 @@
+.overlay {
+    position: relative;
+    z-index: 0;
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: var(--overlay-color);
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}

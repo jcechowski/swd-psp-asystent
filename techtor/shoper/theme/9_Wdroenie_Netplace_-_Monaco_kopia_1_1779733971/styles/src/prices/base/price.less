@@ -1,0 +1,115 @@
+.price {
+    .font-size(@priceFontSize);
+    .line-height(@priceLineHeight);
+
+    display: inline;
+    color: @priceColor;
+    align-items: center;
+
+    &_l {
+        .font-size(@priceFontSizeL);
+    }
+
+    &_m {
+        .font-size(@priceFontSizeM);
+    }
+
+    &_s {
+        .font-size(@priceFontSizeS);
+    }
+
+    &_xs {
+        .font-size(@priceFontSizeXs);
+    }
+
+    &__value {
+        &_special {
+            color: @specialPriceColor;
+        }
+
+        &_secondary {
+            color: @secondaryPriceColor;
+        }
+
+        &_inactive {
+            text-decoration: line-through;
+        }
+
+        &_bold {
+            font-weight: @priceFontWeight;
+        }
+    }
+
+    &__special-price-icon {
+        background-color: @specialPriceColor;
+        stroke: #fff;
+        color: #fff;
+        padding: 2px;
+        border-radius: 3px;
+        width: 19px;
+        height: 19px;
+    }
+}
+
+.vat-info {
+    color: @priceVatInfoColor;
+    .font-size(@priceVatInfoDesktopFontSize);
+    line-height: 1;
+    white-space: nowrap;
+
+    &_xs {
+        .font-size(@priceFontSizeXs);
+    }
+}
+
+.price-list {
+    display: flex;
+    flex-direction: column;
+    gap: @globalSpacing * 0.8;
+    margin-bottom: @globalSpacing;
+
+    &_s {
+        .size-s();
+    }
+
+    &_secondary {
+        margin-bottom: 0;
+        .padding-to-unit(@priceListSecondaryPadding, 0, @priceListSecondaryPadding, @priceListSecondaryPadding);
+        border-left: @priceListSecondaryBorderWidth @priceListSecondaryBorderStyle @priceListSecondaryBorderColor;
+    }
+
+    &__item {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        &_zebra {
+            padding-left: @globalSpacing * 0.4;
+            padding-right: @globalSpacing * 0.4;
+
+            &:nth-child(odd) {
+                background-color: @neutralColors100;
+                padding-top: @globalSpacing * 0.8;
+                padding-bottom: @globalSpacing * 0.8;
+            }
+        }
+
+        &_summary {
+            padding-left: @globalSpacing * 0.4;
+            padding-right: @globalSpacing * 0.4;
+            padding-top: @globalSpacing * 0.8;
+            align-self: flex-end;
+            max-width: fit-content;
+            align-items: baseline;
+            border-top: 1px solid @neutralColors200;
+        }
+    }
+
+    &__value {
+        text-align: right;
+
+        &_secondary {
+            flex: 1;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+p {
+    &:not(:last-child) {
+        margin-bottom: @paragraphMarginBottom;
+    }
+}
+
+.p {
+    &:not(:last-child) {
+        margin-bottom: @paragraphMarginBottom;
+    }
+
+    .size-m();
+
+    &_xs {
+        .size-xs();
+    }
+
+    &_s {
+        .size-s();
+    }
+
+    &_l {
+        .size-l();
+    }
+
+    &_xl {
+        .size-xl();
+    }
+
+    &_no-margin {
+        margin-bottom: 0;
+
+        &:not(:last-child) {
+            margin-bottom: 0;
+        }
+    }
+
+    &_overflow-wrap {
+        &-anywhere {
+            overflow-wrap: anywhere;
+        }
+    }
+}

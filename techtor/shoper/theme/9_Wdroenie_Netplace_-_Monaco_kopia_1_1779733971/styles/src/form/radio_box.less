@@ -1,0 +1,109 @@
+.radio-box {
+    width: fit-content;
+    position: relative;
+    border-radius: @radioBoxBorderRadius;
+    .size-s();
+
+    &__label {
+        min-height: @radioBoxMinHeight;
+        min-width: @radioBoxMinHeight;
+        border-radius: @radioBoxBorderRadius;
+        border: @radioBoxBorder;
+        background-color: @radioBoxBackgroundColor;
+
+        display: block;
+
+        .pixel-to-rem(padding-top, @radioBoxLabelPaddingVertical);
+        .pixel-to-rem(padding-right, @radioBoxLabelPaddingHorizontal);
+        .pixel-to-rem(padding-bottom, @radioBoxLabelPaddingVertical);
+        .pixel-to-rem(padding-left, @radioBoxLabelPaddingHorizontal);
+
+        color: @radioBoxLabelColor;
+        word-break: break-word;
+        text-align: center;
+        cursor: pointer;
+
+        &::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        &:hover {
+            background-color: @radioBoxBackgroundColorHover;
+        }
+    }
+
+    &:focus-within {
+        .radio-box__label {
+            outline: 2px solid @radioOutlineColorFocus;
+            outline-offset: 0.125rem;
+        }
+    }
+
+    &__input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        user-select: none;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
+
+    &__input:checked + .radio-box__label {
+        background-color: @radioBoxSelectedBgColor;
+        border-radius: @radioBoxBorderRadius;
+        border: @radioBoxSelectedBorder;
+
+        .weight-semibold();
+
+        &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: @radioBoxSelectedBadgeTop;
+            right: @radioBoxSelectedBadgeRight;
+            width: @radioBoxSelectedBadgeSize;
+            height: @radioBoxSelectedBadgeSize;
+            background-color: @radioBoxSelectedBadgeBgColor;
+            background-image: @radioBoxSelectedBadgeIconUrl;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 100%;
+            z-index: 1;
+        }
+    }
+
+    &_disabled {
+        .radio-box__label {
+            background-color: @radioBoxDisabledBgColor;
+            color: @radioBoxDisabledColor;
+
+            &::after {
+                content: '';
+                background-image: @radioBoxDisabledCrossLine;
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .radio-box__input:checked + .radio-box__label {
+            background-color: @radioBoxDisabledBgColor;
+            border-color: @radioBoxDisabledSelectedColor;
+
+            &::before {
+                background-image: @colorItemSelectedDisabledIconUrl;
+            }
+
+            &::after {
+                background-image: @radioBoxDisabledSelectedCrossLine;
+            }
+        }
+    }
+}

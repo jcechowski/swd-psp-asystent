@@ -1,0 +1,42 @@
+.file-box {
+    .box();
+    transition: border-color 0.2s ease-in;
+
+    &__header {
+        .padding-to-unit(@fileBoxHeaderPaddingVertical, @fileBoxHeaderPaddingHorizontal, @fileBoxHeaderPaddingVertical, @fileBoxHeaderPaddingHorizontal);
+        display: flex;
+        align-items: center;
+        text-decoration: @fileBoxHeaderTextDecoration;
+        transition: background-color 0.2s ease-in;
+
+        &:hover {
+            background-color: @fileBoxHeaderBackgroundColorHover;
+            border-radius: @fileBoxHeaderBorderRadiusHover;
+            text-decoration: @fileBoxHeaderTextDecorationHover;
+            cursor: pointer;
+        }
+    }
+
+    &__title {
+        .box-header();
+        .padding-to-unit(0, @fileBoxTitlePaddingHorizontal, 0, @fileBoxTitlePaddingHorizontal);
+    }
+
+    &__download-icon {
+        stroke: @fileBoxDownloadIconStroke;
+    }
+
+    &__size {
+        .weight-normal();
+        color: @fileBoxSizeColor;
+    }
+
+    &__description {
+        .box-content();
+        .margin-top-to-unit(@fileBoxDescriptionMarginTop);
+    }
+
+    &:hover {
+        border-color: @fileBoxBorderColorHover;
+    }
+}

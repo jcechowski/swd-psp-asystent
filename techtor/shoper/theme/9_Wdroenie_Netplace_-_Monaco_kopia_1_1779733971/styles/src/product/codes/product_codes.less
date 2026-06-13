@@ -1,0 +1,16 @@
+.product-codes {
+    .size-xs();
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    .pixel-to-rem(column-gap, @productCodesColumnGap);
+    width: fit-content;
+}
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .product-codes {
+        &__code {
+            display: block;
+        }
+    }
+}

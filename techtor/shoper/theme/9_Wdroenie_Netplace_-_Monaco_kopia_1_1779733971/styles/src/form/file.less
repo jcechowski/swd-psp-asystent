@@ -1,0 +1,28 @@
+.file {
+    display: inline-flex;
+    align-items: center;
+    .pixel-to-rem(gap, @fileGutter);
+
+    &__name {
+        .file-picker-button-appearance-with-border();
+        color: @fileColor;
+
+        .file-picker_has-value & {
+            box-shadow: @fileBoxShadowActive;
+        }
+    }
+
+    &__remove-button {
+        .file-picker-button-appearance();
+        color: @fileRemoveButtonColor;
+        cursor: pointer;
+    }
+
+    .file-picker-icon {
+        .pixel-to-rem(margin-right, @fileRemoveButtonIconMargin);
+
+        .icon {
+            stroke: @fileRemoveButtonIconColor;
+        }
+    }
+}

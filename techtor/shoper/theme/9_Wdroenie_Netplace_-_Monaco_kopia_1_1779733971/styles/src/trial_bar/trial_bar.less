@@ -1,0 +1,32 @@
+.trial-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-weight: normal;
+    background: @trialBarBackgroundColor;
+    color: @trialBarFontColor;
+    .font-size(@trialBarFontSize);
+    .pixel-to-rem(height, @trialBarHeight);
+    .line-height(@trialBarLineHeight);
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    
+    @media (max-width: @breakPointXs) {
+        gap: @trialBarGapMobile;
+        top:0;
+    }
+    
+    &__link{
+        .link-decorate-appearance(@trialBarFontColor, @trialBarFontColor, @trialBarFontColor);
+    }
+    
+    &__modal{
+        .line-height(@trialBarLineHeight);
+        
+        &-header{
+            align-items: start;
+        }
+    }
+}

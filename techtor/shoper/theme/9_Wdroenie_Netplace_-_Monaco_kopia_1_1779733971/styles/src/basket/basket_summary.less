@@ -1,0 +1,57 @@
+.basket-summary {
+    &__coupon {
+        &:not(:last-child) {
+            margin-bottom: @globalSpacing;
+        }
+
+        &-code {
+            color: @globalFontColor;
+            background-color: @neutralColors100;
+        }
+    }
+
+    &__box {
+        &:not(:last-child) {
+            margin-bottom: @globalSpacing * 2;
+        }
+
+        width: 100%;
+        background-color: @neutralColors50;
+        padding: @globalSpacing;
+
+        &-header {
+            display: flex;
+            align-items: center;
+            column-gap: @globalSpacing * 0.5;
+            margin-bottom: @globalSpacing;
+            .weight-semibold();
+        }
+    }
+
+    &__payments-list {
+        display: grid;
+        row-gap: @globalSpacing * 0.25;
+    }
+
+    &__payment-method {
+        .weight-semibold();
+    }
+}
+
+[data-module-name='basket_summary_checkout'] {
+    position: sticky;
+    top: @globalSpacing;
+    z-index: 1;
+}
+
+[data-module-name='basket_done'] button[type='submit'].important,
+[data-module-name='basket_done'] input[type='button']#submit-button,
+[data-module-name='customer_panel'] button[type='submit'].important {
+    .btn();
+    .btn-decorate-appearance(@btnBgColorPrimary, @btnColorPrimary);
+
+    &:hover {
+        background-color: @btnBgColorPrimaryHover;
+        color: @btnColorPrimaryHover;
+    }
+}

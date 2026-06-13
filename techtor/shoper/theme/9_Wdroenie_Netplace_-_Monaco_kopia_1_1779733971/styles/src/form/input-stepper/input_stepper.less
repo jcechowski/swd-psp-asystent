@@ -1,0 +1,59 @@
+.input-stepper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    &__value {
+        border-right: none;
+        color: @productAmountFontColor;
+        .pixel-to-rem(max-width, @inputStepperDisplayValueMaxWidth);
+
+        &_input {
+            text-align: center;
+            -moz-appearance: textfield;
+
+            .pixel-to-rem(margin-top, @inputStepperDisplayValueInputMarginTop);
+            .pixel-to-rem(width, @inputStepperDisplayValueInputWidth);
+            .padding-to-unit(
+                @inputStepperDisplayValuePaddingVertical, 
+                @inputStepperDisplayValuePaddingHorizontal,
+                @inputStepperDisplayValuePaddingVertical, 
+                @inputStepperDisplayValuePaddingHorizontal
+            );
+
+            background-color: @inputStepperDisplayValueInputBackgroundColor;
+
+            &::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+            }
+
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    &__display-container {
+        border: @inputStepperAdditionalContentBorder;
+        background-color: @inputStepperDisplayContainerBgColor;
+        display: flex;
+        align-items: center;
+    }
+
+    &__additional-content {
+        color: @productAmountFontColor;
+        border-left: none;
+
+        .pixel-to-rem(max-width, @inputStepperAdditionalContentMaxWidth);
+        .padding-to-unit(
+            0,
+            @inputStepperAdditionalContentPaddingHorizontal,
+            0,
+            0
+        );
+    }
+}

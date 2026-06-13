@@ -1,0 +1,57 @@
+.grid {
+    &__col {
+        display: grid;
+        align-content: start;
+        max-width: 100%;
+        grid-template-columns: minmax(0, 1fr);
+
+        .pixel-to-rem(padding-left, @gridGutter);
+        .pixel-to-rem(padding-right, @gridGutter);
+
+        &_text-color {
+            *:not(a, button, .btn, .js__grid-placeholder, .ribbon, .price__value_special, .resetcss *, .resetcss) {
+                color: var(--text-color);
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            [role='heading'] {
+                color: var(--heading-color);
+                *:not(a, button, .btn, .js__grid-placeholder, .ribbon, .price__value_special, .resetcss *, .resetcss) {
+                    color: var(--heading-color);
+                }
+            }
+
+            .js__grid-placeholder,
+            .js__grid-placeholder * {
+                color: var(--a-neutral-900);
+            }
+        }
+    }
+}
+
+.generate-col-alignments(@breakpointXsName);
+
+@media screen and (min-width: @breakPointXs) {
+    .generate-col-alignments(@breakpointSmName);
+}
+
+@media screen and (min-width: @breakPointSm) {
+    .generate-col-alignments(@breakpointMdName);
+}
+
+@media screen and (min-width: @breakPointMd) {
+    .generate-col-alignments(@breakpointLgName);
+}
+
+@media screen and (min-width: @breakPointLg) {
+    .generate-col-alignments(@breakpointXlName);
+}
+
+@media screen and (min-width: @breakPointXl) {
+    .generate-col-alignments(@breakpointXxlName);
+}

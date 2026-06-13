@@ -1,0 +1,90 @@
+.grid {
+    display: flex;
+    flex-direction: column;
+    max-width: ~'calc(@{gridContainerWidth} + (2 * @{gridGutterRem}))';
+    width: 100%;
+    margin: 0 auto;
+
+    &_full {
+        max-width: 100dvw;
+        padding-left: 0;
+        padding-right: 0;
+
+        & > .grid__row {
+            margin-left: 0;
+            margin-right: 0;
+
+            & > .grid__col {
+                &:first-child {
+                    padding-left: @gridFullFirstColPaddingLeft;
+                }
+
+                &:last-child {
+                    padding-right: @gridFullLastColPaddingRight;
+                }
+            }
+        }
+
+        &-container-width {
+            & > .grid__row {
+                width: 100%;
+                max-width: @gridContainerWidth;
+                min-width: auto;
+            }
+        }
+    }
+
+    &_l {
+        max-width: @gridContainerWidthL;
+    }
+
+    &_s {
+        max-width: @gridContainerWidthS;
+    }
+
+    &_text-color {
+        *:not(a, button, .btn, .js__grid-placeholder, .ribbon, .price__value_special, .resetcss *, .resetcss) {
+            color: var(--text-color);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        [role='heading'] {
+            color: var(--heading-color);
+            *:not(a, button, .btn, .js__grid-placeholder, .ribbon, .price__value_special, .resetcss *, .resetcss) {
+                color: var(--heading-color);
+            }
+        }
+
+        .js__grid-placeholder,
+        .js__grid-placeholder * {
+            color: var(--a-neutral-900);
+        }
+    }
+}
+
+.generate-container-alignments(@breakpointXsName);
+
+@media screen and (min-width: @breakPointXs) {
+    .generate-container-alignments(@breakpointSmName);
+}
+
+@media screen and (min-width: @breakPointSm) {
+    .generate-container-alignments(@breakpointMdName);
+}
+
+@media screen and (min-width: @breakPointMd) {
+    .generate-container-alignments(@breakpointLgName);
+}
+
+@media screen and (min-width: @breakPointLg) {
+    .generate-container-alignments(@breakpointXlName);
+}
+
+@media screen and (min-width: @breakPointXl) {
+    .generate-container-alignments(@breakpointXxlName);
+}

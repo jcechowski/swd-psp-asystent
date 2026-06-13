@@ -1,0 +1,33 @@
+.generate-borders(@width: 1px, @style: solid,  @color: #000, @sides: all) {
+    .border {
+        &-all {
+            border: @width @style @color;
+        }
+        &-top {
+            border: none;
+            border-top: @width @style @color;
+        }
+        &-bottom {
+            border: none;
+            border-bottom: @width @style @color;
+        }
+        &-left {
+            border: none;
+            border-left: @width @style @color;
+        }
+        &-right {
+            border: none;
+            border-right: @width @style @color;
+        }
+        &-left-right {
+            border: none;
+            border-left: @width @style @color;
+            border-right: @width @style @color;
+        }
+        &-top-bottom {
+            border: none;
+            border-top: @width @style @color;
+            border-bottom: @width @style @color;
+        }
+    }
+}

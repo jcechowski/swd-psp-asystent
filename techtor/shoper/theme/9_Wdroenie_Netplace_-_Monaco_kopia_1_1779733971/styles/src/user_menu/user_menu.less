@@ -1,0 +1,74 @@
+.user-menu {
+    &__close {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__user {
+        display: flex;
+        align-items: center;
+        .pixel-to-rem(gap, @userMenuUserGapInPx);
+
+        &-icon {
+            .pixel-to-rem(width, @userMenuUserIconSizeInPx);
+            .pixel-to-rem(height, @userMenuUserIconSizeInPx);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background-color: @userMenuUserIconBgColor;
+            border-radius: @userMenuUserIconBorderRadius;
+
+            color: @userMenuUserIconColor;
+            .font-size(@userMenuUserIconFontSizeInPx);
+            font-weight: @userMenuUserIconFontWeight;
+        }
+
+        &-text {
+            .font-size(@userMenuUserTextFontSizeInPx);
+            .line-height(@userMenuUserTextLineHeightInPx);
+
+            &_secondary {
+                font-weight: @userMenuUserTextSecondaryFontWeight;
+            }
+        }
+    }
+
+    &__list-content {
+        display: flex;
+        flex-direction: column;
+        gap: @userMenuListGap;
+    }
+
+    &__link {
+        .font-size(@userMenuLinkFontSizeInPx);
+        .line-height(@userMenuLinkLineHeightInPx);
+        cursor: pointer;
+        color: @userMenuLinkColor;
+        text-decoration: @userMenuLinkTextDecoration;
+
+        &:hover {
+            color: @userMenuLinkColorHover;
+            text-decoration: @userMenuLinkTextDecorationHover;
+
+            .user-menu__user-text{
+                text-decoration: @userMenuLinkTextDecorationHover;
+            }
+        }
+
+        &_no-underline {
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        &_secondary {
+            color: @userMenuLinkColorSecondary;
+
+            &:hover {
+                color: @userMenuLinkColorSecondaryHover;
+            }
+        }
+    }
+}

@@ -1,0 +1,61 @@
+.language-and-currency {
+    width: fit-content;
+    max-width: @languageAndCurrencyMaxWidth;
+
+    &__modal {
+        &-body {
+            display: flex;
+            flex-direction: column;
+            .pixel-to-rem(padding-bottom, @languageAndCurrencyModalBodyPaddingBottom);
+
+            > div .radio-box-group {
+                .pixel-to-rem(margin-bottom, @languageAndCurrencyModalBodyRowGap);
+            }
+
+            > div:last-of-type .radio-box-group {
+                margin-bottom: 0;
+            }
+
+            .helper {
+                .pixel-to-rem(margin-top, @languageAndCurrencyModalBodyHelperMarginTop);
+            }
+        }
+
+        &-opener {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+
+            &_horizontal {
+                column-gap: @languageAndCurrencyModalFormOpenerHorizontalColumnGap;
+                flex-direction: row;
+            }
+        }
+    }
+
+    &__label {
+        display: flex;
+    }
+
+    &__flag {
+        .pixel-to-rem(width, @languageAndCurrencyFlagWidth);
+        .pixel-to-rem(height, @languageAndCurrencyFlagHeight);
+
+        border-radius: @languageAndCurrencyFlagBorderRadius;
+    }
+
+    &__icon {
+        stroke: @languageAndCurrencyIconStroke;
+    }
+}
+
+@media (min-width: @breakPointXs) {
+    .language-and-currency {
+        &__modal {
+            &-header {
+                .font-size(@languageAndCurrencyModalHeaderFontSize);
+            }
+        }
+    }
+}

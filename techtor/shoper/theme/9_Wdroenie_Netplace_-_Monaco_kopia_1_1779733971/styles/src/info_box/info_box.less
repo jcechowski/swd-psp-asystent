@@ -1,0 +1,91 @@
+.info-box {
+    min-width: @infoBoxMinWidth;
+    border: @infoBoxBorder;
+    border-radius: @infoBoxBorderRadius;
+    background-color: @infoBoxBgColor;
+    color: @infoBoxColor;
+    padding: @infoBoxPadding;
+    text-align: center;
+
+    &_secondary {
+        border: @infoBoxBorderSecondary;
+        background-color: @infoBoxBgColorSecondary;
+        color: @infoBoxColorSecondary;
+    }
+
+    &_s {
+        padding: @infoBoxSPaddingVertical @infoBoxSPaddingHorizontal;
+    }
+
+    &_m {
+        padding: @infoBoxMPaddingVertical @infoBoxMPaddingHorizontal;
+    }
+
+    &_l {
+        padding: @infoBoxLPaddingVertical @infoBoxLPaddingHorizontal;
+    }
+
+    &_no-vertical-padding {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    &_no-padding {
+        padding: 0;
+    }
+
+    &_full-width {
+        width: 100%;
+    }
+
+    &_full-height {
+        height: 100%;
+    }
+
+    &__header {
+        .font-size(@infoBoxHeaderFontSize);
+        .weight-semibold();
+        margin-bottom: @infoBoxHeaderMarginBottom;
+
+        &_secondary {
+            display: flex;
+            align-items: center;
+            gap: @globalSpacing / 2;
+        }
+    }
+
+    &__content {
+        .font-size(@infoBoxContentFontSize);
+
+        &_flex {
+            display: flex;
+            gap: @infoBoxFlexGap;
+        }
+    }
+}
+
+@media screen and (max-width: @breakPointXs) {
+    .info-box {
+        min-width: unset;
+
+        &_l {
+            padding: @infoBoxLPaddingVerticalMobile @infoBoxLPaddingHorizontalMobile;
+        }
+
+        &_full-width-mobile {
+            width: ~"calc(100vw - @{infoBoxFullWidthMobileHorizontalSpacing})";
+        }
+
+        &__content {
+            &_flex {
+                flex-direction: column;
+            }
+        }
+
+        &_width {
+            &_l {
+                min-width: @infoBoxMinWidth;
+            }
+        }
+    }
+}

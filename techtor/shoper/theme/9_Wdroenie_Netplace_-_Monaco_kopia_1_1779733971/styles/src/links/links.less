@@ -1,0 +1,106 @@
+a,
+.link {
+    .link-decorate-appearance();
+    text-decoration: underline;
+
+    width: fit-content;
+
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    &_secondary {
+        .link-decorate-appearance(@linkColorSecondary, @linkColorSecondaryHover, @linkColorSecondaryActive);
+    }
+
+    &_regular {
+        .link-decorate-appearance(@linkColorRegular, @linkColorRegularHover, @linkColorRegularActive);
+    }
+
+    &_disabled {
+        .link-decorate-appearance(@linkColorDisabled, @linkColorDisabled, @linkColorDisabled);
+        text-decoration: none;
+        pointer-events: none;
+    }
+
+    &_no-underline {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &.link_secondary {
+            &:hover {
+                color: @linkColorSecondaryNoUnderlineHoverColor;
+            }
+        }
+    }
+
+    &_with-icon {
+        display: inline-flex;
+        align-items: center;
+        column-gap: @globalSpacing * 0.5;
+    }
+
+    &[target='_blank']:not(:has(img)) {
+        &[data-label]::after {
+            content: '' / attr(data-label);
+        }
+
+        &::after {
+            content: '';
+            display: inline-flex;
+            width: 10px;
+            height: 10px;
+            vertical-align: middle;
+            margin-left: 4px;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.969697 0H3.81818V1.09091H1.09091V7.63636H7.63636V4.90909H8.72727V7.75758C8.72727 8.26424 8.33345 8.68339 7.83681 8.72404L7.75758 8.72727H0.969697C0.46303 8.72727 0.0438788 8.33345 0.0032303 7.83681L0 7.75758V0.969697C0 0.46303 0.393818 0.0438788 0.890467 0.0032303L0.969697 0ZM8.72727 0.545455V2.72727C8.72727 3.02852 8.48306 3.27273 8.18182 3.27273C7.90209 3.27273 7.67154 3.06216 7.64003 2.79088L7.63636 2.72727V1.8623L4.74933 4.74933C4.53632 4.96234 4.19096 4.96234 3.97794 4.74933C3.76493 4.53632 3.76493 4.19096 3.97794 3.97794L6.86497 1.09091L6 1.09091C5.69875 1.09091 5.45455 0.846701 5.45455 0.545454C5.45455 0.265726 5.66511 0.0351778 5.93639 0.00366955L6 0H8.18182C8.44541 0 8.66533 0.186972 8.71619 0.435526C8.72346 0.471034 8.72727 0.507799 8.72727 0.545455Z' fill='%23454545'/%3E%3C/svg%3E%0A");
+            mask: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.969697 0H3.81818V1.09091H1.09091V7.63636H7.63636V4.90909H8.72727V7.75758C8.72727 8.26424 8.33345 8.68339 7.83681 8.72404L7.75758 8.72727H0.969697C0.46303 8.72727 0.0438788 8.33345 0.0032303 7.83681L0 7.75758V0.969697C0 0.46303 0.393818 0.0438788 0.890467 0.0032303L0.969697 0ZM8.72727 0.545455V2.72727C8.72727 3.02852 8.48306 3.27273 8.18182 3.27273C7.90209 3.27273 7.67154 3.06216 7.64003 2.79088L7.63636 2.72727V1.8623L4.74933 4.74933C4.53632 4.96234 4.19096 4.96234 3.97794 4.74933C3.76493 4.53632 3.76493 4.19096 3.97794 3.97794L6.86497 1.09091L6 1.09091C5.69875 1.09091 5.45455 0.846701 5.45455 0.545454C5.45455 0.265726 5.66511 0.0351778 5.93639 0.00366955L6 0H8.18182C8.44541 0 8.66533 0.186972 8.71619 0.435526C8.72346 0.471034 8.72727 0.507799 8.72727 0.545455Z' fill='%23454545'/%3E%3C/svg%3E%0A");
+            background-color: currentColor;
+        }
+    }
+
+    &[target='_blank'].btn:not(:has(img)) {
+        &::after {
+            width: 1em;
+            height: 1em;
+            margin-left: 8px;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.969697 0H3.81818V1.09091H1.09091V7.63636H7.63636V4.90909H8.72727V7.75758C8.72727 8.26424 8.33345 8.68339 7.83681 8.72404L7.75758 8.72727H0.969697C0.46303 8.72727 0.0438788 8.33345 0.0032303 7.83681L0 7.75758V0.969697C0 0.46303 0.393818 0.0438788 0.890467 0.0032303L0.969697 0ZM8.72727 0.545455V2.72727C8.72727 3.02852 8.48306 3.27273 8.18182 3.27273C7.90209 3.27273 7.67154 3.06216 7.64003 2.79088L7.63636 2.72727V1.8623L4.74933 4.74933C4.53632 4.96234 4.19096 4.96234 3.97794 4.74933C3.76493 4.53632 3.76493 4.19096 3.97794 3.97794L6.86497 1.09091L6 1.09091C5.69875 1.09091 5.45455 0.846701 5.45455 0.545454C5.45455 0.265726 5.66511 0.0351778 5.93639 0.00366955L6 0H8.18182C8.44541 0 8.66533 0.186972 8.71619 0.435526C8.72346 0.471034 8.72727 0.507799 8.72727 0.545455Z' fill='%23454545'/%3E%3C/svg%3E%0A");
+            mask: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.969697 0H3.81818V1.09091H1.09091V7.63636H7.63636V4.90909H8.72727V7.75758C8.72727 8.26424 8.33345 8.68339 7.83681 8.72404L7.75758 8.72727H0.969697C0.46303 8.72727 0.0438788 8.33345 0.0032303 7.83681L0 7.75758V0.969697C0 0.46303 0.393818 0.0438788 0.890467 0.0032303L0.969697 0ZM8.72727 0.545455V2.72727C8.72727 3.02852 8.48306 3.27273 8.18182 3.27273C7.90209 3.27273 7.67154 3.06216 7.64003 2.79088L7.63636 2.72727V1.8623L4.74933 4.74933C4.53632 4.96234 4.19096 4.96234 3.97794 4.74933C3.76493 4.53632 3.76493 4.19096 3.97794 3.97794L6.86497 1.09091L6 1.09091C5.69875 1.09091 5.45455 0.846701 5.45455 0.545454C5.45455 0.265726 5.66511 0.0351778 5.93639 0.00366955L6 0H8.18182C8.44541 0 8.66533 0.186972 8.71619 0.435526C8.72346 0.471034 8.72727 0.507799 8.72727 0.545455Z' fill='%23454545'/%3E%3C/svg%3E%0A");
+            align-self: center;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-position: center;
+            mask-position: center;
+        }
+    }
+
+    &__skip-link {
+        display: block;
+        position: absolute;
+        top: -10000px;
+
+        background-color: @skipLinkBgColor;
+        color: @skipLinkColor;
+        text-decoration: @skipLinkTextDecoration;
+        font-weight: @skipLinkFontWeight;
+
+        .font-size(@skipLinkFontSizeInPx);
+        .line-height(@skipLinkLineHeightInPx);
+
+        padding: @skipLinkPadding;
+        border: @skipLinkBorder;
+
+        .pixel-to-rem(border-radius, @skipLinkBorderRadius);
+
+        &:focus-within {
+            top: unset;
+            outline: none;
+        }
+    }
+}

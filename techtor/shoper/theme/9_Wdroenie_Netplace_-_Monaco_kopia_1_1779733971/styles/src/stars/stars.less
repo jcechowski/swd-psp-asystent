@@ -1,0 +1,27 @@
+.star-icon {
+    fill: @starEmptyColor;
+
+    &_filled {
+        fill: @starFilledColor;
+    }
+
+    &_active {
+        fill: @starActiveColor;
+    }
+
+    &_hovered {
+        fill: @starHoverColor;
+    }
+
+    &_hoverable {
+        cursor: pointer;
+
+        &:hover {
+            fill: @starHoverColor;
+        }
+    }
+
+    &_disabled {
+        pointer-events: none;
+    }
+}

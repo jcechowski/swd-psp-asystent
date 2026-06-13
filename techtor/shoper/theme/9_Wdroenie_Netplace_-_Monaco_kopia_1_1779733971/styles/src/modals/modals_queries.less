@@ -1,0 +1,19 @@
+@supports (max-height: 1dvh) {
+    .modal__container {
+        max-height: calc(100dvh - 2rem);
+    }
+}
+
+@supports not (max-height: 1dvh) {
+    .modal__container {
+        max-height: calc(100vh - 2rem);
+    }
+}
+
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .modal__container {
+        max-height: 100dvh;
+        height: 100dvh;
+    }
+}

@@ -1,0 +1,61 @@
+.modal-wrapper-top-left () {
+    top: 0;
+    left: 0;
+    transform: translate3d(@modalWrapperMargin, @modalWrapperMargin, 0);
+    max-width: 50%;
+}
+
+.modal-wrapper-top-center () {
+    top: 0;
+    transform: translate3d(-50%, @modalWrapperMargin, 0);
+}
+
+.modal-wrapper-top-right () {
+    top: 0;
+    right: 0;
+    left: initial;
+    transform: translate3d(-@modalWrapperMargin, @modalWrapperMargin, 0);
+    max-width: 50%;
+}
+
+.modal-wrapper-center-left () {
+    left: 0;
+    transform: translate3d(@modalWrapperMargin, -50%, 0);
+    max-width: 50%;
+}
+
+.modal-wrapper-center-center () {
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.modal-wrapper-center-right () {
+    right: 0;
+    left: inherit;
+    transform: translate3d(-@modalWrapperMargin, -50%, 0);
+    max-width: 50%;
+}
+
+.modal-wrapper-bottom-left () {
+    bottom: 0;
+    left: 0;
+    transform: translate3d(@modalWrapperMargin, -@modalWrapperMargin, 0);
+    top: initial;
+    max-width: 50%;
+}
+
+.modal-wrapper-bottom-center () {
+    top: initial;
+    bottom: 0;
+    transform: translate3d(-50%, -@modalWrapperMargin, 0);
+}
+
+.modal-wrapper-bottom-right () {
+    top: initial;
+    right: 0;
+    left: initial;
+    bottom: 0;
+    transform: translate3d(-@modalWrapperMargin, -@modalWrapperMargin, 0);
+    max-width: 50%;
+}

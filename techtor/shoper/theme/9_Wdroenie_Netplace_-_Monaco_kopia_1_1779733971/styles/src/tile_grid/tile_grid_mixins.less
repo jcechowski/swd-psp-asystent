@@ -1,0 +1,18 @@
+.gridTemplate(@numberOfColumns) {
+    grid-template-columns: repeat(@numberOfColumns, 1fr);
+}
+
+.generate-tile-grid(@iterationsNumber, @breakPointName, @iteration: 0) when (@iteration =< @iterationsNumber) {
+    &_@{breakPointName}-@{iteration} {
+        .gridTemplate(@iteration);
+    }
+
+    .generate-tile-grid(@iterationsNumber, @breakPointName, (@iteration + 1));
+}
+
+.special-tile-size(@device, @type, @row, @col) {
+    .special-tile-size-@{device}-@{type} > .@{device}-only {
+        grid-row: span @row;
+        grid-column: span @col;
+    }
+}

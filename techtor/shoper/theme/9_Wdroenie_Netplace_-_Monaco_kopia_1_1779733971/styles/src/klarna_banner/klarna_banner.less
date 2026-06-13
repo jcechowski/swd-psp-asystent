@@ -1,0 +1,27 @@
+.klarna-banner {
+    &__container {
+        container-type: inline-size;
+    }
+
+    &__image {
+        &_mobile {
+            display: none;
+        }
+        &_desktop {
+            display: block;
+        }
+    }
+}
+
+@container (max-width: 320px) {
+    .klarna-banner {
+        &__image {
+            &_mobile {
+                display: block;
+            }
+            &_desktop {
+                display: none;
+            }
+        }
+    }
+}

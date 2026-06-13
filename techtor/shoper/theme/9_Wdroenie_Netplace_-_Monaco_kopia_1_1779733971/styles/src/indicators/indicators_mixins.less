@@ -1,0 +1,21 @@
+.indicator-decorate-size (@fontSize, @paddingT, @paddingR, @paddingB, @paddingL, @lineHeight) {
+    width: fit-content;
+    .font-size(@fontSize);
+    .line-height(@lineHeight);
+    .padding-to-unit(@paddingT, @paddingR, @paddingB, @paddingL);
+}
+
+.indicator-decorate-appearance (@color, @bgColor, @borderColor) {
+    color: @color;
+    background-color: @bgColor;
+    border: @indicatorBorderWidth @indicatorBorderStyle @borderColor;
+}
+
+
+.indicator-decorate-icon (@top, @right, @bottom, @left, @transform) {
+    top: @top;
+    right: @right;
+    bottom: @bottom;
+    left: @left;
+    transform: @transform;
+}

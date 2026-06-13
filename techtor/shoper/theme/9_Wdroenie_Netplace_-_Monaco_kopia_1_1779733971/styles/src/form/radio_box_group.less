@@ -1,0 +1,17 @@
+.radio-box-group {
+    display: flex;
+    gap: @globalSpacing;
+    flex-wrap: wrap;
+
+    &__radio-box {
+        > .radio-box__label {
+            display: flex;
+            align-items: center;
+            column-gap: @globalSpacing * 0.5;
+        }
+    }
+
+    legend {
+        margin-bottom: 1rem;
+    }
+}

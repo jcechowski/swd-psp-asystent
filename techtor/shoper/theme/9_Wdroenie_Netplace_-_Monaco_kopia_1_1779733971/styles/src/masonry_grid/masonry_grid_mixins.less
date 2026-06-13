@@ -1,0 +1,11 @@
+.masonryGridTemplate(@numberOfColumns) {
+    column-count: @numberOfColumns;
+}
+
+.generate-masonry-grid(@iterationsNumber, @breakPointName, @iteration: 0) when (@iteration =< @iterationsNumber) {
+    &_@{breakPointName}-@{iteration} {
+        .masonryGridTemplate(@iteration);
+    }
+
+    .generate-masonry-grid(@iterationsNumber, @breakPointName, (@iteration + 1));
+}

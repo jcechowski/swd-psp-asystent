@@ -1,0 +1,56 @@
+.generate-col(12, xs);
+.generate-order(5, xs);
+
+@media screen and (min-width: @breakPointXs) {
+    .generate-col(12, sm);
+    .generate-order(5, sm);
+}
+
+@media screen and (min-width: @breakPointSm) {
+    .generate-col(12, md);
+    .generate-order(5, md);
+}
+
+@media screen and (min-width: @breakPointMd) {
+    .generate-col(12, lg);
+    .generate-order(5, lg);
+}
+
+@media screen and (min-width: @breakPointLg) {
+    .generate-col(12, xl);
+    .generate-order(5, xl);
+}
+
+@media screen and (min-width: @breakPointXl) {
+    .generate-col(12, xxl);
+    .generate-order(5, xxl);
+}
+
+.f-row {
+    width: 100%;
+    display: flex;
+    gap: @globalSpacing;
+}
+
+.generate-f-grid(12);
+
+@media screen and (max-width: @breakPointSm) {
+    .grid-mobile-wrap .f-row {
+        flex-direction: column;
+    }
+    .f-grid-1,
+    .f-grid-2,
+    .f-grid-3,
+    .f-grid-4,
+    .f-grid-5,
+    .f-grid-6,
+    .f-grid-7,
+    .f-grid-8,
+    .f-grid-9,
+    .f-grid-10,
+    .f-grid-11,
+    .f-grid-12 {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}

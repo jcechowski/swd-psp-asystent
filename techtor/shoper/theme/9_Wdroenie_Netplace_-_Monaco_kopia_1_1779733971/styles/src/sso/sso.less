@@ -1,0 +1,96 @@
+@media screen and (max-width: (@breakPointMd)) {
+    .modal-wrapper {
+        &.modal-wrapper_sso {
+            top: initial;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transform: translate3d(0, 0, 0);
+            max-width: 100%;
+            max-width: 100vw;
+            max-width: 100dvw;
+
+            .modal__container {
+                width: 100vw;
+                height: auto;
+            }
+
+            .modal__footer {
+                justify-content: flex-start;
+            }
+        }
+    }
+}
+
+.modal-wrapper_sso {
+    &-side {
+        .modal-sso__indicator {
+            left: -(@modalSSOIndicatorSize * 0.5);
+            top: 3rem;
+        }
+    }
+
+    &-side-left {
+        .modal-sso__indicator {
+            left: initial;
+            right: -(@modalSSOIndicatorSize * 0.5);
+            top: 3rem;
+        }
+    }
+
+    &-under {
+        .modal-sso__indicator {
+            top: -(@modalSSOIndicatorSize * 0.5);
+            left: 3rem;
+        }
+    }
+}
+
+.modal-sso {
+    &__indicator {
+        width: @modalSSOIndicatorSize;
+        height: @modalSSOIndicatorSize;
+        z-index: 4;
+        background-color: @modalContainerBgColor;
+        position: fixed;
+        transform: rotate(45deg);
+
+        @media screen and (max-width: (@breakPointMd)) {
+            display: none;
+        }
+    }
+}
+
+.shoper_sso {
+    @backgroundLightness: hsvvalue(@modalContainerBgColor);
+    background-color: @shoperSSOLightButtonBgColor;
+    color: @shoperSSOLightButtonTextColor;
+
+    &__logo {
+        margin-left: @globalSpacing * 0.5;
+
+        &_dark {
+            display: none;
+        }
+
+        &_light {
+            display: inline;
+        }
+    }
+
+    & when (@backgroundLightness < 30) {
+        background-color: @shoperSSODarkButtonBgColor;
+        color: @shoperSSODarkButtonTextColor;
+        border-color: @shoperSSODarkButtonBorderColor;
+
+        &__logo {
+            &_light {
+                display: none;
+            }
+
+            &_dark {
+                display: inline;
+            }
+        }
+    }
+}

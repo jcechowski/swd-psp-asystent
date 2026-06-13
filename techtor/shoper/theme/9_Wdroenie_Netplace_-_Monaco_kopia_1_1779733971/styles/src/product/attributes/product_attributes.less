@@ -1,0 +1,131 @@
+.product-attributes {
+    &__groups {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(@attributeGroupsColumns, 1fr);
+        .pixel-to-rem(column-gap, @attributesGroupsColumnGap);
+    }
+
+    &__attributes {
+        display: grid;
+        grid-template-columns: repeat(@attributeGroupColumns, 1fr);
+        .pixel-to-rem(column-gap, @attributesColumnGap);
+        align-items: stretch;
+
+        &_one-column {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__group-header {
+        .weight-semibold();
+        .pixel-to-rem(margin-bottom, @attributeGroupHeaderMarginBottom);
+    }
+
+    &__group {
+        width: @attributeGroupWidth;
+        .pixel-to-rem(margin-bottom, @attributesGroupMarginBottom);
+    }
+
+    &__attribute {
+        display: flex;
+        align-items: center;
+        .pixel-to-rem(column-gap, @attributesAttributeColumnGap);
+
+        .size-s(@attributeFontSize, @attributeLineHeight);
+
+        .pixel-to-rem(padding-top, @attributesAttributeSpacingHorizontal);
+        .pixel-to-rem(padding-bottom, @attributesAttributeSpacingHorizontal);
+        .pixel-to-rem(padding-left, @attributesAttributeSpacingVertical);
+        .pixel-to-rem(padding-right, @attributesAttributeSpacingVertical);
+
+        &_padding {
+            &-l {
+                .pixel-to-rem(padding-top, @attributesAttributePaddingLSpacingHorizontal);
+                .pixel-to-rem(padding-bottom, @attributesAttributePaddingLSpacingHorizontal);
+                .pixel-to-rem(padding-left, @attributesAttributePaddingLSpacingVertical);
+                .pixel-to-rem(padding-right, @attributesAttributePaddingLSpacingVertical);
+
+                &-horizontal {
+                    .pixel-to-rem(padding-left, @attributesAttributePaddingLSpacingVertical);
+                    .pixel-to-rem(padding-right, @attributesAttributePaddingLSpacingVertical);
+                }
+            }
+        }
+
+        &-name {
+            flex: 0 1 @attributeNameWidth;
+            color: @attributeNameColor;
+
+            &_secondary {
+                display: flex;
+                gap: @globalSpacing * 0.5;
+                align-items: center;
+                width: 100%;
+            }
+
+            &_short {
+                flex: 0 1 @attributeNameShortWidth;
+            }
+        }
+
+        &-value {
+            flex: 0 1 @attributeValueWidth;
+            display: inline-flex;
+
+            font-weight: @attributeValueFontWeight;
+        }
+    }
+
+    &__icon {
+        &_checked {
+            color: @attributeIconCheckedColor;
+        }
+
+        &_unchecked {
+            color: @attributeIconUncheckedColor;
+        }
+    }
+}
+
+@media (max-width: (@breakPointSm - 1)) {
+    .product-attributes {
+        &__attributes {
+            grid-template-columns: 1fr;
+        }
+
+        &__attribute {
+            align-items: flex-start;
+
+            &_secondary {
+                border-radius: 4px;
+                padding: @globalSpacing * 0.5;
+                background-color: @attributesAttributeSecondaryBackgroundColor;
+                margin-bottom: @globalSpacing;
+                width: 100%;
+            }
+
+            &_padding {
+                &-l {
+                    .pixel-to-rem(padding-top, @attributesAttributePaddingLSpacingVerticalMobile);
+                    .pixel-to-rem(padding-bottom, @attributesAttributePaddingLSpacingVerticalMobile);
+                    .pixel-to-rem(padding-left, @attributesAttributePaddingLSpacingHorizontalMobile);
+                    .pixel-to-rem(padding-right, @attributesAttributePaddingLSpacingHorizontalMobile);
+
+                    gap: @attributesAttributePaddingLGapMobile;
+                }
+            }
+
+            &_column-mobile {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                padding-bottom: @globalSpacing;
+            }
+
+            &_border-mobile {
+                border-bottom: 1px solid @neutralColors100;
+            }
+        }
+    }
+}

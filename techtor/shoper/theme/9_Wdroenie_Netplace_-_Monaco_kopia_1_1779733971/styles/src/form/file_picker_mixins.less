@@ -1,0 +1,16 @@
+.file-picker-button-appearance () {
+    .pixel-to-rem(height, @filePickerButtonAppearanceHeight);
+    .padding-right-to-unit(@filePickerButtonAppearancePaddingH);
+    .padding-left-to-unit(@filePickerButtonAppearancePaddingH);
+    .pixel-to-rem(font-size, @filePickerButtonAppearanceFontSize);
+    .pixel-to-rem(line-height, @filePickerButtonAppearanceLineHeight);
+    .weight-semibold();
+    display: inline-flex;
+    align-items: center;
+}
+
+.file-picker-button-appearance-with-border () {
+    .file-picker-button-appearance ();
+    border: @filePickerButtonAppearanceBorder;
+    border-radius: @filePickerButtonAppearanceBorderRadius;
+}

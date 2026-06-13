@@ -1,0 +1,60 @@
+.indicator {
+    position: relative;
+    display: inline-flex;
+
+    &::after {
+        content: attr(data-value);
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: @indicatorBorderRadius;
+        .indicator-decorate-size(
+            @indicatorFontSizeInPxXS,
+            @indicatorPaddingTop,
+            @indicatorPaddingRight,
+            @indicatorPaddingBottom,
+            @indicatorPaddingLeft,
+            @indicatorLineHeightInPxXS
+        );
+        min-width: @indicatorMinWidth;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        .indicator-decorate-appearance(@indicatorColorPrimary, @indicatorBgColorPrimary, @indicatorBorderColorPrimary);
+        .indicator-decorate-icon(0, 0, unset, unset, @indicatorTransformTopRight);
+        .weight-semibold();
+    }
+
+    &_top-left {
+        &::before {
+            .indicator-decorate-icon(0, unset, unset, 0, @indicatorTransformTopLeft);
+        }
+    }
+
+    &_bottom-right {
+        &::before {
+            .indicator-decorate-icon(unset, 0, 0, unset, @indicatorTransformBottomRight);
+        }
+    }
+
+    &_bottom-left {
+        &::before {
+            .indicator-decorate-icon(unset, unset, 0, 0, @indicatorTransformBottomLeft);
+        }
+    }
+
+    &_secondary {
+        &::before {
+            .indicator-decorate-appearance(@indicatorColorSecondary, @indicatorBgColorSecondary, @indicatorBorderColorSecondary);
+        }
+    }
+
+    &_static {
+        margin-right: @staticIndicatorSpacing;
+
+        &::after {
+            position: static;
+            transform: initial;
+        }
+    }
+}

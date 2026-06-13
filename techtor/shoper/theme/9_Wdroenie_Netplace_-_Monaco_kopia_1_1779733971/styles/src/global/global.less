@@ -1,0 +1,105 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline-color: @primaryColors700;
+}
+
+html {
+    @fontSizeInPercent: ((100 * @globalBaseFontSize) / 16);
+    font-size: ~'@{fontSizeInPercent}%';
+}
+
+body {
+    font-family: @globalBodyFontFamilyName, Arial;
+    font-size: ~'@{globalBaseFontSize}px';
+    color: @globalFontColor;
+
+    background-color: @globalBodyBackgroundColor;
+    overflow-y: scroll;
+
+    &.body_with-trial-bar {
+        .pixel-to-rem(padding-bottom, @trialBarHeight);
+
+        @media (max-width: @breakPointXs) {
+            .pixel-to-rem(padding-top, @trialBarHeight);
+            padding-bottom: 0;
+        }
+    }
+}
+
+button {
+    background-color: initial;
+    font-family: @globalButtonFontFamilyName;
+    .size-m();
+
+    outline-offset: 0.25rem;
+}
+
+input {
+    font-family: @globalInputFontFamilyName;
+    color: @globalFontColor;
+    .size-m();
+}
+
+:-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus,
+:-webkit-autofill:active,
+:-internal-autofill-selected {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+}
+
+pre {
+    white-space: pre-line;
+}
+
+a {
+    outline-offset: 0.25rem;
+}
+
+ul,
+ol {
+    list-style-type: none;
+}
+
+#main-header,
+main,
+#main-footer {
+    & > .grid:not(.grid_full) {
+        .pixel-to-rem(padding-left, @gridGutter);
+        .pixel-to-rem(padding-right, @gridGutter);
+    }
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.visible-hidden {
+    visibility: hidden;
+}
+
+.scrollable {
+    overflow-y: scroll;
+    .custom-scrollbar();
+}
+
+.scroll {
+    &-x {
+        &_blocked {
+            overflow-x: hidden;
+        }
+    }
+
+    &-y {
+        &_blocked {
+            overflow-y: hidden;
+        }
+    }
+}

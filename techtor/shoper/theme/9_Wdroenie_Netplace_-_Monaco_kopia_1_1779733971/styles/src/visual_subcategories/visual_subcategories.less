@@ -1,0 +1,31 @@
+.visual-subcategories {
+    .category-tile {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &__image {
+            &-wrapper {
+                background-color: @visualSubcategoriesCategoryTileBgColor;
+            }
+        }
+
+        &__link {
+            color: @visualSubcategoriesCategoryTileHeaderColor;
+
+            .category-tile__caption {
+                color: @visualSubcategoriesCategoryTileCaptionColor;
+                text-decoration: none;
+            }
+
+            &:hover {
+                text-decoration-color: @visualSubcategoriesCategoryTileTextDecorationColorHover;
+                color: @visualSubcategoriesCategoryTileHeaderColorHover;
+
+                .category-tile__caption {
+                    color: @visualSubcategoriesCategoryTileCaptionColorHover;
+                }
+            }
+        }
+    }
+}

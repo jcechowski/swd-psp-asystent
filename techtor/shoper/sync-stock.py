@@ -42,8 +42,8 @@ except ImportError:
 
 # ── Config ──────────────────────────────────────────────────────────────────
 SHOPER_URL      = os.environ.get("SHOPER_URL", "https://techtor.pl/webapi/rest")
-SHOPER_USER     = os.environ.get("SHOPER_API_LOGIN", "api_user")
-SHOPER_PASS     = os.environ.get("SHOPER_API_PASSWORD", "&PnFY3Gg2kn^3Xn4GV3G")
+SHOPER_USER     = os.environ.get("SHOPER_API_LOGIN", "techtor_api")
+SHOPER_PASS     = os.environ.get("SHOPER_API_PASSWORD", "")
 
 FIRMAO_URL      = os.environ.get("FIRMAO_COMPANY_URL", "https://system.firmao.pl/techtor/svc/v1")
 FIRMAO_EMAIL    = os.environ.get("FIRMAO_API_EMAIL", "techtor.api@firmao.pl")

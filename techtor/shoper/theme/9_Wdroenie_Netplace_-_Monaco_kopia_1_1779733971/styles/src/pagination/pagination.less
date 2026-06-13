@@ -1,0 +1,71 @@
+.pagination {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: @paginationGap;
+
+    &__button {
+        gap: @paginationButtonGap;
+
+        .pixel-to-rem(font-size, @paginationButtonFontSize);
+        .pixel-to-rem(line-height, @paginationButtonLineHeight);
+
+        padding: @paginationButtonPadding;
+
+        &_secondary {
+            padding: @paginationButtonSmallPadding;
+
+            @media screen and (max-width: @breakPointXs) {
+                padding: @paginationButtonSmallPaddingMobile;
+            }
+        }
+
+        &_with-text {
+            padding-top: @paginationButtonWithTextPaddingVertical;
+            padding-left: @paginationButtonWithTextPaddingHorizontal;
+            padding-bottom: @paginationButtonWithTextPaddingVertical;
+            padding-right: @paginationButtonWithTextPaddingHorizontal;
+
+            @media screen and (max-width: @breakPointXs) {
+                padding: @paginationButtonWithTextPaddingMobile;
+            }
+        }
+
+        &-text {
+            @media screen and (max-width: @breakPointXs) {
+                display: none;
+            }
+        }
+    }
+
+    &__icon {
+        &-prev {
+            stroke: @paginationIconPrevColor;
+        }
+
+        &-next {
+            stroke: @paginationIconNextColor;
+        }
+    }
+
+    &__page-selector {
+        display: flex;
+        align-items: center;
+        gap: @paginationPageSelectorGap;
+
+        .pixel-to-rem(font-size, @paginationPageSelectorFontSize);
+        .pixel-to-rem(line-height, @paginationPageSelectorLineHeight);
+
+        color: @paginationPageSelectorColor;
+
+        &-text {
+            white-space: nowrap;
+        }
+    }
+}
+
+@media screen and (max-width: @breakPointXs) {
+    .pagination {
+        margin: 0 auto;
+    }
+}

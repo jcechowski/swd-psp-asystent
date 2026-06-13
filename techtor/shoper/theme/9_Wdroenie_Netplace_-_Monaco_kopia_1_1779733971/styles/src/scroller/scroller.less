@@ -1,0 +1,21 @@
+.scroller {
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: var(--vertical-alignment, end);
+        overflow-x: clip;
+    }
+    &__content {
+        --invertedSkew: ~'calc(var(--skew, 0deg) * -1)';
+        transform: skew(var(--invertedSkew), var(--skew, 0deg));
+        .splide__track {
+            padding-block: @scrollerGap;
+        }
+    }
+    .splide__slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: @scrollerGap;
+    }
+}

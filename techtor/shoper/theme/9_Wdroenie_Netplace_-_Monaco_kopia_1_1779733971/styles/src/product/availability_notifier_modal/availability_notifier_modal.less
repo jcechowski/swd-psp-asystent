@@ -1,0 +1,22 @@
+.availability-notifier-modal {
+
+    &__product-name {
+        .pixel-to-rem(font-size, @availabilityNotifierModalProductNameFontSize);
+
+        color: @availabilityNotifierModalProductNameColor;
+    }
+
+    &__text{
+        .pixel-to-rem(font-size, @availabilityNotifierModalTextFontSize);
+    }
+
+    &__footer{
+        display: flex;
+        gap: @availabilityNotifierModalFooterGap;
+
+        @media screen and (max-width: @breakPointXs) {
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+}

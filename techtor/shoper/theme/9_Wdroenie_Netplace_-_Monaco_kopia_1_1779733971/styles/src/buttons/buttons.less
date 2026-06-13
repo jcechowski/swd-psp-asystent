@@ -1,0 +1,168 @@
+.btn {
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    outline-offset: 0.25rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: @baseFontFamilyName;
+    text-decoration: none;
+    text-align: center;
+
+    background-color: transparent;
+    border: ~'@{btnBorderWidth}px' @btnBorderStyle @btnBorderColor;
+    border-radius: ~'@{btnBorderRadius}px';
+
+    user-select: none;
+    cursor: pointer;
+    min-height: 40px;
+    min-width: 40px;
+
+    .weight-semibold();
+    .line-height(@btnLineHeight);
+    .btn-decorate-size(@btnFontSizeInPxM, @btnPaddingTopM, @btnPaddingRightM, @btnPaddingBottomM, @btnPaddingLeftM, @lineHeightInPxM);
+
+    &_l {
+        .btn-decorate-size(@btnFontSizeInPxL, @btnPaddingTopL, @btnPaddingRightL, @btnPaddingBottomL, @btnPaddingLeftL, @lineHeightInPxL);
+    }
+
+    &_s {
+        .btn-decorate-size(@btnFontSizeInPxS, @btnPaddingTopS, @btnPaddingRightS, @btnPaddingBottomS, @btnPaddingLeftS, @lineHeightInPxS);
+    }
+
+    &_xs {
+        .btn-decorate-size(@btnFontSizeInPxXS, @btnPaddingTopXS, @btnPaddingRightXS, @btnPaddingBottomXS, @btnPaddingLeftXS, @lineHeightInPxXS);
+    }
+
+    &_full-width {
+        min-width: fit-content;
+        width: 100%;
+    }
+
+    &_primary {
+        .btn-decorate-appearance(@btnBgColorPrimary, @btnColorPrimary);
+
+        &:hover {
+            background-color: @btnBgColorPrimaryHover;
+            color: @btnColorPrimaryHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorPrimaryDisabled, @btnColorPrimaryDisabled);
+            pointer-events: none;
+        }
+    }
+
+    &_secondary {
+        .btn-decorate-appearance(@btnBgColorSecondary, @btnColorSecondary);
+
+        &:hover {
+            background-color: @btnBgColorSecondaryHover;
+            color: @btnColorSecondaryHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorSecondaryDisabled, @btnColorSecondaryDisabled);
+            pointer-events: none;
+        }
+    }
+
+    &_special {
+        .btn-decorate-appearance(@btnBgColorSpecial, @btnColorSpecial);
+
+        &:hover {
+            background-color: @btnBgColorSpecialHover;
+            color: @btnColorSpecialHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorSpecialDisabled, @btnColorSpecialDisabled);
+            pointer-events: none;
+        }
+    }
+
+    &_outline {
+        .btn-decorate-appearance(@btnBgColorOutline, @btnColorOutline, @btnBorderColorOutline);
+        border-width: ~'@{btnBorderWidthOutline}px';
+
+        &:hover {
+            color: @btnColorOutlineHover;
+            border-color: @btnBorderColorOutlineHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorOutlineDisabled, @btnColorOutlineDisabled, @btnBorderColorOutline);
+            pointer-events: none;
+        }
+    }
+
+    &_ghost {
+        .btn-decorate-appearance(@btnBgColorGhost, @btnColorGhost);
+
+        &:hover {
+            color: @btnColorGhostHover;
+            background-color: @btnBgColorGhostHover;
+        }
+
+        &-disabled {
+            .btn-decorate-appearance(@btnBgColorGhostDisabled, @btnColorGhostDisabled);
+            pointer-events: none;
+        }
+    }
+
+    &_icon {
+        .btn-decorate-size(@btnFontSizeInPxIcon, @btnPaddingIcon, @btnPaddingIcon, @btnPaddingIcon, @btnPaddingIcon, @lineHeightInPxL);
+        .btn-decorate-appearance(@btnBgColorIcon, @btnColorIcon);
+
+        border-radius: 50%;
+        aspect-ratio: 1/1;
+
+        &:hover {
+            background-color: @btnBgColorIconHover;
+        }
+    }
+
+    &_join-right {
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    &_join-left {
+        border-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    &__icon {
+        .icon-m();
+        stroke: inherit;
+
+        &_left {
+            margin-right: @btnIconGutter;
+        }
+
+        &_right {
+            margin-left: @btnIconGutter;
+        }
+
+        &_filled {
+            fill: inherit;
+        }
+    }
+}
+
+@media (max-width: (@breakPointSm - 1)) {
+    .btn {
+        &_full-width {
+            &-mobile {
+                width: 100%;
+            }
+        }
+    }
+}
+
+buy-button {
+    display: inline-flex;
+}

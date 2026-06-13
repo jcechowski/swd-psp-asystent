@@ -1,0 +1,100 @@
+.font {
+    &_normal {
+        .weight-normal();
+    }
+
+    &_medium {
+        .weight-medium();
+    }
+
+    &_semibold {
+        .weight-semibold();
+    }
+
+    &_bold {
+        .weight-bold();
+    }
+
+    &_extrabold {
+        .weight-extrabold();
+    }
+
+    &_line-through {
+        text-decoration: line-through;
+    }
+
+    &_underline {
+        text-decoration: underline;
+    }
+
+    &_normal {
+        font-style: normal;
+    }
+
+    &_italic {
+        font-style: italic;
+    }
+
+    &_size-l {
+        .size-l();
+    }
+
+    &_size-m {
+        .size-m();
+    }
+
+    &_size-s {
+        .size-s();
+    }
+
+    &_size-xs {
+        .size-xs();
+    }
+}
+
+.align {
+    &_left {
+        text-align: left;
+    }
+
+    &_center {
+        text-align: center;
+    }
+
+    &_right {
+        text-align: right;
+    }
+}
+
+.text {
+    &_uppercase {
+        text-transform: uppercase;
+    }
+}
+
+.overline {
+    .font-size(@overlineFontSize);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: @overlineFontWeight;
+    margin-bottom: @globalSpacing;
+
+    &_s {
+        .font-size(@overlineFontSizeS);
+    }
+}
+
+.generate-font-color-modifier(neutral);
+.generate-font-color-modifier(primary);
+.generate-font-color-modifier(secondary);
+.generate-font-color-modifier(success);
+.generate-font-color-modifier(error);
+.generate-font-color-modifier(warning);
+
+.color_shade-light {
+    color: @neutralColors0;
+}
+
+.color_shade-dark {
+    color: @neutralColors1000;
+}

@@ -1,0 +1,16 @@
+.flash-message-colors(@bgColor, @borderColor, @color, @iconStroke, @closeIconStroke) {
+    background-color: @bgColor;
+    border: 1px solid @borderColor;
+    color: @color;
+
+    .flash-message {
+        &__icon {
+            stroke: @iconStroke;
+        }
+
+        &__close-icon {
+            stroke: @closeIconStroke;
+            cursor: pointer;
+        }
+    }
+}

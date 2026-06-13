@@ -1,0 +1,36 @@
+.payments-channels-list {
+    display: grid;
+    gap: @globalSpacing;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.payment-channel {
+    gap: 1rem;
+    border: 1px solid @neutralColors300;
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    flex-direction: column;
+    padding: @globalSpacing;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    word-break: break-word;
+
+    &_selected,
+    &:hover {
+        border-color: @primaryColors500;
+        background-color: @primaryColors50;
+    }
+
+    &__image {
+        flex: 0 0 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            max-height: 70px;
+        }
+    }
+}

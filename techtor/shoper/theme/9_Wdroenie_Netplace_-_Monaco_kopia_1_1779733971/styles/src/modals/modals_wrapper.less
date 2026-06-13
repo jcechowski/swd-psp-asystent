@@ -1,0 +1,73 @@
+.modal-wrapper {
+    position: fixed;
+    z-index: 2;
+    max-width: 100%;
+    will-change: @modalChangeableProperties;
+
+    .modal-wrapper-center-center();
+
+    &_l {
+        .modal__container {
+            width: @modalWidthL;
+        }
+    }
+
+    &_s {
+        .modal__container {
+            width: @modalWidthS;
+        }
+
+        .modal__btn {
+            flex: 1;
+        }
+    }
+
+    &_alert {
+        z-index: 1000;
+    }
+
+    &_layer-out {
+        z-index: 0;
+    }
+
+    &_full-bottom {
+        top: initial;
+        bottom: 0;
+        transform: translate3d(0, 0, 0);
+        left: 0;
+
+        .modal__container {
+            width: 100vw;
+        }
+
+        .modal__footer {
+            justify-content: flex-start;
+        }
+    }
+}
+
+@media screen and (max-width: (@breakPointMd - 1)) {
+    .modal-wrapper {
+        top: 50%;
+        left: 50%;
+        max-width: ~'calc(100% - calc(@{modalWrapperMargin} * 2))';
+        transform: translate3d(-50%, -50%, 0);
+
+        &_full-bottom {
+            top: initial;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transform: translate3d(0, 0, 0);
+            max-width: 100%;
+            max-width: 100vw;
+            max-width: 100dvw;
+        }
+    }
+}
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .modal-wrapper {
+        max-width: 100%;
+    }
+}

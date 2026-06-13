@@ -1,0 +1,95 @@
+.padding-top-to-unit (@paddingTop, @unit: 'rem') {
+    @paddingTopRem: (@paddingTop / @baseFontSize);
+    padding-top: ~'@{paddingTopRem}@{unit}';
+}
+
+.padding-left-to-unit (@paddingLeft, @unit: 'rem') {
+    @paddingLeftRem: (@paddingLeft / @baseFontSize);
+    padding-left: ~'@{paddingLeftRem}@{unit}';
+}
+
+.padding-right-to-unit (@paddingRight, @unit: 'rem') {
+    @paddingRightRem: (@paddingRight / @baseFontSize);
+    padding-right: ~'@{paddingRightRem}@{unit}';
+}
+
+.padding-bottom-to-unit (@paddingBottom, @unit: 'rem') {
+    @paddingBottomRem: (@paddingBottom / @baseFontSize);
+    padding-bottom: ~'@{paddingBottomRem}@{unit}';
+}
+
+.padding-to-unit (@paddingTop, @paddingRight, @paddingBottom, @paddingLeft, @unit: 'rem') {
+    .padding-top-to-unit(@paddingTop);
+    .padding-right-to-unit(@paddingRight);
+    .padding-bottom-to-unit(@paddingBottom);
+    .padding-left-to-unit(@paddingLeft);
+}
+
+.padding-all-to-unit (@padding, @unit: 'rem') {
+    .padding-top-to-unit(@padding);
+    .padding-right-to-unit(@padding);
+    .padding-bottom-to-unit(@padding);
+    .padding-left-to-unit(@padding);
+}
+
+.margin-top-to-unit (@marginTop, @unit: 'rem') {
+    @marginTopUnit: (@marginTop / @baseFontSize);
+    margin-top: ~'@{marginTopUnit}@{unit}';
+}
+
+.margin-left-to-unit (@marginLeft, @unit: 'rem') {
+    @marginLeftUnit: (@marginLeft / @baseFontSize);
+    margin-left: ~'@{marginLeftUnit}@{unit}';
+}
+
+.margin-right-to-unit (@marginRight, @unit: 'rem') {
+    @marginRightUnit: (@marginRight / @baseFontSize);
+    margin-right: ~'@{marginRightUnit}@{unit}';
+}
+
+.margin-bottom-to-unit (@marginBottom, @unit: 'rem') {
+    @marginBottomUnit: (@marginBottom / @baseFontSize);
+    margin-bottom: ~'@{marginBottomUnit}@{unit}';
+}
+
+.margin-to-unit (@marginTop, @marginRight, @marginBottom, @marginLeft, @unit: 'rem') {
+    .margin-top-to-unit(@marginTop);
+    .margin-bottom-to-unit(@marginBottom);
+    .margin-right-to-unit(@marginRight);
+    .margin-left-to-unit(@marginLeft);
+}
+
+.height-to-unit (@height, @unit: 'rem') {
+    @rem: (@height / @baseFontSize);
+    height: ~'@{rem}@{unit}';
+}
+
+.pixel-to-rem(@propertyName, @number) {
+    @toRemValue: (@number / @baseFontSize);
+    @remUnitValue: ~'@{toRemValue}rem';
+    @{propertyName}: @remUnitValue;
+}
+
+.custom-scrollbar(@bgColor: @scrollBarBgColorDefault, @thumbColor: @scrollBarThumbColorDefault, @width: @scrollBarWidthDefault, @height: @scrollBarHeightDefault, @scrollBarTrackBgHover: @scrollBarTrackBgHoverDefault, @scrollBarThumbBgHover: @scrollBarThumbBgHoverDefault) {
+    &::-webkit-scrollbar {
+        width: @width;
+        height: @height;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: @bgColor;
+        border-radius: 12px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: @thumbColor;
+        border-radius: 12px;
+
+        &:hover {
+            background-color: @scrollBarThumbBgHover;
+        }
+    }
+
+    scrollbar-color: @thumbColor @bgColor;
+    scrollbar-width: thin;
+}

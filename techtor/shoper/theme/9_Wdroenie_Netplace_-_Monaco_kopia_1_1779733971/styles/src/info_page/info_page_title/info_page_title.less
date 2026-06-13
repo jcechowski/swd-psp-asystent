@@ -1,0 +1,15 @@
+.info-page-title {
+    .pixel-to-rem(font-size, @infoPageTitleFontSizeInPxMobile);
+    .pixel-to-rem(line-height, @infoPageTitleLineHeightInPxMobile);
+
+    margin-bottom: @infoPageTitleMarginBottomMobile;
+}
+
+@media screen and (min-width: @breakPointXs) {
+    .info-page-title {
+        .pixel-to-rem(font-size, @infoPageTitleFontSizeInPx);
+        .pixel-to-rem(line-height, @infoPageTitleLineHeightInPx);
+        font-weight: @infoPageTitleFontWeight;
+        margin-bottom: @infoPageTitleMarginBottom;
+    }
+}

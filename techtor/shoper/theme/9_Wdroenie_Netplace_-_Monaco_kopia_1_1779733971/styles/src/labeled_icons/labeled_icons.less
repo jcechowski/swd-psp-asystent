@@ -1,0 +1,42 @@
+.labeled-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+    text-decoration: none;
+
+    &_horizontal {
+        flex-direction: row;
+        column-gap: @globalSpacing * 0.5;
+    }
+
+    &__icon {
+        .icon-l();
+
+        fill: transparent;
+        stroke: @labeledIconIconStrokeColor;
+
+        &_m {
+            .icon-m();
+        }
+    }
+
+    &__signature {
+        .size-xs();
+
+        color: @labeledIconSignatureColor;
+        text-decoration: none;
+
+        &_secondary {
+            .size-s();
+        }
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        .labeled-icon__signature {
+            text-decoration: underline;
+        }
+    }
+}

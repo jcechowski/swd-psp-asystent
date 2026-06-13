@@ -1,0 +1,100 @@
+.basket-product {
+    display: flex;
+    border-top: 1px solid @neutralColors200;
+    column-gap: @globalSpacing * 2;
+    flex-wrap: wrap;
+    margin-top: @globalSpacing;
+    padding-top: @globalSpacing;
+
+    &:first-child {
+        border-top: none;
+        margin-top: @globalSpacing * 1.5;
+        padding-top: 0;
+    }
+
+    &__wrapper {
+        flex: 1 0 10%;
+        display: flex;
+        column-gap: @globalSpacing * 2;
+    }
+
+    &__prices {
+        flex: 0 0 190px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        line-height: 24px;
+        .size-s();
+    }
+
+    &__image {
+        flex: 0 0 50px;
+
+        &-border {
+            display: inline-flex;
+            border: @basketProductImageBorder;
+            border-radius: @basketProductImageBorderRadius;
+        }
+    }
+
+    &__info {
+        display: flex;
+        column-gap: @globalSpacing * 2;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    &__content {
+        width: 100%;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: @globalSpacing;
+
+        .remove-product__button {
+            .font-size(@fontSizeInPxS);
+        }
+    }
+
+    &__price {
+        display: flex;
+        column-gap: 5px;
+        align-items: center;
+    }
+
+    &__name {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: column;
+        margin-bottom: @globalSpacing;
+    }
+
+    &__link {
+        .weight-semibold();
+        text-decoration: none;
+        color: @basketProductLinkColor;
+    }
+
+    &__additional-info {
+        .size-s();
+        .line-height(@lineHeightInPxM);
+    }
+
+    &__options {
+        .size-s();
+
+        color: @globalFontColorSecondary;
+        margin-top: @globalSpacing * 0.5;
+    }
+}
+
+.basket-products {
+    &__header {
+        border-bottom: 1px solid @neutralColors200;
+        margin-bottom: @globalSpacing;
+    }
+}

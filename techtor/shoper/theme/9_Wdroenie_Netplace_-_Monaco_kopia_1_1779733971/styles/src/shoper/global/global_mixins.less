@@ -1,0 +1,5 @@
+.pixel-to-rem(@propertyName, @number) {
+    @toRemValue: (@number / 16);
+    @remUnitValue: ~'@{toRemValue}rem';
+    @{propertyName}: @remUnitValue;
+}

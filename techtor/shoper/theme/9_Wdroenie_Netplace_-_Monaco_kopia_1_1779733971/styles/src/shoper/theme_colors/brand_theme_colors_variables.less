@@ -1,0 +1,20 @@
+@brandColor: #0e61e6;
+@hueBrand: hsvhue(@brandColor);
+@saturationBrand: hsvsaturation(@brandColor);
+
+@brandColors50: mix(hsl(@hueBrand, @saturationBrand, 95%), transparent, 100);
+@brandColors100: mix(hsl(@hueBrand, @saturationBrand, 90%), transparent, 100);
+@brandColors200: mix(hsl(@hueBrand, @saturationBrand, 80%), transparent, 100);
+@brandColors500: mix(hsl(@hueBrand, @saturationBrand, 50%), transparent, 100);
+@brandColors700: mix(hsl(@hueBrand, @saturationBrand, 30%), transparent, 100);
+@brandColors900: mix(hsl(@hueBrand, @saturationBrand, 10%), transparent, 100);
+
+:root {
+    --brandColor: @brandColor;
+    --brandColors50: @brandColors50;
+    --brandColors100: @brandColors100;
+    --brandColors200: @brandColors200;
+    --brandColors500: @brandColors500;
+    --brandColors700: @brandColors700;
+    --brandColors900: @brandColors900;
+}

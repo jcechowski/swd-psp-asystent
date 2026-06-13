@@ -1,0 +1,109 @@
+.flash-message {
+    .padding-to-unit(
+        @flashMessagePaddingTop,
+        @flashMessagePaddingRight,
+        @flashMessagePaddingBottom,
+        @flashMessagePaddingLeft
+    );
+
+    position: relative;
+
+    border-radius: @flashMessageBorderRadius;
+
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+
+    width: inherit;
+
+    .pixel-to-rem(column-gap, @flashMessageColumnGap);
+
+    .font-size(@fontSizeInPxXS);
+    .line-height(@lineHeightInPxXS);
+
+    transition: @flashMessagesTransition;
+    animation: flashMessageLoad 0.3s ease-in-out;
+
+    &_secondary {
+        align-items: start;
+    }
+
+    &_no-animation {
+        animation: none;
+    }
+
+    &__success {
+        .flash-message-colors(
+            @flashMessageSuccessBgColor,
+            @flashMessageSuccessBorderColor,
+            @flashMessageSuccessColor,
+            @flashMessageSuccessIconStroke,
+            @flashMessageSuccessCloseIconStroke
+        );
+    }
+
+    &__info {
+        .flash-message-colors(
+            @flashMessageInfoBgColor,
+            @flashMessageInfoBorderColor,
+            @flashMessageInfoColor,
+            @flashMessageInfoIconStroke,
+            @flashMessageInfoCloseIconStroke
+        );
+    }
+
+    &__warning {
+        .flash-message-colors(
+            @flashMessageWarningBgColor,
+            @flashMessageWarningBorderColor,
+            @flashMessageWarningColor,
+            @flashMessageWarningIconStroke,
+            @flashMessageWarningCloseIconStroke
+        );
+    }
+
+    &__error {
+        .flash-message-colors(
+            @flashMessageErrorBgColor,
+            @flashMessageErrorBorderColor,
+            @flashMessageErrorColor,
+            @flashMessageErrorIconStroke,
+            @flashMessageErrorCloseIconStroke
+        );
+    }
+
+    &__notice {
+        .flash-message-colors(
+            @flashMessageNoticeBgColor,
+            @flashMessageNoticeBorderColor,
+            @flashMessageNoticeColor,
+            @flashMessageNoticeIconStroke,
+            @flashMessageNoticeCloseIconStroke
+        );
+    }
+
+    &__removed {
+        opacity: 0;
+    }
+
+    strong {
+        .weight-semibold();
+    }
+}
+
+@keyframes flashMessageLoad {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .flash-message {
+        width: 100%;
+        max-width: none;
+        pointer-events: all;
+    }
+}

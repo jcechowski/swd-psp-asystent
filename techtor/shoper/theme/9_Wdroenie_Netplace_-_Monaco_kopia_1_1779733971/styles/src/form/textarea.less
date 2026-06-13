@@ -1,0 +1,57 @@
+.textarea {
+    transition: @textareaTransition;
+
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    border: @textareaBorderWidth @textareaBorderStyle @textareaBorderColor;
+    border-radius: ~'@{textareaBorderRadius}px';
+    column-gap: @textareaWrapperGutter;
+
+    .padding-all-to-unit(@textareaPadding);
+
+    .font-size(@textareaFontSizeInPxS);
+    .line-height(@textareaLineHeightInPxS);
+
+    color: @globalFontColor;
+    -webkit-text-fill-color: @globalFontColor;
+
+    &:hover {
+        border-color: @textareaBorderColorHover;
+    }
+
+    &:focus-within {
+        outline: 2px solid @textareaOutlineColorFocus;
+        outline-offset: 0.125rem;
+    }
+
+    &_disabled {
+        border-color: @textareaBorderColorDisabled;
+        background-color: @textareaBackgroundColorDisabled;
+        color: @textareaColorDisabled;
+        pointer-events: none;
+    }
+
+    &_error {
+        border-color: @textareaBorderColorError;
+        box-shadow: @textareaBoxShadowError;
+    }
+
+    &__control,
+    textarea {
+        display: flex;
+        flex: 1 0 auto;
+        outline: 0;
+        background-color: @textareaBackgroundColor;
+
+        .pixel-to-rem(min-height, @textareaMinHeight);
+        .font-size(@textareaFontSizeInPxS);
+        .line-height(@textareaLineHeightInPxS);
+    }
+
+    textarea {
+        .padding-to-unit(@textareaControlPaddingTopM, @textareaControlPaddingRightM, @textareaControlPaddingBottomM, @textareaControlPaddingLeftM);
+        font-family: @globalBodyFontFamilyName, Arial;
+    }
+}

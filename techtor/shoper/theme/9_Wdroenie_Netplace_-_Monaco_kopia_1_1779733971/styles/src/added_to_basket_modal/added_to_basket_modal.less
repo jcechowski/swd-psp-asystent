@@ -1,0 +1,62 @@
+.added-to-basket-modal {
+    &__h-modal-paddings {
+        @media screen and (max-width: @breakPointXs) {
+            padding: 1rem;
+        }
+    }
+
+    &__generic {
+        &_wrap {
+            flex-wrap: wrap;
+        }
+    }
+
+    &__options {
+        .size-s();
+
+        color: @globalFontColorSecondary;
+        margin-bottom: @globalSpacing * 0.5;
+    }
+
+    &_quantity-badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: @addedToBasketModalCustomColor;
+        font-size: @addedToBasketModalQuantityBadgeFontSize;
+        padding: @addedToBasketModalQuantityBadgePadding;
+        margin: @addedToBasketModalQuantityBadgeMargin;
+    }
+
+    &_product-name {
+        margin: @addedToBasketModalProductNameMargin;
+        font-size: @addedToBasketModalFontsizeDesktop;
+    }
+
+    &_quantity-summary {
+        flex-wrap: wrap;
+        background-color: @addedToBasketModalCustomColor;
+        line-height: @addedToBasketModalLineHeightDesktop;
+
+        padding: @addedToBasketModalQuantitySummaryPadding;
+        margin: @addedToBasketModalQuantitySummaryMargin;
+    }
+
+    &_preview-image {
+        object-fit: contain;
+        width: @addedToBasketModalImageSize;
+        height: @addedToBasketModalImageSize;
+    }
+
+    &_button {
+        text-align: center;
+    }
+
+    &__customized-paragraph {
+        @media screen and (max-width: @breakPointXs) {
+            font-size: @addedToBasketModalFontsizeMobile;
+            line-height: @addedToBasketModalLineHeightMobile;
+        }
+    }
+}

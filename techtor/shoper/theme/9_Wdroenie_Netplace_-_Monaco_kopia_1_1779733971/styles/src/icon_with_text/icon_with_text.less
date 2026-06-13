@@ -1,0 +1,56 @@
+.icon-with-text {
+    .generate-borders(@iconWithTextBorderWidth, @iconWithTextBorderStyle, @iconWithTextBorderColor);
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        width: fit-content;
+        place-self: center;
+        padding: @iconWithTextPadding;
+        gap: @iconWithTextItemGap;
+        background-color: @iconWithTextBgColor;
+        border-radius: ~'calc(@{iconWithTextBorderRadius} * 1%)';
+        overflow: hidden;
+    }
+    &__position {
+        &_left {
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        &_right {
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        &_above {
+            justify-content: center;
+            flex-direction: column-reverse;
+        }
+        &_below {
+            justify-content: center;
+        }
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: @iconWithTextItemLineGap;
+        p:not(:last-child) {
+            margin-bottom: 0;
+        }
+    }
+
+    &__image {
+        display: block;
+        margin-inline: auto;
+    }
+    &__content {
+        display: block;
+        color: @iconWithTextTextColor;
+    }
+    &__title {
+        font-weight: @fontWeightBold;
+    }
+}

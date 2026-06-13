@@ -1,0 +1,70 @@
+.color-item {
+    display: block;
+    width: @colorItemSize;
+    height: @colorItemSize;
+    border: @colorItemBorder;
+    border-radius: 100%;
+    cursor: pointer;
+
+    &_s {
+        width: @colorItemSSize;
+        height: @colorItemSSize;
+    }
+
+    &_xs {
+        width: @colorItemXsSize;
+        height: @colorItemXsSize;
+    }
+
+    &[selected] {
+        position: relative;
+        border: @colorItemSelectedBorder;
+
+        &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: @colorItemSelectedIconTopPostion;
+            right: @colorItemSelectedIconRightPostion;
+            width: @colorItemSelectedIconWrapperSize;
+            height: @colorItemSelectedIconWrapperSize;
+            background-color: @colorItemSelectedIconWrapperColor;
+            background-image: @colorItemSelectedIconUrl;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 100%;
+            z-index: 1;
+        }
+    }
+
+    &[disabled] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-color: @colorItemDisabledBorderColor;
+
+        &::after {
+            content: '';
+            width: @colorItemDisabledLineWidth;
+            height: 100%;
+            background-color: @colorItemDisabledBorderColor;
+            .rotate(45deg);
+        }
+    }
+
+    &[disabled][selected] {
+        border-color: @colorItemSelectedDisabledBorderColor;
+
+        &::before {
+            background-image: @colorItemSelectedDisabledIconUrl;
+        }
+
+        &::after {
+            background-color: @colorItemSelectedDisabledBorderColor;
+        }
+    }
+
+    &[unclickable] {
+        cursor: not-allowed;
+    }
+}

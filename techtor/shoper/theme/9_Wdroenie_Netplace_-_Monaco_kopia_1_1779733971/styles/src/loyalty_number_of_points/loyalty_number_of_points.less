@@ -1,0 +1,22 @@
+.loyalty-number-of-points {
+    &__icon {
+        stroke: @loyaltyNumberOfPointsIconStroke;
+
+        &-wrapper {
+            &:hover {
+                cursor: auto;
+            }
+        }
+
+        &-label {
+            color: @loyaltyNumberOfPointsIconLabelColor;
+        }
+    }
+
+    &__points {
+        .h5();
+
+        color: @loyaltyNumberOfPointsPointsColor;
+        font-weight: @loyaltyNumberOfPointsPointsFontWeight;
+    }
+}

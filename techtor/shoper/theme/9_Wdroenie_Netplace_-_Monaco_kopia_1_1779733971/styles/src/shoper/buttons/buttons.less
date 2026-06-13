@@ -1,0 +1,120 @@
+.btn {
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s;
+    outline-offset: 0.25rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    text-align: center;
+
+    background-color: transparent;
+    border: ~'@{btnBorderWidth}px' @btnBorderStyle @btnBorderColor;
+    border-radius: ~'@{btnBorderRadius}px';
+    gap: 0.25rem;
+
+    .text-lg-medium();
+    .pixel-to-rem(padding-top, @btnPaddingVertical);
+    .pixel-to-rem(padding-bottom, @btnPaddingVertical);
+    .pixel-to-rem(padding-left, @btnPaddingHorizontal);
+    .pixel-to-rem(padding-right, @btnPaddingHorizontal);
+
+    user-select: none;
+    cursor: pointer;
+    min-width: 48px;
+    .pixel-to-rem(height, 48);
+
+    &_primary {
+        .text-inverse();
+        .bg-brand();
+
+        &:hover {
+            .bg-brand-strong();
+        }
+
+        &:focus,
+        &-active {
+            .bg-brand-stronger();
+        }
+    }
+
+    &_secondary {
+        .text-brand-strong();
+        .bg-brand-lighter();
+
+        &:hover {
+            .bg-brand-light();
+        }
+
+        &:focus,
+        &-active {
+            .border-brand-color();
+            .bg-brand-lighter();
+        }
+    }
+
+    &_outline {
+        .text-color();
+        .bg();
+        .border-color-strong();
+
+        &:hover {
+            .border-color-stronger();
+        }
+
+        &:focus,
+        &-active {
+            .border-color-stronger();
+            .bg-subtle();
+        }
+    }
+
+    &_disabled {
+        .text-lighter();
+        .bg-subtle();
+        pointer-events: none;
+    }
+
+    &_ghost {
+        .text-color();
+    }
+
+    .icon {
+        .icon-size(18px, 18px);
+    }
+
+    &_s {
+        .pixel-to-rem(height, 36);
+
+        .text-md-medium();
+
+        .pixel-to-rem(padding-top, @btnPaddingVerticalS);
+        .pixel-to-rem(padding-bottom, @btnPaddingVerticalS);
+        .pixel-to-rem(padding-left, @btnPaddingHorizontalS);
+        .pixel-to-rem(padding-right, @btnPaddingHorizontalS);
+
+        .icon {
+            .icon-size(16px, 16px);
+        }
+
+        &.btn {
+            &_icon-left {
+                .pixel-to-rem(padding-left, @btnPaddingIconHorizontalS);
+            }
+
+            &_icon-right {
+                .pixel-to-rem(padding-right, @btnPaddingIconHorizontalS);
+            }
+        }
+    }
+
+    &_icon-left {
+        .pixel-to-rem(padding-left, @btnPaddingIconHorizontal);
+    }
+
+    &_icon-right {
+        .pixel-to-rem(padding-right, @btnPaddingIconHorizontal);
+    }
+}

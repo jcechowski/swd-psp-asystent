@@ -1,0 +1,35 @@
+.form {
+    &__additional-info {
+        .font-size(@formAdditionalInfoFontSizeInPx);
+        .line-height(@formAdditionalInfoLineHeightInPx);
+
+        margin: @formAdditionalInfoMarginTop 0 @formAdditionalInfoMarginBottom;
+        padding: @formAdditionalInfoPaddingVertical @formAdditionalInfoPaddingHorizontal;
+
+        background-color: @formAdditionalInfoBackgroundColor;
+        color: @formAdditionalInfoColor;
+
+        border-radius: 2px;
+        width: fit-content;
+
+        &_secondary {
+            color: @formAdditionalInfoSecondaryColor;
+        }
+
+        &_margin {
+            &-l {
+                margin: @formAdditionalInfoMarginLMarginTop 0 @formAdditionalInfoMarginLMarginBottom;
+            }
+        }
+    }
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+    @media screen and (-webkit-min-device-pixel-ratio: 0) {
+        select,
+        textarea,
+        input {
+            font-size: 16px !important;
+        }
+    }
+}

@@ -1,0 +1,14 @@
+.blog-article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @blogArticleTagsRowGap @blogArticleTagsColumnGap;
+
+    &__tag {
+        color: @blogArticleTagsTagColor;
+        text-decoration: none;
+
+        &:hover {
+            color: @blogArticleTagsTagColorHover;
+        }
+    }
+}

@@ -1,0 +1,54 @@
+.accordion {
+    &__toggler {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &:not([aria-disabled='true']) {
+            cursor: pointer;
+        }
+
+        &[aria-disabled='true'],
+        &[disabled] {
+            .module__header-title {
+                cursor: auto;
+            }
+        }
+
+        &-icon {
+            transition: transform 0.2s ease-in-out;
+
+            &_secondary {
+                vertical-align: sub;
+            }
+        }
+
+        &[aria-expanded='true'] {
+            .accordion__toggler-icon {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    &-toggle-transition {
+        &-start {
+            opacity: 0;
+        }
+
+        &-end {
+            opacity: 1;
+        }
+    }
+}
+
+h-accordion-content {
+    transition: opacity 0.2s ease-in, transform 0.2s ease-out, height 0.2s ease-in;
+    display: block;
+    overflow: hidden;
+
+    &.accordion-content {
+        &_container {
+            container-type: inline-size;
+        }
+    }
+}

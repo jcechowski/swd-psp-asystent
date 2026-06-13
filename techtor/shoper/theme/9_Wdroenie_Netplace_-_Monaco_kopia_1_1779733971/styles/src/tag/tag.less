@@ -1,0 +1,118 @@
+.tag {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .pixel-to-rem(gap, 4);
+
+    .pixel-to-rem(padding-top, 4);
+    .pixel-to-rem(padding-bottom, 4);
+    .pixel-to-rem(padding-left, 6);
+    .pixel-to-rem(padding-right, 6);
+
+    background-color: @baseTagBgColor;
+    border-right: @tagBorderRadius;
+
+    .font-size(@tagFontSizeInPx);
+    .line-height(@tagLineHeightInPx);
+
+    vertical-align: top;
+    text-align: center;
+    height: fit-content;
+
+    &_promotion {
+        color: @tagPromotionColor;
+        background-color: @tagPromotionBgColor;
+        line-height: 1;
+        .font-size(12);
+        .pixel-to-rem(border-radius, @tagPromotionBorderRadiusInPx);
+        .pixel-to-rem(padding-left, 4);
+        .pixel-to-rem(padding-right, 4);
+    }
+
+    &_l {
+        .pixel-to-rem(padding-top, 4);
+        .pixel-to-rem(padding-bottom, 4);
+        .pixel-to-rem(padding-left, 12);
+        .pixel-to-rem(padding-right, 12);
+    }
+
+    &__remove-button {
+        .icon-m();
+        .line-height(16);
+
+        .icon {
+            stroke: @baseTagCloseButtonIconColor;
+        }
+    }
+
+    &_interactive {
+        cursor: pointer;
+
+        &.tag:hover {
+            background-color: @baseTagInteractiveHoverBgColor;
+
+            .icon {
+                cursor: pointer;
+
+                stroke: @baseTagInteractiveHoverIconColor;
+            }
+        }
+    }
+
+    &_secondary {
+        padding: @tagSecondaryPaddingVertical @tagSecondaryPaddingHorizontal;
+        .pixel-to-rem(border-radius, @tagSecondaryBorderRadius);
+    }
+
+    &_tertiary {
+        padding: @tagTertiaryPaddingVertical @tagTertiaryPaddingHorizontal;
+        .pixel-to-rem(border-radius, @tagTertiaryBorderRadius);
+    }
+
+    &_quaternary {
+        display: inline-block;
+        color: @tagQuartenaryColor;
+        background-color: @tagQuartenaryBgColor;
+        .font-size(@tagQuartenaryFontSizeInPx);
+        padding: @tagQuaternaryPaddingVertical @tagQuaternaryPaddingHorizontal;
+        .pixel-to-rem(border-radius, @tagQuaternaryBorderRadius);
+    }
+
+    &_minimal {
+        .font-size(@tagMinimalFontSize);
+        .line-height(@tagMinimalLineHeight);
+        font-weight: @tagMinimalFontWeight;
+        color: @tagMinimalColor;
+        background-color: @tagMinimalBgColor;
+        border: @tagMinimalBorder;
+        padding: @tagMinimalPaddingVertical @tagMinimalPaddingHorizontal;
+    }
+
+    &_success {
+        background-color: @tagSuccessBackgroundColor;
+        color: @tagSuccessColor;
+    }
+
+    &_info {
+        background-color: @tagInfoBackgroundColor;
+        color: @tagInfoColor;
+    }
+
+    &_error {
+        background-color: @tagErrorBackgroundColor;
+        color: @tagErrorColor;
+    }
+
+    &_notice {
+        background-color: @tagNoticeBackgroundColor;
+        color: @tagNoticeColor;
+    }
+
+    &__group {
+        display: inline-flex;
+        flex-wrap: wrap;
+        .pixel-to-rem(gap, @tagGroupGapInPx);
+        vertical-align: super;
+    }
+}

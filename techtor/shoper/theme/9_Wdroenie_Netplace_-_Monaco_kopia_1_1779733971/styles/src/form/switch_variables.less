@@ -1,0 +1,27 @@
+@switchGutter: @globalSpacing * 0.75;
+
+@switchControlWidth: 30;
+@switchControlHeight: 18;
+@switchControlBorderRadius: 18;
+
+@switchFocusBoxShadow: 0 0 0 5px fade(@switchFocusColor, 30%);
+@checkedSwitchFocusBoxShadow: 0 0 0 5px fade(@checkedSwitchFocusColor, 30%);
+
+@switchHoverBoxShadow: 0 0 0 5px fade(@switchFocusColor, 20%);
+
+@switchLabelDisabledBgColor: @controlDisabledBgColor;
+
+@switchLabelBgColor: @neutralColors300;
+@switchLabelBorderRadius: 18;
+@switchFocusColor: @neutralColors200;
+@checkedSwitchFocusColor: @primaryColors200;
+
+@switchCheckedHandleColor: @controlColor;
+@switchHandleWidth: 18;
+@switchHandleHeight: 18;
+@switchHandleBorderRadius: 18;
+@switchHandlePositionEnd: calc(~"@{switchControlWidth}px" - ~"@{switchHandleWidth}px");
+@switchHandleBgColor: #fff;
+@switchHandleBorderColor: @neutralColors300;
+
+@switchErrorColor: @controlErrorColor;

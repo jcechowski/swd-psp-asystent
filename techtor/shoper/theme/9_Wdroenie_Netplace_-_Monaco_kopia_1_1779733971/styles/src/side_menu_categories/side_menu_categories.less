@@ -1,0 +1,71 @@
+.side-menu-categories {
+    position: relative;
+
+    &__list {
+        .side-menu-categories__list-item-link_active > ul {
+            border-left: @sideMenuCategoriesListItemLinkActiveListBorderLeft;
+        }
+
+        &-go-back-link {
+            .font-size(@sideMenuCategoriesListGoBackLinkFontSize);
+            .line-height(@sideMenuCategoriesListGoBackLinkLineHeight);
+
+            display: block;
+            margin-bottom: @sideMenuCategoriesListGoBackLinkMarginBottom;
+        }
+    
+        &-item {
+            .font-size(@sideMenuCategoriesListItemFontSize);
+            .line-height(@sideMenuCategoriesListItemLineHeight);
+
+            margin-top: @sideMenuCategoriesListItemMarginTop;
+            margin-bottom: @sideMenuCategoriesListItemMarginBottom;
+
+            &_secondary {
+                color: @sideMenuCategoriesListItemSecondaryColor;
+                font-weight: @sideMenuCategoriesListItemSecondaryFontWeight;
+            }
+    
+            &-link {
+                font-weight: @sideMenuCategoriesListItemLinkFontWeight;
+                color: @sideMenuCategoriesListItemLinkColor;
+                text-decoration: @sideMenuCategoriesListItemLinkTextDecoration;
+
+                &:hover {
+                    color: @sideMenuCategoriesListItemLinkColorHover;
+                }
+
+                &_secondary {
+                    color: @sideMenuCategoriesListItemLinkSecondaryColor;
+
+                    &:hover {
+                        color: @sideMenuCategoriesListItemLinkSecondaryColorHover;
+                    }
+                }
+    
+                &_active {
+                    font-weight: @sideMenuCategoriesListItemLinkActiveFontWeight;
+                    color: @sideMenuCategoriesListItemLinkActiveColor;
+
+                    &:hover {
+                        color: @sideMenuCategoriesListItemLinkActiveColor;
+                    }
+                }
+            }
+    
+            .side-menu-categories__list-level(@i) when (@i > 1) {
+                padding-left: (@i - 1) * @sideMenuCategoriesListLevelPaddingLeft;
+            }
+    
+            .side-menu-categories__list-level(2);
+            .side-menu-categories__list-level(3);
+            .side-menu-categories__list-level(4);
+            .side-menu-categories__list-level(5);
+            .side-menu-categories__list-level(6);
+        }
+    
+        .side-menu-categories__list-level-1 {
+            padding-left: 0;
+        }
+    }
+}

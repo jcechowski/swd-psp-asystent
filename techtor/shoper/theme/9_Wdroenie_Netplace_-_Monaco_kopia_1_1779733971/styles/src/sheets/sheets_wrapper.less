@@ -1,0 +1,48 @@
+.sheet-wrapper {
+    position: fixed;
+    z-index: 2;
+    max-width: @sheetWrapperMaxWidth;
+    width: @sheetWrapperWidth;
+    top: 0;
+    right: 0;
+    left: initial;
+
+    &_layer-out {
+        z-index: 0;
+    }
+
+    .sheet {
+        &_show-scale-start,
+        &_hide-scale-end {
+            transform: translate3d(20%, 0, 0);
+        }
+
+        &_show-scale-end,
+        &_hide-scale-start {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    &_left {
+        left: 0;
+        right: initial;
+
+        .sheet {
+            &_show-scale-start,
+            &_hide-scale-end {
+                transform: translate3d(-20%, 0, 0);
+            }
+
+            &_show-scale-end,
+            &_hide-scale-start {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: (@breakPointXs - 1)) {
+    .sheet-wrapper {
+        max-width: @sheetWrapperMaxWidthOnMobile;
+    }
+}

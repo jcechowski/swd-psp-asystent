@@ -1,0 +1,64 @@
+.basket-shipping {
+    border: 1px solid @neutralColors300;
+    padding: 1rem;
+    border-radius: 4px;
+
+    &:focus-within {
+        border-color: @inputBorderColorFocus;
+        box-shadow: @inputBoxShadowFocus;
+    }
+
+    &_selected {
+        border-color: @primaryColors500;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: @globalSpacing;
+    }
+
+    &__radio {
+        flex-grow: 1;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__summary {
+        display: flex;
+        align-items: center;
+        column-gap: @globalSpacing;
+    }
+    
+    &__image {
+        height: 30px;
+        max-width: 345px;
+        object-fit: contain;
+        width: calc(100% - 1rem);
+        margin-left: 1rem;
+    }
+
+    &__pickup-point {
+        margin-top: @globalSpacing * 0.5;
+
+        &-address {
+            background-color: @neutralColors50;
+            padding: @globalSpacing;
+            border-radius: 2px;
+            margin-top: @globalSpacing * 0.5;
+            font-style: normal;
+        }
+    }
+
+    &__price {
+        &_highlight {
+            color: @secondaryColor;
+        }
+    }
+}
+
+.easypack-widget :focus {
+    box-shadow: @inputBoxShadowFocus !important;
+    border-color: @inputBorderColorFocus !important;
+}

@@ -1,0 +1,47 @@
+.select-toggler {
+    .input();
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0;
+
+    .pixel-to-rem(padding-right, 12);
+
+    &:empty {
+        .pixel-to-rem(height, @selectTogglerLoadingHeight);
+    }
+
+    &_selected {
+        border-color: @selectTogglerSelectedBorderColor;
+    }
+
+    &__placeholder {
+        flex-basis: 100%;
+        .padding-to-unit(@selectTogglerPlaceholderPaddingTopInPx, @selectTogglerPlaceholderPaddingRightInPx, @selectTogglerPlaceholderPaddingBottomInPx, @selectTogglerPlaceholderPaddingLeftInPx);
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    &__values {
+        display: flex;
+        flex-wrap: wrap;
+        flex-basis: 100%;
+
+        overflow-y: auto;
+
+        .pixel-to-rem(max-height, @selectTogglerTagHeightInPx * @selectTogglerTagValuesNumberOfRows + 2 * @selectTogglerTagValuesGap + 2 * @selectTogglerPaddingTopInPx);
+        .custom-scrollbar();
+        .pixel-to-rem(gap, @selectTogglerTagValuesGap);
+        .padding-to-unit(@selectTogglerPaddingTopInPx, @selectTogglerPaddingRightInPx, @selectTogglerPaddingBottomInPx, @selectTogglerPaddingLeftInPx);
+    }
+
+    &_variant {
+        .select-toggler__values > * {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}

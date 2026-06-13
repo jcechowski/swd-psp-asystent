@@ -1,0 +1,20 @@
+.box {
+    .box();
+
+    &__header {
+        .box-header();
+    }
+
+    &__content {
+        .box-content();
+    }
+
+    &_spacing-s {
+        .padding-to-unit(@boxPaddingS, @boxPaddingS, @boxPaddingS, @boxPaddingS);
+    }
+
+    &_primary {
+        background-color: @boxPrimaryBgColor;
+        border-color: @boxPrimaryBorderColor;
+    }
+}

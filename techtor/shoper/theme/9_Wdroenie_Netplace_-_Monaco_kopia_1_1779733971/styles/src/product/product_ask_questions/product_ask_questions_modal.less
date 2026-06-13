@@ -1,0 +1,35 @@
+.product-ask-questions-modal {
+    &__product {
+        display: flex;
+        gap: @globalSpacing;
+        align-items: center;
+
+        &_with-image {
+            @media (max-width: (@breakPointXs - 1)) {
+                flex-direction: column;
+            }
+        }
+
+        &-image-wrapper {
+            max-width: @productAskQuestionsModalProductImageWrapperMaxWidth;
+        }
+
+        &-name {
+            .pixel-to-rem(font-size, @productAskQuestionsProductNameFontSize);
+            .pixel-to-rem(line-height, @productAskQuestionsProductNameLineHeight);
+
+            color: @productAskQuestionsProductNameColor;
+        }
+    }
+
+    &__legal-notice {
+        .font-size(@productAskQuestionsLegalNoticeFontSize);
+        .line-height(@productAskQuestionsLegalNoticeLineHeight);
+        color: @productAskQuestionsLegalNoticeColor;
+        margin-bottom: @productAskQuestionsLegalNoticeMarginBottom;
+
+        @media (max-width: (@breakPointXs - 1)) {
+            margin-bottom: @productAskQuestionsLegalNoticeMobileMarginBottom;
+        }
+    }
+}

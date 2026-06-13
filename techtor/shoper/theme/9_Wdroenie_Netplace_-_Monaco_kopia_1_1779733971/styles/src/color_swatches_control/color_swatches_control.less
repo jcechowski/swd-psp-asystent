@@ -1,0 +1,9 @@
+.color-swatches-control {
+    display: inline-block;
+
+    &_error {
+        .pixel-to-rem(padding, @colorSwatchesControlBorderRadiusPadding);
+        border: @colorSwatchesControlBorderError;
+        border-radius: @colorSwatchesControlBorderRadius;
+    }
+}

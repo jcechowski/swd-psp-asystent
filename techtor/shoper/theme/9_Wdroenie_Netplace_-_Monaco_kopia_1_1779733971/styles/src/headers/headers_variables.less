@@ -1,0 +1,40 @@
+@headersSize: 100;
+@h1FontSize: 24 * (@headersSize / 100);
+@h2FontSize: 22 * (@headersSize / 100);
+@h3FontSize: 20 * (@headersSize / 100);
+@h4FontSize: 19 * (@headersSize / 100);
+@h5FontSize: 18 * (@headersSize / 100);
+@h6FontSize: 17 * (@headersSize / 100);
+
+@h1MobileFontSize: @h1FontSize - 2;
+@h2MobileFontSize: @h2FontSize - 2;
+@h3MobileFontSize: @h3FontSize - 1;
+@h4MobileFontSize: @h4FontSize - 1;
+@h5MobileFontSize: @h5FontSize - 1;
+@h6MobileFontSize: @h6FontSize - 1;
+
+@hxLineSpacingMultiplier: 110;
+@h1LineHeightInPx: (@h1FontSize + 4) * (@hxLineSpacingMultiplier / 100);
+@h2LineHeightInPx: (@h2FontSize + 4)  * (@hxLineSpacingMultiplier / 100);
+@h3LineHeightInPx: (@h3FontSize + 4)  * (@hxLineSpacingMultiplier / 100);
+@h4LineHeightInPx: (@h4FontSize + 4)  * (@hxLineSpacingMultiplier / 100);
+@h5LineHeightInPx: (@h5FontSize + 4)  * (@hxLineSpacingMultiplier / 100);
+@h6LineHeightInPx: (@h6FontSize + 3)  * (@hxLineSpacingMultiplier / 100);
+
+@h1MobileLineHeightInPx: @h1MobileFontSize + 4;
+@h2MobileLineHeightInPx: @h2MobileFontSize + 4;
+@h3MobileLineHeightInPx: @h3MobileFontSize + 4;
+@h4MobileLineHeightInPx: @h4MobileFontSize + 4;
+@h5MobileLineHeightInPx: @h5MobileFontSize + 3;
+@h6MobileLineHeightInPx: @h6MobileFontSize + 4;
+
+@headersFont: @globalBodyFontFamilyName;
+@hxFontColor: @globalFontColor;
+@hxFontWeight: @fontWeightNormal;
+@hxMarginBottom: @globalSpacing;
+
+
+@secondaryHeaderMFontSize: @fontSizeInPxL;
+@secondaryHeaderSFontSize: @fontSizeInPxM;
+@secondaryHeaderFontWeight: @fontWeightSemibold;
+@secondaryHeaderMarginBottom: @globalSpacing;

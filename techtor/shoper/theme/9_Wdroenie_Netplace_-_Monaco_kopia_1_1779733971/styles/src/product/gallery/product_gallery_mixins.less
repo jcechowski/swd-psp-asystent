@@ -1,0 +1,9 @@
+.full-width-pattern(@index, @rule) when (@index > 0) {
+    .full-width-pattern(@index - 1, @rule);
+
+    & when (mod(@index, 3) = 0) {
+        & > [data-visible-index='@{index}'] {
+            grid-column: @rule;
+        }
+    }
+}

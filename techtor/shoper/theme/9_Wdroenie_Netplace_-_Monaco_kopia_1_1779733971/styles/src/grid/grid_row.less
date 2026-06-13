@@ -1,0 +1,63 @@
+.grid {
+    &__row {
+        display: flex;
+        flex-wrap: wrap;
+
+        min-width: 100%;
+        max-width: 100dvw;
+        .pixel-to-rem(margin-left, -@gridGutter);
+        .pixel-to-rem(margin-right, -@gridGutter);
+
+        &_container-width {
+            width: 100%;
+            max-width: @gridContainerWidth;
+            min-width: auto;
+        }
+
+        &_text-color {
+            *:not(a, button, .btn, .js__grid-placeholder, .ribbon, .price__value_special, .resetcss *, .resetcss) {
+                color: var(--text-color);
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            [role='heading'] {
+                color: var(--heading-color);
+                *:not(a, button, .btn, .js__grid-placeholder, .ribbon, .price__value_special, .resetcss *, .resetcss) {
+                    color: var(--heading-color);
+                }
+            }
+
+            .js__grid-placeholder,
+            .js__grid-placeholder * {
+                color: var(--a-neutral-900);
+            }
+        }
+    }
+}
+
+.generate-row-alignments(@breakpointXsName);
+
+@media screen and (min-width: @breakPointXs) {
+    .generate-row-alignments(@breakpointSmName);
+}
+
+@media screen and (min-width: @breakPointSm) {
+    .generate-row-alignments(@breakpointMdName);
+}
+
+@media screen and (min-width: @breakPointMd) {
+    .generate-row-alignments(@breakpointLgName);
+}
+
+@media screen and (min-width: @breakPointLg) {
+    .generate-row-alignments(@breakpointXlName);
+}
+
+@media screen and (min-width: @breakPointXl) {
+    .generate-row-alignments(@breakpointXxlName);
+}

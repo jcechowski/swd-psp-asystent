@@ -1,0 +1,35 @@
+.footer-groups {
+    width: 100%;
+    column-gap: @footerGroupsSpacing;
+    row-gap: @footerGroupsSpacing;
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.footer-group {
+    &__title {
+        line-height: normal;
+    }
+
+    &__list {
+        margin-top: @footerGroupListMarginTop;
+    }
+
+    &__link {
+        text-decoration: none;
+        color: @footerGroupLinkColor;
+
+        &:hover {
+            color: @footerGroupLinkHoverColor;
+            text-decoration: underline;
+        }
+    }
+}
+
+@media (max-width: (@breakPointXs - 1)) {
+    .footer-groups {
+        grid-template-columns: 1fr;
+        row-gap: @footerGroupsSpacingXs;
+    }
+}
