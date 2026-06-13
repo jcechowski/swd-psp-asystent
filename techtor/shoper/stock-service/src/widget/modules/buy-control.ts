@@ -1,14 +1,14 @@
 import type { WidgetModule, WidgetState, StockInfo } from '../types';
 
-/** Kontroluje blokadę/odblokadę koszyka (buy-button) */
+/** Kontroluje blokadę/odblokadę koszyka i widoczność ceny */
 export class BuyControl implements WidgetModule {
+  private priceStyleEl: HTMLStyleElement | null = null;
+
   apply(state: WidgetState, _info: StockInfo, _qty: number): void {
     const buyBtns = document.querySelectorAll<HTMLElement>('buy-button, [class*="buy-button"], .product-buy__button');
     const stepper = document.querySelector<HTMLElement>('h-input-stepper, [class*="quantity__input"]');
     const stepperWrapper = stepper?.closest('product-quantity, [class*="quantity"], .product-quantity') as HTMLElement | null;
 
-    // Blokada TYLKO przy price-zero (brak ceny → klient musi zapytać)
-    // Overlimit → koszyk odblokowany, baner "Zapytaj o dostępność"
     const shouldBlock = state === 'price-zero';
     const shouldHide = state === 'price-zero';
 
@@ -42,6 +42,7 @@ export class BuyControl implements WidgetModule {
       }
     }
 
+    // Stepper: ukryj przy price-zero
     if (stepperWrapper) {
       if (shouldHide) {
         stepperWrapper.classList.add('techtor-hide');
@@ -51,9 +52,30 @@ export class BuyControl implements WidgetModule {
         delete stepperWrapper.dataset.techtorHidden;
       }
     }
+
+    // Cena: ukryj przy price-zero (Shoper pokazuje 0,01 zł)
+    if (shouldHide) {
+      if (!this.priceStyleEl) {
+        this.priceStyleEl = document.createElement('style');
+        this.priceStyleEl.id = 'techtor-price-hide';
+        this.priceStyleEl.textContent = `
+          product-price, .product-price,
+          [data-module-name="product_prices"],
+          .product-prices { display: none !important; }
+        `;
+        document.head.appendChild(this.priceStyleEl);
+      }
+    } else {
+      if (this.priceStyleEl) {
+        this.priceStyleEl.remove();
+        this.priceStyleEl = null;
+      }
+    }
   }
 
   destroy(): void {
+    this.priceStyleEl?.remove();
+    this.priceStyleEl = null;
     document.querySelectorAll<HTMLElement>('[data-techtor-hidden]').forEach(el => {
       el.classList.remove('techtor-hide');
       delete el.dataset.techtorHidden;
