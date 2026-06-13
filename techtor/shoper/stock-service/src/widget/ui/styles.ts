@@ -15,6 +15,10 @@ export const WIDGET_CSS = `
   background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
   border: 1px solid #fecaca;
 }
+.techtor-banner--info {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid #93c5fd;
+}
 .techtor-banner__row {
   display: flex;
   align-items: center;
@@ -27,6 +31,7 @@ export const WIDGET_CSS = `
 }
 .techtor-banner__text--amber { color: #92400e; }
 .techtor-banner__text--red { color: #991b1b; }
+.techtor-banner__text--blue { color: #1e40af; }
 .techtor-banner__detail {
   margin: 8px 0 0;
   font-size: 13px;

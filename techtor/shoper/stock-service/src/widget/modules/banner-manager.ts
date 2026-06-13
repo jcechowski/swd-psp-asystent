@@ -1,7 +1,7 @@
 import type { WidgetModule, WidgetState, StockInfo } from '../types';
-import { askBannerHtml, price0BannerHtml, overlimitBannerHtml } from '../ui/templates';
+import { askBannerHtml, tarnawaBannerHtml, price0BannerHtml, overlimitBannerHtml } from '../ui/templates';
 
-const BANNER_IDS = ['techtor-ask-banner', 'techtor-price0-banner', 'techtor-overlimit-banner'];
+const BANNER_IDS = ['techtor-ask-banner', 'techtor-tarnawa-banner', 'techtor-price0-banner', 'techtor-overlimit-banner'];
 
 /** Zarządza banerami na stronie produktu */
 export class BannerManager implements WidgetModule {
@@ -23,6 +23,9 @@ export class BannerManager implements WidgetModule {
 
     let html = '';
     switch (state) {
+      case 'available-tarnawa':
+        html = tarnawaBannerHtml();
+        break;
       case 'out-of-stock':
         html = askBannerHtml();
         break;

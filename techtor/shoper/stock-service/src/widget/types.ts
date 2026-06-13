@@ -1,5 +1,5 @@
 /** Stany maszyny stanów widgetu */
-export type WidgetState = 'loading' | 'available' | 'overlimit' | 'out-of-stock' | 'price-zero';
+export type WidgetState = 'loading' | 'available' | 'available-tarnawa' | 'overlimit' | 'out-of-stock' | 'price-zero';
 
 /** Dane stocku dla SKU */
 export interface StockInfo {

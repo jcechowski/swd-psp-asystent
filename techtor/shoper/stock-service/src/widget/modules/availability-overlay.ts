@@ -18,13 +18,17 @@ export class AvailabilityOverlay implements WidgetModule {
         text = 'dostępny';
         color = '#16a34a'; // green
         break;
-      case 'overlimit':
+      case 'available-tarnawa':
         text = 'dostępny';
-        color = '#16a34a';
+        color = '#16a34a'; // green (towar jest, tylko dłuższa wysyłka)
+        break;
+      case 'overlimit':
+        text = 'zapytaj o dostępność';
+        color = '#b45309'; // amber
         break;
       case 'out-of-stock':
         text = 'zapytaj o dostępność';
-        color = '#b45309'; // amber
+        color = '#b45309';
         break;
       case 'price-zero':
         text = 'zapytaj o cenę i dostępność';

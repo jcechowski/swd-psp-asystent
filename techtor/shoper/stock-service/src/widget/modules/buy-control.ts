@@ -7,7 +7,9 @@ export class BuyControl implements WidgetModule {
     const stepper = document.querySelector<HTMLElement>('h-input-stepper, [class*="quantity__input"]');
     const stepperWrapper = stepper?.closest('product-quantity, [class*="quantity"], .product-quantity') as HTMLElement | null;
 
-    const shouldBlock = state === 'price-zero' || state === 'overlimit';
+    // Blokada TYLKO przy price-zero (brak ceny → klient musi zapytać)
+    // Overlimit → koszyk odblokowany, baner "Zapytaj o dostępność"
+    const shouldBlock = state === 'price-zero';
     const shouldHide = state === 'price-zero';
 
     for (const bb of buyBtns) {
@@ -19,22 +21,20 @@ export class BuyControl implements WidgetModule {
         delete bb.dataset.techtorHidden;
       }
 
-      // Disabled state na przyciskach wewnątrz
       const btn = bb.querySelector<HTMLButtonElement>('.btn_primary, button[type="submit"]')
         || (bb.classList.contains('btn_primary') ? bb as HTMLButtonElement : null);
       if (btn) {
-        if (shouldBlock && !shouldHide) {
+        if (shouldBlock) {
           btn.setAttribute('disabled', 'true');
           btn.style.opacity = '0.5';
           btn.style.pointerEvents = 'none';
-        } else if (!shouldBlock) {
+        } else {
           btn.removeAttribute('disabled');
           btn.style.opacity = '';
           btn.style.pointerEvents = '';
         }
       }
 
-      // is-buyable atrybut (Shoper Phoenix web component)
       if (shouldBlock) {
         bb.setAttribute('is-buyable', '0');
       } else {
@@ -42,7 +42,6 @@ export class BuyControl implements WidgetModule {
       }
     }
 
-    // Stepper: ukryj przy price-zero, pokaż w reszcie
     if (stepperWrapper) {
       if (shouldHide) {
         stepperWrapper.classList.add('techtor-hide');
@@ -55,7 +54,6 @@ export class BuyControl implements WidgetModule {
   }
 
   destroy(): void {
-    // Przywróć oryginalne stany
     document.querySelectorAll<HTMLElement>('[data-techtor-hidden]').forEach(el => {
       el.classList.remove('techtor-hide');
       delete el.dataset.techtorHidden;
