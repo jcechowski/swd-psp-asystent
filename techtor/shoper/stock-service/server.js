@@ -68,8 +68,9 @@ function cors(req, res, next) {
   next();
 }
 
-// ── Snippet JS — NO CACHE (Cloudflare nadpisywał max-age na 28800=8h!) ──────
-// Obsługuje: /snippet.js, /v2/snippet.js, /v99/snippet.js, /snippet.js?v=abc
+// ── Snippet JS → SERWUJE WIDGET v3 (podmiana!) ──────────────────────────────
+// /snippet.js, /v2/snippet.js → widget.js (nowy kod Event Bus)
+// /legacy/snippet.js → stary snippet.js (rollback)
 app.get(/^\/(v\d+\/)?snippet\.js$/, cors, (req, res) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.set('CDN-Cache-Control', 'no-store');
@@ -77,7 +78,15 @@ app.get(/^\/(v\d+\/)?snippet\.js$/, cors, (req, res) => {
   res.set('Pragma', 'no-cache');
   res.set('Expires', '0');
   res.set('Content-Type', 'application/javascript; charset=utf-8');
-  res.set('ETag', `"${snippetHash}"`);
+  res.set('ETag', `"${widgetHash}"`);
+  loadWidget();
+  res.send(widgetContent);
+});
+
+// ── Legacy snippet (rollback) ──
+app.get('/legacy/snippet.js', cors, (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Content-Type', 'application/javascript; charset=utf-8');
   loadSnippet();
   res.send(snippetContent);
 });
