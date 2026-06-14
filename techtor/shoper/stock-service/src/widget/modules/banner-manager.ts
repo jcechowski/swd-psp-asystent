@@ -24,8 +24,7 @@ export class BannerManager implements WidgetModule {
     let html = '';
     switch (state) {
       case 'available-tarnawa':
-        html = tarnawaBannerHtml();
-        break;
+        return; // czas wysyłki zmieniony przez DeliveryTime — baner zbędny
       case 'out-of-stock':
         html = askBannerHtml();
         break;

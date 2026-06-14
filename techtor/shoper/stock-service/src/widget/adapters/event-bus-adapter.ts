@@ -67,12 +67,23 @@ export class EventBusAdapter implements WidgetAdapter {
       mo.observe(stepper, { attributes: true, attributeFilter: ['value'] });
       this.listeners.push({ event: '__mo_qty', cb: () => mo.disconnect() } as never);
 
-      // Click listeners na stepper buttons
+      // Input event na polu ilości (ręczne wpisywanie)
+      const qtyInput = stepper.querySelector<HTMLInputElement>('input[type="number"], input');
+      if (qtyInput) {
+        const inputHandler = () => {
+          const val = parseInt(qtyInput.value || '1', 10);
+          if (val > 0) cb(val);
+        };
+        qtyInput.addEventListener('change', inputHandler);
+        qtyInput.addEventListener('input', inputHandler);
+      }
+
+      // Click listeners na stepper buttons — czekaj aż DOM się zaktualizuje
       stepper.querySelectorAll('h-button-stepper, button').forEach(btn => {
         const clickHandler = () => setTimeout(() => {
           const val = parseInt(stepper.getAttribute('value') || '1', 10);
           cb(val || 1);
-        }, 50);
+        }, 250);
         btn.addEventListener('click', clickHandler);
       });
     }

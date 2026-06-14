@@ -9,10 +9,24 @@ import { WIDGET_CSS, SHOPER_ASK_HIDE_CSS } from '../ui/styles';
 import { BuyControl } from '../modules/buy-control';
 import { BannerManager } from '../modules/banner-manager';
 import { AvailabilityOverlay } from '../modules/availability-overlay';
+import { DeliveryTime } from '../modules/delivery-time';
 import { InpostHider } from '../modules/inpost-hider';
 import { VariantSelector } from '../modules/variant-selector';
-import { DeliveryTime } from '../modules/delivery-time';
 import { showAskModal } from '../modules/ask-modal';
+
+/** Tworzy pełny zestaw modułów widgetu */
+function createModules(): WidgetModule[] {
+  const banners = new BannerManager();
+  banners.setAskHandler(showAskModal);
+  return [
+    new BuyControl(),
+    banners,
+    new AvailabilityOverlay(),
+    new DeliveryTime(),
+    new InpostHider(),
+    new VariantSelector(),
+  ];
+}
 
 /** Główna klasa widgetu */
 class Widget {
@@ -31,16 +45,7 @@ class Widget {
     this.injectStyles();
 
     // Inicjalizuj moduły
-    const banners = new BannerManager();
-    banners.setAskHandler(showAskModal);
-    this.modules = [
-      new BuyControl(),
-      banners,
-      new AvailabilityOverlay(),
-      new DeliveryTime(),
-      new InpostHider(),
-      new VariantSelector(),
-    ];
+    this.modules = createModules();
 
     // Nasłuchuj na zmiany produktu (wariantu)
     this.adapter.onProductChange(sku => {
@@ -103,7 +108,7 @@ class Widget {
     }
   }
 
-  private restart(): void {
+  restart(): void {
     dbg('Widget restart');
     // Zniszcz moduły
     for (const mod of this.modules) mod.destroy();
@@ -116,16 +121,7 @@ class Widget {
 
     // Przeładuj stock data i restart
     loadStockData().then(() => {
-      // Reinicjalizuj moduły
-      const banners = new BannerManager();
-      banners.setAskHandler(showAskModal);
-      this.modules = [
-        new BuyControl(),
-        banners,
-        new AvailabilityOverlay(),
-        new InpostHider(),
-        new VariantSelector(),
-      ];
+      this.modules = createModules();
 
       const sku = getSku();
       if (sku) {
@@ -145,17 +141,33 @@ class Widget {
   }
 }
 
+/** Aktywna instancja widgetu — potrzebna do rerun */
+let _activeWidget: Widget | null = null;
+
 /** Inicjalizacja widgetu — próbuje Event Bus, fallback na DOM */
 export async function bootstrap(): Promise<void> {
-  // Guard: zapobiegaj podwójnemu ładowaniu
-  if (window.__techtorWidget?.initialized) return;
+  // Przy ponownym wywołaniu (img onload po SPA nav) — restart istniejącego
+  if (window.__techtorWidget?.initialized && _activeWidget) {
+    dbg('Widget already initialized — rerun');
+    _activeWidget.restart();
+    return;
+  }
+
+  // Reset stanu przy ponownym załadowaniu skryptu (page refresh)
   window.__techtorWidget = { version: 3, runId: 0, initialized: false, mode: 'loading' };
 
   initDebug();
   dbg('Widget v3 bootstrap start');
 
-  // Załaduj stock data
+  // Wymuś świeże dane stocku (nie z sessionStorage cache)
+  invalidateCache();
   await loadStockData();
+
+  function initWidget(adapter: WidgetAdapter): void {
+    const widget = new Widget(adapter);
+    _activeWidget = widget;
+    widget.start();
+  }
 
   // Próbuj Shoper Event Bus
   if (typeof window.useStorefront === 'function') {
@@ -164,10 +176,7 @@ export async function bootstrap(): Promise<void> {
       window.__techtorWidget!.initialized = true;
       window.__techtorWidget!.mode = 'eventbus';
       dbg('Tryb: Event Bus (useStorefront)');
-
-      const adapter = new EventBusAdapter(api);
-      const widget = new Widget(adapter);
-      widget.start();
+      initWidget(new EventBusAdapter(api));
     });
 
     // Timeout: jeśli useStorefront nie wywołał callbacka po 5s → fallback
@@ -176,10 +185,7 @@ export async function bootstrap(): Promise<void> {
         dbgWarn('useStorefront timeout — fallback na DOM adapter');
         window.__techtorWidget!.initialized = true;
         window.__techtorWidget!.mode = 'dom-fallback';
-
-        const adapter = new DomAdapter();
-        const widget = new Widget(adapter);
-        widget.start();
+        initWidget(new DomAdapter());
       }
     }, 5000);
   } else {
@@ -187,9 +193,6 @@ export async function bootstrap(): Promise<void> {
     dbgWarn('Brak useStorefront — DOM fallback');
     window.__techtorWidget!.initialized = true;
     window.__techtorWidget!.mode = 'dom-fallback';
-
-    const adapter = new DomAdapter();
-    const widget = new Widget(adapter);
-    widget.start();
+    initWidget(new DomAdapter());
   }
 }

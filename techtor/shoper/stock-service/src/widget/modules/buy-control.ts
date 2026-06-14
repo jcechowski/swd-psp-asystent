@@ -38,7 +38,7 @@ export class BuyControl implements WidgetModule {
       if (shouldBlock) {
         bb.setAttribute('is-buyable', '0');
       } else {
-        bb.removeAttribute('is-buyable');
+        bb.setAttribute('is-buyable', '1');
       }
     }
 
@@ -81,7 +81,7 @@ export class BuyControl implements WidgetModule {
       delete el.dataset.techtorHidden;
     });
     document.querySelectorAll<HTMLElement>('buy-button').forEach(bb => {
-      bb.removeAttribute('is-buyable');
+      bb.setAttribute('is-buyable', '1');
       const btn = bb.querySelector<HTMLButtonElement>('.btn_primary, button');
       if (btn) {
         btn.removeAttribute('disabled');

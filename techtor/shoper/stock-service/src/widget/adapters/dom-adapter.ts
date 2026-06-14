@@ -58,9 +58,9 @@ export class DomAdapter implements WidgetAdapter {
       mo.observe(stepper, { attributes: true, attributeFilter: ['value'] });
       this.observers.push(mo);
 
-      // Click listeners
+      // Click listeners — czekaj aż stepper zaktualizuje DOM
       stepper.querySelectorAll('h-button-stepper, button').forEach(btn => {
-        const handler = () => setTimeout(check, 50);
+        const handler = () => setTimeout(check, 250);
         btn.addEventListener('click', handler);
         this.cleanups.push(() => btn.removeEventListener('click', handler));
       });

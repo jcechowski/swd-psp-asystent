@@ -13,7 +13,7 @@ export function askBannerHtml(): string {
 /** Baner "Wysyłka 48h" — towar z magazynu Tarnawa, koszyk ODBLOKOWANY */
 export function tarnawaBannerHtml(): string {
   return `<div class="techtor-banner techtor-banner--info" id="techtor-tarnawa-banner">
-    <div class="techtor-banner__row">${ICON_INFO}<span class="techtor-banner__text techtor-banner__text--blue">Towar dostępny u dostawcy — czas wysyłki 48 godzin</span></div>
+    <div class="techtor-banner__row">${ICON_INFO}<span class="techtor-banner__text techtor-banner__text--blue">Czas wysyłki 48 godzin</span></div>
   </div>`;
 }
 
@@ -28,8 +28,9 @@ export function price0BannerHtml(): string {
 /** Baner "Przekroczono ilość" — qty > total, koszyk ODBLOKOWANY + zapytaj */
 export function overlimitBannerHtml(stock: number): string {
   return `<div class="techtor-banner techtor-banner--warning" id="techtor-overlimit-banner">
-    <div class="techtor-banner__row">${ICON_WARN}<span class="techtor-banner__text techtor-banner__text--amber">Zapytaj o dostępność większej ilości</span></div>
+    <div class="techtor-banner__row">${ICON_WARN}<span class="techtor-banner__text techtor-banner__text--amber">Zapytaj o dostępność i czas wysyłki</span></div>
     <p class="techtor-banner__detail">W magazynie posiadamy <strong>${stock} szt.</strong></p>
-    <button class="techtor-ask-btn techtor-ask-btn--amber" id="techtor-overlimit-ask">${ICON_CHAT} Zapytaj o dostępność</button>
+    <p class="techtor-banner__detail" style="font-size:12px;color:#6b7280;margin-top:4px;">Możesz złożyć zamówienie, a my poinformujemy Cię kiedy zamówienie zostanie wysłane. W przypadku zbyt długiego terminu w każdej chwili możesz zrezygnować z zamówienia.</p>
+    <button class="techtor-ask-btn techtor-ask-btn--amber" id="techtor-overlimit-ask">${ICON_CHAT} Wyślij</button>
   </div>`;
 }

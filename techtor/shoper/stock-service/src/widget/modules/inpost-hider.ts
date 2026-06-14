@@ -6,7 +6,7 @@ export class InpostHider implements WidgetModule {
   private styleEl: HTMLStyleElement | null = null;
 
   apply(state: WidgetState, _info: StockInfo, qty: number): void {
-    const shouldHide = state === 'price-zero' || state === 'out-of-stock' || state === 'overlimit';
+    const shouldHide = state === 'price-zero' || state === 'out-of-stock';
 
     if (shouldHide && !this.styleEl) {
       this.styleEl = document.createElement('style');
