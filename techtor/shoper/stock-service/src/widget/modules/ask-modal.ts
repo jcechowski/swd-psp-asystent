@@ -93,20 +93,29 @@ export function showAskModal(sku: string, productName: string, quantity?: number
       try {
         const res = await fetch(`${VAT_API}?nip=${nip}`);
         const data = await res.json();
-        if (data?.result?.subject) {
-          const s = data.result.subject;
+        // API zwraca { ok, data: { name, street, postalCode, city } }
+        // lub legacy { result: { subject: { name, workingAddress } } }
+        const s = data?.data || data?.result?.subject;
+        if (s) {
           const form = overlay.querySelector('form')!;
           const set = (name: string, val: string) => {
             const el = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
             if (el && !el.value) el.value = val;
           };
           set('company', s.name || '');
-          set('street', s.workingAddress?.split(',')[0] || '');
-          const parts = (s.workingAddress || '').split(',');
-          if (parts.length > 1) {
-            const zipCity = parts[parts.length - 1].trim();
-            const zm = zipCity.match(/^(\d{2}-\d{3})\s+(.+)/);
-            if (zm) { set('zip', zm[1]); set('city', zm[2]); }
+          set('street', s.street || s.workingAddress?.split(',')[0] || '');
+          if (s.postalCode) set('zip', s.postalCode);
+          if (s.city) set('city', s.city);
+          if (s.email) set('email', s.email);
+          if (s.phone) set('phone', s.phone);
+          // Fallback: parsuj workingAddress gdy brak osobnych pól
+          if (!s.postalCode && s.workingAddress) {
+            const parts = s.workingAddress.split(',');
+            if (parts.length > 1) {
+              const zipCity = parts[parts.length - 1].trim();
+              const zm = zipCity.match(/^(\d{2}-\d{3})\s+(.+)/);
+              if (zm) { set('zip', zm[1]); set('city', zm[2]); }
+            }
           }
           dbg('NIP auto-fill:', s.name);
         }
