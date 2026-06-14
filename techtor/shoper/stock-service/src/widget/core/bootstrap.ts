@@ -28,6 +28,19 @@ function createModules(): WidgetModule[] {
   ];
 }
 
+/** Odczytaj aktualną ilość ze steppera */
+function readQtyFromDom(): number {
+  const stepper = document.querySelector<HTMLElement>('h-input-stepper, [class*="quantity__input"]');
+  if (!stepper) return 1;
+  const input = stepper.querySelector<HTMLInputElement>('input[type="number"], input');
+  if (input) {
+    const v = parseInt(input.value, 10);
+    if (v > 0) return v;
+  }
+  const attr = parseInt(stepper.getAttribute('value') || '', 10);
+  return attr > 0 ? attr : 1;
+}
+
 /** Główna klasa widgetu */
 class Widget {
   private adapter: WidgetAdapter;
@@ -66,6 +79,10 @@ class Widget {
       dbg('Navigation detected — restart');
       this.restart();
     });
+
+    // Odczytaj początkową ilość ze steppera
+    this.currentQty = readQtyFromDom();
+    dbg('Initial qty:', this.currentQty);
 
     // Inicjalny stan
     const sku = getSku();
@@ -122,6 +139,7 @@ class Widget {
     // Przeładuj stock data i restart
     loadStockData().then(() => {
       this.modules = createModules();
+      this.currentQty = readQtyFromDom();
 
       const sku = getSku();
       if (sku) {
