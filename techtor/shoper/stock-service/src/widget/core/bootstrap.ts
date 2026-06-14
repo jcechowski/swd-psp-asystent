@@ -11,6 +11,7 @@ import { BannerManager } from '../modules/banner-manager';
 import { AvailabilityOverlay } from '../modules/availability-overlay';
 import { InpostHider } from '../modules/inpost-hider';
 import { VariantSelector } from '../modules/variant-selector';
+import { DeliveryTime } from '../modules/delivery-time';
 import { showAskModal } from '../modules/ask-modal';
 
 /** Główna klasa widgetu */
@@ -36,6 +37,7 @@ class Widget {
       new BuyControl(),
       banners,
       new AvailabilityOverlay(),
+      new DeliveryTime(),
       new InpostHider(),
       new VariantSelector(),
     ];
