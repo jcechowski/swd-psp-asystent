@@ -1,13 +1,19 @@
 // =============================================================================
 // dopaliwa.pl — Theme variables (Luma child)
+// B2B Industrial Equipment Store — Navy + Orange
 // =============================================================================
 
 // --- Kolory marki ---
-@color-primary: #1a1a2e;        // Granat — glowny kolor
-@color-secondary: #e94560;      // Czerwony — akcenty, CTA
-@color-accent: #0f3460;         // Ciemny niebieski — naglowki
-@color-background: #f5f5f5;     // Jasne tlo
-@color-text: #333333;           // Tekst
+@color-primary: #1a2332;        // Ciemny granat — header, footer, nawigacja
+@color-secondary: #e67e22;      // Pomaranczowy — CTA, akcenty
+@color-accent: #2c3e50;         // Ciemny niebieski — naglowki, podkreslenia
+@color-background: #f8f9fa;     // Jasne tlo
+@color-text: #2d3436;           // Tekst
+@color-text-light: #636e72;     // Tekst jasny
+@color-border: #dfe6e9;         // Obramowania
+@color-white: #ffffff;
+@color-success: #27ae60;        // Dostepnosc, sukces
+@color-warning: #f39c12;        // Ostrzezenia
 
 // --- Typografia ---
 @font-family__base: 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -20,13 +26,13 @@
 @navigation-desktop-level0-item__hover__color: @color-secondary;
 
 // --- Header ---
-@header__background-color: #ffffff;
+@header__background-color: @color-white;
 @header-icons-color: @color-primary;
 
 // --- Footer ---
 @footer__background-color: @color-primary;
-@footer__color: #cccccc;
-@copyright__background-color: @color-primary;
+@footer__color: #b2bec3;
+@copyright__background-color: darken(@color-primary, 5%);
 
 // --- Buttony ---
 @button-primary__background: @color-secondary;
@@ -35,8 +41,8 @@
 @button-primary__border: none;
 
 // --- Ceny ---
-@price-color: @color-accent;
-@price-size__large: 24px;
+@price-color: @color-primary;
+@price-size__large: 26px;
 
 // --- Breadcrumbs ---
 @breadcrumbs__background: transparent;

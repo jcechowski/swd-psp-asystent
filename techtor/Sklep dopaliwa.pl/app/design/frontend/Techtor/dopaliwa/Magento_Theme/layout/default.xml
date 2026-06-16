@@ -17,6 +17,14 @@
             </arguments>
         </referenceBlock>
 
+        <!-- Free shipping banner above header -->
+        <referenceContainer name="page.top">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="free.shipping.banner"
+                   template="Magento_Theme::html/free-shipping-banner.phtml"
+                   before="-"/>
+        </referenceContainer>
+
         <!-- Footer custom links -->
         <referenceContainer name="footer">
             <block class="Magento\Cms\Block\Block" name="footer_links_custom" before="-">
