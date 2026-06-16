@@ -10,4 +10,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogUrlRewrite\Model\Product\GetProductUrlRewriteDataByStore">
+        <plugin name="techtor_safe_url_rewrite" type="Techtor\Import\Plugin\SafeUrlRewriteData" sortOrder="10"/>
+    </type>
 </config>
