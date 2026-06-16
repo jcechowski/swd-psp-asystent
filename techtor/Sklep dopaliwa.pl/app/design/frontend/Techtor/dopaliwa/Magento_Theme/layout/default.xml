@@ -5,8 +5,7 @@
         <!-- Google Fonts: Inter -->
         <css src="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
              src_type="url"/>
-        <!-- Favicon -->
-        <link src="Techtor_Theme::images/favicon.ico" rel="icon" type="image/x-icon"/>
+        <!-- Favicon ustawiany przez admin: Content > Design > Configuration -->
     </head>
     <body>
         <!-- Logo -->
