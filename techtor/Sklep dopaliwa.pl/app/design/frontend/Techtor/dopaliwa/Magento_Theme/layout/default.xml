@@ -17,10 +17,19 @@
             </arguments>
         </referenceBlock>
 
+        <!-- Footer custom links -->
+        <referenceContainer name="footer">
+            <block class="Magento\Cms\Block\Block" name="footer_links_custom" before="-">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">footer_links_custom</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
         <!-- Copyright -->
         <referenceBlock name="copyright">
             <arguments>
-                <argument name="copyright" xsi:type="string">© 2026 dopaliwa.pl — TECHTOR. Wszelkie prawa zastrzezone.</argument>
+                <argument name="copyright" xsi:type="string">© 2026 dopaliwa.pl — TECHTOR Jakub Cechowski. Wszelkie prawa zastrzeżone.</argument>
             </arguments>
         </referenceBlock>
     </body>

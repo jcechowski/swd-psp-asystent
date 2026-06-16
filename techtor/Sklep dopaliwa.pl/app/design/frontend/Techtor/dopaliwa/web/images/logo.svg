@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 50" width="280" height="50">
+  <defs>
+    <linearGradient id="fuel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e94560"/>
+      <stop offset="100%" style="stop-color:#c73651"/>
+    </linearGradient>
+  </defs>
+  <!-- Fuel drop icon -->
+  <path d="M22 6 C22 6 10 20 10 28 C10 34.6 15.4 40 22 40 C28.6 40 34 34.6 34 28 C34 20 22 6 22 6Z" fill="url(#fuel)"/>
+  <circle cx="22" cy="30" r="4" fill="#fff" opacity="0.3"/>
+  <!-- Brand name -->
+  <text x="44" y="24" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="26" font-weight="700" fill="#1a1a2e" letter-spacing="-0.5">do</text>
+  <text x="76" y="24" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="26" font-weight="700" fill="#e94560" letter-spacing="-0.5">paliwa</text>
+  <text x="164" y="24" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="26" font-weight="700" fill="#1a1a2e" letter-spacing="-0.5">.pl</text>
+  <!-- Tagline -->
+  <text x="44" y="42" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="10" font-weight="400" fill="#888" letter-spacing="2">SPRZĘT PALIWOWY</text>
+</svg>
