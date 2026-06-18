@@ -63,12 +63,30 @@ sudo -u www-data php bin/magento cache:flush
 - MySQL: `query_cache` usunięty w 8.0.46, `innodb_log_file_size` deprecated → `innodb_redo_log_capacity`
 - Composer create-project nie kopiuje `magento2-base` do roota → wymaga ręcznego `cp -rn` + utworzenia `app/etc/vendor_path.php`
 
+## Wykonane (2026-06-18 — audyt CTO)
+- [x] Magento: production mode (było default!)
+- [x] env.php/config.php: chmod 640 (było world-readable)
+- [x] Supervisor consumers: naprawione (3x RUNNING)
+- [x] SSH: PasswordAuthentication no, PermitRootLogin prohibit-password
+- [x] nginx: server_tokens off, max_execution_time 300s, worker_connections 1024
+- [x] OpenSearch: replicas=0 → cluster GREEN
+- [x] Fail2ban: +magento-admin +nginx-scan jails
+- [x] Braintree: wyłączony (spam w logach)
+- [x] MySQL backup: codziennie 3:00, /var/backups/mysql/, 14 dni retencji
+- [x] Theme: fix @dp-primary, konsolidacja CSS (flex zamiast float), self-hosted Inter font
+- [x] A11y: focus indicators, kontrast WCAG, ARIA na bannerze
+- [x] EAV: dodane atrybuty ean + delivery_time (AddMissingAttributes DataPatch)
+
 ## TODO
-- [ ] Domena: potwierdzić transfer dopaliwa.pl, DNS A → 72.62.1.240, SSL certbot
+- [ ] Domena: transfer dopaliwa.pl w toku (Hostinger, status: pending_verification), DNS A → 72.62.1.240, SSL certbot
 - [ ] Przelewy24: pobrać moduł z panel.przelewy24.pl, zainstalować
-- [ ] InPost: wpisać API token ShipX w admin
+- [ ] InPost: wpisać API token ShipX w admin + dodać Geowidget do checkout
 - [ ] Import produktów z Firmao/BaseLinker
 - [ ] Regulamin + Polityka prywatności — zlecić prawnikowi
-- [ ] 2FA: włączyć Magento_TwoFactorAuth przed go-live
+- [ ] 2FA: włączyć Magento_TwoFactorAuth ПОСЛЕ SSL
 - [ ] Numer konta bankowego w instrukcjach przelewu
 - [ ] NIP firmy uzupełnić na stronie O nas
+- [ ] Product JSON-LD schema (rich snippets Google)
+- [ ] Cookie consent banner (GDPR — obowiązkowy w PL)
+- [ ] Fix DPD Client (SOAP zamiast fikcyjnego REST)
+- [ ] Sitemap.xml → Google Search Console
