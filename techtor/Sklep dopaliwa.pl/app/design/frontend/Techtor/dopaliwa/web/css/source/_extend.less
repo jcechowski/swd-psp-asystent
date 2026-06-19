@@ -415,7 +415,7 @@ a {
         }
     }
 
-    // Price
+    // Price — netto główna, brutto mała
     .price-box {
         margin: 10px 0;
 
@@ -432,6 +432,27 @@ a {
 
         .special-price .price {
             color: #c0392b;
+        }
+    }
+
+    .price-container {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .price-excluding-tax {
+        display: block;
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: @dp-navy;
+        }
+    }
+    .price-including-tax {
+        display: block;
+        .price {
+            font-size: 12px;
+            font-weight: 400;
+            color: #999;
         }
     }
 
@@ -642,11 +663,6 @@ a {
         }
 
         .product-info-price {
-            .price {
-                font-size: 26px;
-                font-weight: 700;
-                color: @dp-primary;
-            }
             .price-label {
                 font-size: 11px;
                 color: #888;
@@ -654,15 +670,26 @@ a {
             }
         }
 
+        // B2B: Cena netto duża, brutto mała
         .price-excluding-tax,
         .price-including-tax {
             display: block;
             margin-bottom: 2px;
         }
-        .price-excluding-tax .price {
-            font-size: 16px;
-            color: #666;
-            font-weight: 500;
+        // Brutto (w HTML jest pierwsze) — mała, szara
+        .price-including-tax .price {
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            color: #999 !important;
+        }
+        // Netto (w HTML jest drugie) — duża, główna
+        // !important potrzebne bo Luma ma `.price-including-tax + .price-excluding-tax .price { font-size: 1.4rem }`
+        .price-excluding-tax .price,
+        .price-including-tax + .price-excluding-tax .price {
+            font-size: 32px !important;
+            font-weight: 700 !important;
+            color: @dp-primary !important;
+            line-height: 1.2 !important;
         }
 
         .product-info-stock-sku {
