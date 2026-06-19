@@ -76,6 +76,9 @@ sudo -u www-data php bin/magento cache:flush
 - [x] Theme: fix @dp-primary, konsolidacja CSS (flex zamiast float), self-hosted Inter font
 - [x] A11y: focus indicators, kontrast WCAG, ARIA na bannerze
 - [x] EAV: dodane atrybuty ean + delivery_time (AddMissingAttributes DataPatch)
+- [x] Cookie consent banner (GDPR/RODO) — vanilla JS, dp_cookie_consent cookie
+- [x] Product JSON-LD schema (rich snippets: cena, dostępność, marka, EAN)
+- [x] Organization JSON-LD sitewide
 
 ## TODO
 - [ ] Domena: transfer dopaliwa.pl w toku (Hostinger, status: pending_verification), DNS A → 72.62.1.240, SSL certbot
@@ -86,7 +89,5 @@ sudo -u www-data php bin/magento cache:flush
 - [ ] 2FA: włączyć Magento_TwoFactorAuth ПОСЛЕ SSL
 - [ ] Numer konta bankowego w instrukcjach przelewu
 - [ ] NIP firmy uzupełnić na stronie O nas
-- [ ] Product JSON-LD schema (rich snippets Google)
-- [ ] Cookie consent banner (GDPR — obowiązkowy w PL)
 - [ ] Fix DPD Client (SOAP zamiast fikcyjnego REST)
 - [ ] Sitemap.xml → Google Search Console
