@@ -1313,6 +1313,53 @@ select {
 }
 
 // =============================================================================
+// B2B PRICE DISPLAY — global override (netto duże, brutto małe)
+// Musi być po wszystkich Luma regułach żeby nadpisać styles-m.css
+// =============================================================================
+
+.price-excluding-tax,
+.price-including-tax {
+    display: block !important;
+}
+
+// Netto — główna cena
+.price-excluding-tax {
+    .price {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        color: @dp-navy !important;
+    }
+    &:before {
+        content: '' !important; // ukryj Luma "(Bez podatku: "
+    }
+    &:after {
+        content: '' !important;
+    }
+}
+
+// Brutto — pomocnicza
+.price-including-tax {
+    .price {
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        color: #999 !important;
+    }
+    &:before {
+        content: '' !important;
+    }
+}
+
+// Product page — netto jeszcze większe
+.catalog-product-view .product-info-main {
+    .price-excluding-tax .price {
+        font-size: 32px !important;
+    }
+    .price-including-tax .price {
+        font-size: 14px !important;
+    }
+}
+
+// =============================================================================
 // RESPONSIVE / MOBILE
 // =============================================================================
 
@@ -1470,22 +1517,16 @@ select {
     .cookie-consent-inner {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 16px 24px;
+        padding: 10px 20px;
         display: flex;
         align-items: center;
-        gap: 24px;
-
-        @media (max-width: 768px) {
-            flex-direction: column;
-            text-align: center;
-            gap: 12px;
-        }
+        gap: 12px;
     }
 
     .cookie-consent-text {
         flex: 1;
         font-size: 13px;
-        line-height: 1.5;
+        line-height: 1.4;
         margin: 0;
 
         a {
@@ -1496,7 +1537,7 @@ select {
 
     .cookie-consent-actions {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         flex-shrink: 0;
     }
 
@@ -1505,7 +1546,7 @@ select {
         color: @dp-white;
         border: none;
         border-radius: @dp-radius;
-        padding: 10px 24px;
+        padding: 8px 20px;
         font-weight: 700;
         font-size: 13px;
         cursor: pointer;
@@ -1519,9 +1560,9 @@ select {
         color: @dp-white;
         border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: @dp-radius;
-        padding: 10px 24px;
+        padding: 8px 16px;
         font-weight: 500;
-        font-size: 13px;
+        font-size: 12px;
         cursor: pointer;
         transition: @dp-transition;
 
