@@ -28,6 +28,20 @@
             </block>
         </referenceContainer>
 
+        <!-- Organization JSON-LD (sitewide) -->
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="organization.jsonld"
+                   template="Magento_Theme::html/breadcrumbs-jsonld.phtml"/>
+        </referenceContainer>
+
+        <!-- Cookie consent banner (GDPR/RODO) -->
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="cookie.consent.banner"
+                   template="Magento_Theme::html/cookie-consent.phtml"/>
+        </referenceContainer>
+
         <!-- Copyright -->
         <referenceBlock name="copyright">
             <arguments>

@@ -1366,3 +1366,76 @@ select {
         font-weight: 700;
     }
 }
+
+// Cookie consent banner (GDPR/RODO)
+.cookie-consent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: @dp-navy;
+    color: @dp-white;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+
+    .cookie-consent-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            text-align: center;
+            gap: 12px;
+        }
+    }
+
+    .cookie-consent-text {
+        flex: 1;
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 0;
+
+        a {
+            color: @dp-orange;
+            text-decoration: underline;
+        }
+    }
+
+    .cookie-consent-actions {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .cookie-accept {
+        background: @dp-orange;
+        color: @dp-white;
+        border: none;
+        border-radius: @dp-radius;
+        padding: 10px 24px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        transition: @dp-transition;
+
+        &:hover { background: @dp-orange-hover; }
+    }
+
+    .cookie-reject {
+        background: transparent;
+        color: @dp-white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: @dp-radius;
+        padding: 10px 24px;
+        font-weight: 500;
+        font-size: 13px;
+        cursor: pointer;
+        transition: @dp-transition;
+
+        &:hover { border-color: @dp-white; }
+    }
+}

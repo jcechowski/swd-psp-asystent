@@ -1,0 +1,44 @@
+<?php
+/**
+ * Cookie consent banner — GDPR/RODO compliance
+ * dopaliwa.pl — TECHTOR
+ */
+?>
+<div id="cookie-consent" class="cookie-consent" role="dialog" aria-label="<?= $escaper->escapeHtmlAttr(__('Zgoda na pliki cookies')) ?>" style="display:none;">
+    <div class="cookie-consent-inner">
+        <p class="cookie-consent-text">
+            Używamy plików cookies, aby zapewnić najlepsze wrażenia na naszej stronie.
+            Kontynuując przeglądanie, zgadzasz się na ich używanie zgodnie z naszą
+            <a href="/polityka-prywatnosci">Polityką prywatności</a>.
+        </p>
+        <div class="cookie-consent-actions">
+            <button id="cookie-accept" class="action primary cookie-accept" type="button">
+                Akceptuję
+            </button>
+            <button id="cookie-reject" class="action secondary cookie-reject" type="button">
+                Tylko niezbędne
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    var COOKIE_NAME = 'dp_cookie_consent';
+    var consent = document.cookie.match('(^|;)\\s*' + COOKIE_NAME + '\\s*=\\s*([^;]+)');
+    if (consent) return;
+
+    var banner = document.getElementById('cookie-consent');
+    if (!banner) return;
+    banner.style.display = '';
+
+    function setCookie(value) {
+        var d = new Date();
+        d.setFullYear(d.getFullYear() + 1);
+        document.cookie = COOKIE_NAME + '=' + value + ';path=/;expires=' + d.toUTCString() + ';SameSite=Lax';
+        banner.style.display = 'none';
+    }
+
+    document.getElementById('cookie-accept').addEventListener('click', function() { setCookie('all'); });
+    document.getElementById('cookie-reject').addEventListener('click', function() { setCookie('essential'); });
+})();
+</script>

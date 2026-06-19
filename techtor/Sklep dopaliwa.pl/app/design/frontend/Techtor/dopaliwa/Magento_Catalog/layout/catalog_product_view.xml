@@ -4,5 +4,12 @@
     <body>
         <referenceContainer name="sidebar.main" remove="true"/>
         <referenceContainer name="sidebar.additional" remove="true"/>
+
+        <!-- Product JSON-LD structured data (Schema.org) -->
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Catalog\Block\Product\View"
+                   name="product.jsonld"
+                   template="Magento_Catalog::product/jsonld.phtml"/>
+        </referenceContainer>
     </body>
 </page>
