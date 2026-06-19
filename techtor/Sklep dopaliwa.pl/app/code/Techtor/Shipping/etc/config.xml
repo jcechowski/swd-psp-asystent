@@ -30,6 +30,7 @@
                 <name>DPD Kurier</name>
                 <price>14.99</price>
                 <free_shipping_threshold>500</free_shipping_threshold>
+                <sandbox>1</sandbox>
                 <api_url/>
                 <login/>
                 <api_password/>
