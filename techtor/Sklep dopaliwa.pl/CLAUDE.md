@@ -89,5 +89,5 @@ sudo -u www-data php bin/magento cache:flush
 - [ ] 2FA: włączyć Magento_TwoFactorAuth ПОСЛЕ SSL
 - [ ] Numer konta bankowego w instrukcjach przelewu
 - [ ] NIP firmy uzupełnić na stronie O nas
-- [ ] Fix DPD Client (SOAP zamiast fikcyjnego REST)
+- [x] Fix DPD Client — SOAP API (generateSpedLabelsV4 + getEventsForWaybillV1)
 - [ ] Sitemap.xml → Google Search Console
