@@ -617,37 +617,39 @@ a {
         }
     }
 
-    // Product page — 2-kolumnowy flex layout: zdjęcie | info
+    // Product page — 2-kolumnowy layout: zdjęcie | info
     .column.main {
         @media (min-width: 769px) {
             display: flex;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 24px;
         }
     }
 
     .product.media {
         float: none !important;
         width: auto !important;
+        box-sizing: border-box;
 
         @media (min-width: 769px) {
-            flex: 0 0 52%;
-            max-width: 52%;
+            flex: 1 1 0%;
+            min-width: 0;
+            max-width: calc(100% - 404px); // 380px info + 24px gap
         }
     }
 
     .product-info-main {
         background: @dp-white;
-        padding: 25px;
+        padding: 20px;
         border: 1px solid @dp-border;
         border-radius: @dp-radius;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
         float: none !important;
         width: auto !important;
+        box-sizing: border-box;
 
         @media (min-width: 769px) {
-            flex: 0 0 44%;
-            max-width: 44%;
+            flex: 0 0 380px;
         }
 
         @media (max-width: 768px) {
@@ -676,14 +678,11 @@ a {
             display: block;
             margin-bottom: 2px;
         }
-        // Brutto (w HTML jest pierwsze) — mała, szara
         .price-including-tax .price {
             font-size: 14px !important;
             font-weight: 400 !important;
             color: #999 !important;
         }
-        // Netto (w HTML jest drugie) — duża, główna
-        // !important potrzebne bo Luma ma `.price-including-tax + .price-excluding-tax .price { font-size: 1.4rem }`
         .price-excluding-tax .price,
         .price-including-tax + .price-excluding-tax .price {
             font-size: 32px !important;
@@ -701,11 +700,19 @@ a {
             color: #666;
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
 
             .stock {
                 font-weight: 600;
                 &.available {
                     color: @dp-success;
+                    &::before {
+                        content: "●";
+                        margin-right: 4px;
+                    }
+                }
+                &.unavailable {
+                    color: #c0392b;
                     &::before {
                         content: "●";
                         margin-right: 4px;
@@ -725,21 +732,81 @@ a {
         }
     }
 
+    // Tabs section — full width poniżej zdjęcie+info
     .product.info.detailed {
         @media (min-width: 769px) {
             flex: 0 0 100%;
-            max-width: 100%;
         }
         margin-top: 30px;
     }
 
-    // Gallery
-    .gallery-placeholder,
-    .fotorama__stage {
+    // Tabela atrybutów (Dane techniczne)
+    .additional-attributes-wrapper {
+        .table-additional-attributes {
+            width: 100%;
+            border-collapse: collapse;
+
+            th, td {
+                padding: 10px 14px;
+                font-size: 13px;
+                border-bottom: 1px solid @dp-border;
+                text-align: left;
+            }
+
+            th {
+                font-weight: 600;
+                color: @dp-navy;
+                background: @dp-bg;
+                width: 35%;
+                white-space: nowrap;
+            }
+
+            td {
+                color: @dp-text;
+            }
+
+            tr:last-child th,
+            tr:last-child td {
+                border-bottom: none;
+            }
+
+            tr:hover {
+                td, th {
+                    background: fade(@dp-orange, 4%);
+                }
+            }
+
+            @media (max-width: 600px) {
+                th {
+                    width: 40%;
+                    white-space: normal;
+                    font-size: 12px;
+                }
+                td {
+                    font-size: 12px;
+                }
+                th, td {
+                    padding: 8px 10px;
+                }
+            }
+        }
+    }
+
+    // Gallery — min-height zapobiega CLS
+    .gallery-placeholder {
         background: @dp-white;
         border: 1px solid @dp-border;
         border-radius: @dp-radius;
         overflow: hidden;
+        min-height: 400px;
+
+        @media (max-width: 768px) {
+            min-height: 300px;
+        }
+    }
+
+    .fotorama__stage {
+        background: @dp-white;
     }
 
     // Breadcrumbs
@@ -760,11 +827,71 @@ a {
         color: #555;
     }
 
+    // Opis pełny w zakładce
+    .product.attribute.description {
+        font-size: 14px;
+        line-height: 1.8;
+        color: @dp-text;
+
+        p { margin-bottom: 12px; }
+        ul, ol { margin: 12px 0 12px 20px; }
+        li { margin-bottom: 6px; }
+    }
+
+    // Review form styling
+    .review-add {
+        .block-title strong {
+            font-size: 18px;
+            font-weight: 700;
+            color: @dp-navy;
+        }
+
+        .review-legend {
+            font-size: 14px;
+            span { color: #888; }
+            strong {
+                display: block;
+                color: @dp-navy;
+                margin-top: 4px;
+            }
+        }
+
+        .review-field-nickname,
+        .review-field-summary,
+        .review-field-text {
+            margin-bottom: 15px;
+
+            .label span {
+                font-weight: 600;
+                color: @dp-navy;
+            }
+        }
+
+        .action.submit {
+            background: @dp-orange;
+            border: none;
+            border-radius: @dp-radius;
+            color: @dp-white;
+            font-weight: 700;
+            padding: 12px 30px;
+            font-size: 14px;
+            text-transform: uppercase;
+
+            &:hover {
+                background: @dp-orange-hover;
+            }
+        }
+    }
+
     // Wishlist i compare
     .product-addto-links a,
     .product-social-links a {
         font-size: 12px;
         color: #888;
+
+        &:hover {
+            color: @dp-orange;
+        }
     }
 }
 

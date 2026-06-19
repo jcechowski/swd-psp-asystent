@@ -1,6 +1,6 @@
 <?php
 /**
- * BreadcrumbList JSON-LD structured data
+ * Organization JSON-LD structured data (sitewide)
  * dopaliwa.pl — TECHTOR
  *
  * @var \Magento\Framework\View\Element\Template $block
@@ -15,11 +15,14 @@ $baseUrl = rtrim($storeManager->getStore()->getBaseUrl(), '/');
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "TECHTOR — dopaliwa.pl",
+    "legalName": "TECHTOR Jakub Cechowski",
     "url": "<?= $escaper->escapeUrl($baseUrl) ?>",
     "logo": "<?= $escaper->escapeUrl($baseUrl) ?>/media/logo/stores/1/logo.svg",
+    "email": "biuro@techtor.pl",
     "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
+        "email": "biuro@techtor.pl",
         "availableLanguage": "Polish"
     },
     "address": {

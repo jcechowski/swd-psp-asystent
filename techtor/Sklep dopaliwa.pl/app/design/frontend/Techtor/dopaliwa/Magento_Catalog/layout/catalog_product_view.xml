@@ -1,7 +1,32 @@
 <?xml version="1.0"?>
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!-- Preload critical product image for LCP -->
+        <attribute name="class" value="catalog-product-view"/>
+    </head>
     <body>
+        <!-- Ensure description tab is visible -->
+        <referenceBlock name="product.info.description">
+            <arguments>
+                <argument name="title" translate="true" xsi:type="string">Opis</argument>
+            </arguments>
+        </referenceBlock>
+
+        <!-- Ensure attributes tab is visible with Polish title -->
+        <referenceBlock name="product.attributes">
+            <arguments>
+                <argument name="title" translate="true" xsi:type="string">Dane techniczne</argument>
+            </arguments>
+        </referenceBlock>
+
+        <!-- Ensure reviews tab has Polish title -->
+        <referenceBlock name="reviews.tab">
+            <arguments>
+                <argument name="title" translate="true" xsi:type="string">Opinie</argument>
+            </arguments>
+        </referenceBlock>
+
         <!-- Product JSON-LD structured data (Schema.org) -->
         <referenceContainer name="before.body.end">
             <block class="Magento\Catalog\Block\Product\View"

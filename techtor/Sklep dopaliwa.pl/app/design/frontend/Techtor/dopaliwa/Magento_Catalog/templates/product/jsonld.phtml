@@ -15,15 +15,14 @@ if (!$product) {
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
 $imageHelper = $objectManager->get(\Magento\Catalog\Helper\Image::class);
-$priceHelper = $objectManager->get(\Magento\Framework\Pricing\Helper\Data::class);
 $reviewFactory = $objectManager->get(\Magento\Review\Model\ReviewFactory::class);
 $stockRegistry = $objectManager->get(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
 
-$baseUrl = $storeManager->getStore()->getBaseUrl();
+$baseUrl = rtrim($storeManager->getStore()->getBaseUrl(), '/');
 $imageUrl = $imageHelper->init($product, 'product_page_image_large')->getUrl();
 $productUrl = $product->getProductUrl();
 
-// Price
+// Price (netto — bez VAT)
 $finalPrice = $product->getFinalPrice();
 $regularPrice = $product->getPrice();
 
@@ -63,6 +62,60 @@ $reviewFactory->create()->getEntitySummary($product, $storeManager->getStore()->
 $ratingSummary = $product->getRatingSummary();
 $reviewCount = (int) $product->getReviewsCount();
 
+// Build offers
+$offers = [
+    '@type' => 'Offer',
+    'url' => $productUrl,
+    'priceCurrency' => 'PLN',
+    'price' => number_format((float)$finalPrice, 2, '.', ''),
+    'availability' => $availability,
+    'itemCondition' => 'https://schema.org/NewCondition',
+    'seller' => [
+        '@type' => 'Organization',
+        'name' => 'TECHTOR Jakub Cechowski',
+    ],
+    'shippingDetails' => [
+        '@type' => 'OfferShippingDetails',
+        'shippingDestination' => [
+            '@type' => 'DefinedRegion',
+            'addressCountry' => 'PL',
+        ],
+        'shippingRate' => [
+            '@type' => 'MonetaryAmount',
+            'value' => '0',
+            'currency' => 'PLN',
+        ],
+        'deliveryTime' => [
+            '@type' => 'ShippingDeliveryTime',
+            'handlingTime' => [
+                '@type' => 'QuantitativeValue',
+                'minValue' => 1,
+                'maxValue' => 2,
+                'unitCode' => 'DAY',
+            ],
+            'transitTime' => [
+                '@type' => 'QuantitativeValue',
+                'minValue' => 1,
+                'maxValue' => 3,
+                'unitCode' => 'DAY',
+            ],
+        ],
+    ],
+    'hasMerchantReturnPolicy' => [
+        '@type' => 'MerchantReturnPolicy',
+        'applicableCountry' => 'PL',
+        'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        'merchantReturnDays' => 14,
+        'returnMethod' => 'https://schema.org/ReturnByMail',
+        'returnFees' => 'https://schema.org/FreeReturn',
+    ],
+];
+
+// Only add priceValidUntil when there's an actual discount
+if ($regularPrice > $finalPrice && ($regularPrice - $finalPrice) > 0.01) {
+    $offers['priceValidUntil'] = date('Y-12-31');
+}
+
 // Build schema
 $schema = [
     '@context' => 'https://schema.org',
@@ -71,39 +124,35 @@ $schema = [
     'image' => $imageUrl,
     'description' => $description,
     'sku' => $product->getSku(),
+    'mpn' => $product->getSku(),
     'url' => $productUrl,
     'brand' => [
         '@type' => 'Brand',
         'name' => $brand,
     ],
-    'offers' => [
-        '@type' => 'Offer',
-        'url' => $productUrl,
-        'priceCurrency' => 'PLN',
-        'price' => number_format((float)$finalPrice, 2, '.', ''),
-        'availability' => $availability,
-        'seller' => [
-            '@type' => 'Organization',
-            'name' => 'TECHTOR Jakub Cechowski',
-        ],
-    ],
+    'offers' => $offers,
 ];
 
 if ($ean && preg_match('/^\d{8,14}$/', $ean)) {
     $schema['gtin'] = $ean;
-}
-
-if ($regularPrice > $finalPrice) {
-    $schema['offers']['priceValidUntil'] = date('Y-12-31');
+    if (strlen($ean) === 13) {
+        $schema['gtin13'] = $ean;
+    } elseif (strlen($ean) === 14) {
+        $schema['gtin14'] = $ean;
+    }
 }
 
 if ($reviewCount > 0 && $ratingSummary) {
-    $schema['aggregateRating'] = [
-        '@type' => 'AggregateRating',
-        'ratingValue' => round($ratingSummary->getRatingSummary() / 20, 1),
-        'bestRating' => '5',
-        'reviewCount' => $reviewCount,
-    ];
+    $ratingValue = $ratingSummary->getRatingSummary();
+    if ($ratingValue > 0) {
+        $schema['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'ratingValue' => round($ratingValue / 20, 1),
+            'bestRating' => '5',
+            'worstRating' => '1',
+            'reviewCount' => $reviewCount,
+        ];
+    }
 }
 ?>
 <script type="application/ld+json"><?= /* @noEscape */ json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?></script>
