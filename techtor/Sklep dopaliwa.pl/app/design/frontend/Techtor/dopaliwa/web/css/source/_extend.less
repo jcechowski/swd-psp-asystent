@@ -148,6 +148,11 @@ a {
 .navigation {
     background: @dp-navy;
 
+    // Override Luma's `.navigation a { color: #575757 }` — must be on <a> not just <span>
+    a {
+        color: @dp-white;
+    }
+
     .level0 {
         > .level-top {
             color: @dp-white;
@@ -309,10 +314,18 @@ a {
 // Product list wrapper
 .products-grid {
     .product-items {
+        // Reset Luma's inline-block grid margins
+        margin-left: 0;
+        display: flex;
+        flex-wrap: wrap;
+
         // 3 kolumny desktop
         .product-item {
             width: 33.33%;
             padding: 10px;
+            margin-left: 0; // override Luma's margin-left: 2%
+            display: block;
+            float: none;
 
             @media (min-width: 1200px) {
                 width: 25%;
@@ -327,6 +340,31 @@ a {
             }
         }
     }
+
+    // Disable Luma's hover popup behavior — show ATC button always
+    .product-item-info {
+        &:not(:hover):not(.active) .product-item-inner {
+            position: static;
+            height: auto;
+            width: auto;
+            clip: auto;
+            overflow: visible;
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        &:hover {
+            margin: 0;
+            padding: 15px;
+            border: 1px solid darken(@dp-border, 10%);
+            z-index: auto;
+        }
+    }
+    .product-item-inner {
+        position: static;
+        box-shadow: none;
+        border: none;
+    }
 }
 
 // Product card
@@ -338,12 +376,10 @@ a {
         padding: 15px;
         transition: @dp-transition;
         position: relative;
-        overflow: hidden;
 
         &:hover {
             box-shadow: @dp-shadow-hover;
             border-color: darken(@dp-border, 10%);
-            transform: translateY(-2px);
         }
     }
 
@@ -570,6 +606,9 @@ a {
     }
 
     .product.media {
+        float: none !important;
+        width: auto !important;
+
         @media (min-width: 769px) {
             flex: 0 0 52%;
             max-width: 52%;
@@ -582,6 +621,8 @@ a {
         border: 1px solid @dp-border;
         border-radius: @dp-radius;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        float: none !important;
+        width: auto !important;
 
         @media (min-width: 769px) {
             flex: 0 0 44%;
@@ -861,10 +902,10 @@ a.action.secondary,
     padding: 15px 0;
     text-align: center;
     font-size: 12px;
-    color: @dp-text-light;
+    color: #b2bec3;
 
     span {
-        color: @dp-text-light;
+        color: #b2bec3;
     }
 }
 
@@ -948,8 +989,8 @@ select {
 
     &:focus {
         border-color: @dp-orange;
-        outline: 2px solid @dp-orange;
-        outline-offset: 2px;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.25);
     }
 }
 
@@ -1255,6 +1296,9 @@ select {
             color: @dp-navy;
             font-size: 28px;
         }
+        &:hover:before {
+            color: @dp-orange;
+        }
     }
 
     // Mobile nav sections
@@ -1263,11 +1307,29 @@ select {
     }
 
     .navigation {
+        // Override Luma's `.navigation a { color: #575757 }` for mobile panel
+        a {
+            color: @dp-white !important;
+            &:hover {
+                color: @dp-orange !important;
+            }
+        }
+
         .level0 {
             > .level-top {
+                color: @dp-white;
                 font-size: 14px;
                 padding: 12px 15px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        // Submenu links — white on navy
+        .submenu a {
+            color: rgba(255, 255, 255, 0.85) !important;
+            &:hover {
+                color: @dp-orange !important;
+                background: rgba(255, 255, 255, 0.08);
             }
         }
     }
