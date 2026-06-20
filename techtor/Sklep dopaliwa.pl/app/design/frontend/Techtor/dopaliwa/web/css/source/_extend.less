@@ -581,18 +581,41 @@ a {
     .box-tocart {
         .fieldset {
             display: flex !important;
-            align-items: flex-end !important;
+            align-items: center !important;
             gap: 12px !important;
             flex-wrap: nowrap !important;
         }
 
         .field.qty {
+            display: flex !important;
+            align-items: center !important;
             margin-bottom: 0 !important;
             flex: 0 0 auto !important;
+            float: none !important;
+            width: auto !important;
+            vertical-align: middle !important;
+
+            .label {
+                display: none !important;
+            }
+
+            .control {
+                float: none !important;
+                display: block !important;
+            }
         }
 
         .actions {
-            flex: 1 1 auto !important;
+            flex: 0 1 auto !important;
+            display: flex !important;
+            float: none !important;
+            width: auto !important;
+            vertical-align: middle !important;
+        }
+
+        .actions-primary {
+            display: block !important;
+            float: none !important;
         }
 
         .action.tocart {
@@ -609,6 +632,8 @@ a {
             white-space: nowrap !important;
             width: auto !important;
             margin: 0 !important;
+            float: none !important;
+            box-sizing: border-box !important;
             transition: @dp-transition;
 
             &:hover {
