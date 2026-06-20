@@ -1,6 +1,6 @@
 <?php
 /**
- * Organization JSON-LD structured data (sitewide)
+ * Organization + BreadcrumbList JSON-LD structured data (sitewide)
  * dopaliwa.pl — TECHTOR
  *
  * @var \Magento\Framework\View\Element\Template $block
@@ -19,15 +19,92 @@ $baseUrl = rtrim($storeManager->getStore()->getBaseUrl(), '/');
     "url": "<?= $escaper->escapeUrl($baseUrl) ?>",
     "logo": "<?= $escaper->escapeUrl($baseUrl) ?>/media/logo/stores/1/logo.svg",
     "email": "biuro@techtor.pl",
+    "telephone": "+48 600 000 000",
     "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
         "email": "biuro@techtor.pl",
+        "telephone": "+48 600 000 000",
         "availableLanguage": "Polish"
     },
     "address": {
         "@type": "PostalAddress",
         "addressCountry": "PL"
-    }
+    },
+    "sameAs": []
 }
 </script>
+<?php
+// BreadcrumbList JSON-LD — from current category or product's category
+$crumbs = [];
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+$currentCategory = $registry->registry('current_category');
+$currentProduct = $registry->registry('current_product');
+
+// Build breadcrumb from category path
+$category = $currentCategory;
+if (!$category && $currentProduct) {
+    $categoryIds = $currentProduct->getCategoryIds();
+    if (!empty($categoryIds)) {
+        $categoryRepository = $objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        // Pick deepest category
+        $deepestId = end($categoryIds);
+        try {
+            $category = $categoryRepository->get($deepestId);
+        } catch (\Exception $e) {
+            $category = null;
+        }
+    }
+}
+
+if ($category) {
+    $pathIds = explode('/', $category->getPath());
+    $categoryRepository = $objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+    $rootCategoryId = $storeManager->getStore()->getRootCategoryId();
+
+    // Start with Home
+    $crumbs[] = [
+        '@type' => 'ListItem',
+        'position' => 1,
+        'name' => 'Strona główna',
+        'item' => $baseUrl . '/',
+    ];
+    $position = 2;
+
+    foreach ($pathIds as $catId) {
+        if ($catId <= $rootCategoryId) {
+            continue; // skip root categories (1, 2)
+        }
+        try {
+            $cat = $categoryRepository->get((int)$catId);
+            $crumbs[] = [
+                '@type' => 'ListItem',
+                'position' => $position,
+                'name' => $cat->getName(),
+                'item' => $cat->getUrl(),
+            ];
+            $position++;
+        } catch (\Exception $e) {
+            continue;
+        }
+    }
+
+    // Add product as last crumb
+    if ($currentProduct) {
+        $crumbs[] = [
+            '@type' => 'ListItem',
+            'position' => $position,
+            'name' => $currentProduct->getName(),
+        ];
+    }
+}
+
+if (count($crumbs) > 1) : ?>
+<script type="application/ld+json">
+<?= /* @noEscape */ json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => $crumbs,
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
+</script>
+<?php endif; ?>

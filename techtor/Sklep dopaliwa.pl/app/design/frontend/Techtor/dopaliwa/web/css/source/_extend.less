@@ -179,7 +179,7 @@ a {
         }
     }
 
-    // Dropdown
+    // Dropdown submenu — must override `.navigation a { color: white }`
     .level0 .submenu {
         background: @dp-white;
         border: 1px solid @dp-border;
@@ -187,15 +187,33 @@ a {
         box-shadow: @dp-shadow-hover;
         min-width: 240px;
 
-        a {
-            color: @dp-text;
+        a,
+        a:visited,
+        a span,
+        .level1 > a,
+        .level2 > a {
+            color: @dp-text !important;
             padding: 10px 20px;
             font-weight: 400;
             font-size: 13px;
 
             &:hover {
                 background: @dp-bg;
-                color: @dp-orange;
+                color: @dp-orange !important;
+            }
+        }
+    }
+
+    // Mobile nav — submenu links must also be dark
+    @media (max-width: 768px) {
+        .level0 .submenu {
+            a,
+            a span {
+                color: @dp-text !important;
+
+                &:hover {
+                    color: @dp-orange !important;
+                }
             }
         }
     }
@@ -561,17 +579,22 @@ a {
 
     // Add to cart — product page
     .box-tocart {
+        text-align: center;
+
         .action.tocart {
             background: @dp-orange;
             border: none;
             border-radius: @dp-radius;
             color: @dp-white;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 14px 40px;
+            padding: 8px 60px;
+            line-height: 1.2;
+            white-space: nowrap;
             transition: @dp-transition;
+            display: inline-block;
 
             &:hover {
                 background: @dp-orange-hover;
@@ -1525,14 +1548,8 @@ select {
             }
         }
 
-        // Submenu links — white on navy
-        .submenu a {
-            color: rgba(255, 255, 255, 0.85) !important;
-            &:hover {
-                color: @dp-orange !important;
-                background: rgba(255, 255, 255, 0.08);
-            }
-        }
+        // Mobile nav: all links white (navy bg), including subcategories
+        // Desktop submenu override is in the .navigation block above with higher specificity
     }
 
     // Header mobile

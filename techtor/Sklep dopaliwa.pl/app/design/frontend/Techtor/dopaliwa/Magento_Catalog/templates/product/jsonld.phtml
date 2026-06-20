@@ -82,7 +82,7 @@ $offers = [
         ],
         'shippingRate' => [
             '@type' => 'MonetaryAmount',
-            'value' => '0',
+            'value' => ((float)$finalPrice >= 2000) ? '0' : '12.99',
             'currency' => 'PLN',
         ],
         'deliveryTime' => [
