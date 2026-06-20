@@ -577,27 +577,42 @@ a {
         }
     }
 
-    // Add to cart — product page
+    // Add to cart — product page (qty + button in one row)
     .box-tocart {
-        text-align: center;
+        .fieldset {
+            display: flex !important;
+            align-items: flex-end !important;
+            gap: 12px !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .field.qty {
+            margin-bottom: 0 !important;
+            flex: 0 0 auto !important;
+        }
+
+        .actions {
+            flex: 1 1 auto !important;
+        }
 
         .action.tocart {
-            background: @dp-orange;
-            border: none;
-            border-radius: @dp-radius;
-            color: @dp-white;
-            font-weight: 700;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 8px 60px;
-            line-height: 1.2;
-            white-space: nowrap;
+            background: @dp-orange !important;
+            border: none !important;
+            border-radius: @dp-radius !important;
+            color: @dp-white !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            padding: 10px 40px !important;
+            line-height: 1.2 !important;
+            white-space: nowrap !important;
+            width: auto !important;
+            margin: 0 !important;
             transition: @dp-transition;
-            display: inline-block;
 
             &:hover {
-                background: @dp-orange-hover;
+                background: @dp-orange-hover !important;
                 box-shadow: 0 3px 12px rgba(230, 126, 34, 0.35);
             }
 
@@ -695,23 +710,10 @@ a {
             }
         }
 
-        // B2B: Cena netto duża, brutto mała
+        // B2B: ceny — style globalne w sekcji B2B PRICE DISPLAY poniżej
         .price-excluding-tax,
         .price-including-tax {
-            display: block;
             margin-bottom: 2px;
-        }
-        .price-including-tax .price {
-            font-size: 14px !important;
-            font-weight: 400 !important;
-            color: #999 !important;
-        }
-        .price-excluding-tax .price,
-        .price-including-tax + .price-excluding-tax .price {
-            font-size: 32px !important;
-            font-weight: 700 !important;
-            color: @dp-primary !important;
-            line-height: 1.2 !important;
         }
 
         .product-info-stock-sku {
@@ -722,6 +724,7 @@ a {
             font-size: 13px;
             color: #666;
             display: flex;
+            justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
 
@@ -741,6 +744,11 @@ a {
                         margin-right: 4px;
                     }
                 }
+            }
+
+            // Usunięcie "#" przed SKU (Luma default)
+            .product.attribute.sku .type::after {
+                content: '' !important;
             }
         }
 
@@ -1463,49 +1471,68 @@ select {
 }
 
 // =============================================================================
-// B2B PRICE DISPLAY — global override (netto duże, brutto małe)
+// B2B PRICE DISPLAY — netto pierwsza od góry, brutto pod spodem
 // Musi być po wszystkich Luma regułach żeby nadpisać styles-m.css
 // =============================================================================
+
+.price-container {
+    display: flex !important;
+    flex-direction: column !important;
+}
 
 .price-excluding-tax,
 .price-including-tax {
     display: block !important;
+    &:before {
+        content: '' !important;
+    }
 }
 
-// Netto — główna cena
+// Netto — pierwsza od góry, główna cena
 .price-excluding-tax {
+    order: -1 !important;
     .price {
         font-size: 18px !important;
         font-weight: 700 !important;
         color: @dp-navy !important;
     }
-    &:before {
-        content: '' !important; // ukryj Luma "(Bez podatku: "
-    }
     &:after {
-        content: '' !important;
+        content: ' netto' !important;
+        font-size: 12px !important;
+        font-weight: 400 !important;
+        color: #888 !important;
     }
 }
 
-// Brutto — pomocnicza
+// Brutto — druga, nieco mniejsza
 .price-including-tax {
+    order: 1 !important;
     .price {
-        font-size: 13px !important;
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        color: #666 !important;
+    }
+    &:after {
+        content: ' brutto' !important;
+        font-size: 11px !important;
         font-weight: 400 !important;
         color: #999 !important;
     }
-    &:before {
-        content: '' !important;
-    }
 }
 
-// Product page — netto jeszcze większe
+// Product page — ceny większe, netto tylko trochę większe od brutto
 .catalog-product-view .product-info-main {
     .price-excluding-tax .price {
-        font-size: 32px !important;
+        font-size: 28px !important;
+    }
+    .price-excluding-tax:after {
+        font-size: 14px !important;
     }
     .price-including-tax .price {
-        font-size: 14px !important;
+        font-size: 22px !important;
+    }
+    .price-including-tax:after {
+        font-size: 13px !important;
     }
 }
 
