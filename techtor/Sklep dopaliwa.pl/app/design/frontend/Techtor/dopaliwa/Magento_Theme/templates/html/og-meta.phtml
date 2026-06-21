@@ -1,0 +1,67 @@
+<?php
+/**
+ * Open Graph meta tags — dopaliwa.pl
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+declare(strict_types=1);
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager  = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+$request       = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
+
+$store    = $storeManager->getStore();
+$baseUrl  = rtrim($store->getBaseUrl(), '/');
+$mediaUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+// Current URL
+$currentUrl = $store->getCurrentUrl(false);
+
+// Page title from head block
+$headBlock = $block->getLayout()->getBlock('head');
+$pageTitle = $headBlock ? strip_tags((string)$headBlock->getTitle()) : 'dopaliwa.pl — TECHTOR';
+$pageTitle = $pageTitle ?: 'dopaliwa.pl — TECHTOR';
+
+// Meta description
+$metaDescription = $headBlock ? $headBlock->getDescription() : '';
+$metaDescription = $metaDescription ?: 'Sprzęt do dystrybucji paliw, olejów, smarów i płynów. Pompy, węże, złączki i akcesoria — dopaliwa.pl';
+
+// Default OG image: store logo
+$ogImage = $mediaUrl . 'logo/default/logo.svg';
+$ogType  = 'website';
+
+// Product page: use product image and type "product"
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+$product  = $registry->registry('current_product');
+if ($product && $product->getId()) {
+    $ogType = 'product';
+    try {
+        $imageHelper = $objectManager->get(\Magento\Catalog\Helper\Image::class);
+        $productImage = $imageHelper->init($product, 'product_page_image_large')
+            ->setImageFile($product->getImage())
+            ->getUrl();
+        if ($productImage && strpos($productImage, 'placeholder') === false) {
+            $ogImage = $productImage;
+        }
+    } catch (\Exception $e) {
+        // keep default logo
+    }
+}
+?>
+<?php /* Open Graph */ ?>
+<meta property="og:site_name" content="dopaliwa.pl — TECHTOR"/>
+<meta property="og:type" content="<?= $block->escapeHtmlAttr($ogType) ?>"/>
+<meta property="og:locale" content="pl_PL"/>
+<meta property="og:title" content="<?= $block->escapeHtmlAttr($pageTitle) ?>"/>
+<?php if ($metaDescription): ?>
+<meta property="og:description" content="<?= $block->escapeHtmlAttr($metaDescription) ?>"/>
+<?php endif; ?>
+<meta property="og:url" content="<?= $block->escapeUrl($currentUrl) ?>"/>
+<meta property="og:image" content="<?= $block->escapeUrl($ogImage) ?>"/>
+<meta property="og:image:type" content="image/svg+xml"/>
+<?php /* Twitter Card */ ?>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="<?= $block->escapeHtmlAttr($pageTitle) ?>"/>
+<?php if ($metaDescription): ?>
+<meta name="twitter:description" content="<?= $block->escapeHtmlAttr($metaDescription) ?>"/>
+<?php endif; ?>
+<meta name="twitter:image" content="<?= $block->escapeUrl($ogImage) ?>"/>
