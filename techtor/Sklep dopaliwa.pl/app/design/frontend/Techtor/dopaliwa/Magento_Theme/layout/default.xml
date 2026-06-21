@@ -35,6 +35,13 @@
                    template="Magento_Theme::html/breadcrumbs-jsonld.phtml"/>
         </referenceContainer>
 
+        <!-- Newsletter popup -->
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="newsletter.popup"
+                   template="Magento_Theme::html/newsletter-popup.phtml"/>
+        </referenceContainer>
+
         <!-- Cookie consent banner (GDPR/RODO) -->
         <referenceContainer name="before.body.end">
             <block class="Magento\Framework\View\Element\Template"
