@@ -1496,6 +1496,81 @@ select {
 }
 
 // =============================================================================
+// RELATED / UPSELL / CROSSSELL PRODUCTS
+// =============================================================================
+
+.block.related,
+.block.upsell,
+.block.crosssell {
+    margin-top: 40px;
+
+    .block-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: @dp-navy;
+        margin-bottom: 20px;
+    }
+
+    .products-grid .product-items {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+        gap: 20px !important;
+
+        .product-item {
+            width: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+
+            .product-item-info {
+                width: 100% !important;
+                padding: 15px;
+                border: 1px solid @dp-border;
+                border-radius: @dp-radius;
+                background: @dp-white;
+                text-align: center;
+            }
+
+            .product-item-photo {
+                display: block;
+                margin-bottom: 10px;
+
+                .product-image-container {
+                    width: 100% !important;
+                    max-width: 160px;
+                    margin: 0 auto;
+                }
+            }
+
+            .product-item-details {
+                .product-item-name {
+                    font-size: 13px;
+                    font-weight: 600;
+                    line-height: 1.4;
+                    min-height: 36px;
+                    margin-bottom: 8px;
+
+                    a {
+                        color: @dp-navy;
+                        &:hover { color: @dp-orange; }
+                    }
+                }
+            }
+
+            .field.choice {
+                margin-top: 8px;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .products-grid .product-items {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+        }
+    }
+}
+
+// =============================================================================
 // B2B PRICE DISPLAY — netto pierwsza od góry, brutto pod spodem
 // Musi być po wszystkich Luma regułach żeby nadpisać styles-m.css
 // =============================================================================
