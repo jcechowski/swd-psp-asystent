@@ -98,14 +98,32 @@ sudo -u www-data php bin/magento cache:flush
 - [x] 2FA wyłączone (moduł disabled)
 - [x] SKU bez "#", wiersz stock/SKU wyśrodkowany
 
+## Wykonane (2026-06-21 — moduły, blog, CMS)
+- [x] Moduły płatności: Autopay (BLIK/karty/przelewy), Tpay, PayU — zainstalowane, do konfiguracji
+- [x] InPost (smartmage/inpost) — zainstalowany, wymaga API token ShipX w admin
+- [x] Google Tag Manager (magefan/module-google-tag-manager) — wymaga Container ID
+- [x] Google Analytics GA4 (Magento_GoogleGtag) — wymaga Measurement ID
+- [x] Google reCAPTCHA (wbudowany) — wymaga Site key + Secret key
+- [x] Blog Magefan: 3 kategorie + 3 artykuły (/blog)
+- [x] FAQ: 10 pytań z akordeonem (/faq)
+- [x] Hero carousel: 3 slajdy z auto-rotacją
+- [x] Bestsellery: widget 8 produktów na stronie głównej
+- [x] Newsletter popup (30s, AJAX, localStorage)
+- [x] Footer: badge'e kurierów/płatności + linki FAQ/Blog
+- [x] Numer konta bankowego: mBank 26 1140 2004 0000 3702 8407 7924
+- [x] NIP/REGON/adres/telefon poprawione na wszystkich stronach CMS
+- [x] Jarosław Cechowski (nie Jakub) wszędzie
+
 ## TODO
-- [ ] Domena: transfer dopaliwa.pl w toku (Hostinger, status: pending_verification), DNS A → 72.62.1.240, SSL certbot
-- [ ] Przelewy24: pobrać moduł z panel.przelewy24.pl, zainstalować
-- [ ] InPost: wpisać API token ShipX w admin + dodać Geowidget do checkout
-- [ ] Import produktów z Firmao/BaseLinker
+- [ ] Domena: transfer dopaliwa.pl w toku (Hostinger), DNS A → 72.62.1.240, SSL certbot
+- [ ] Konfiguracja płatności: wpisać klucze API Autopay/Tpay/PayU w admin
+- [ ] InPost: wpisać API token ShipX w admin
+- [ ] GTM/GA4: wpisać Container ID i Measurement ID w admin
+- [ ] reCAPTCHA: wpisać Site key + Secret key
+- [ ] Import produktów z PIM TECHTOR (techtor-platform)
 - [ ] 2FA: włączyć Magento_TwoFactorAuth po SSL
-- [ ] Numer konta bankowego w instrukcjach przelewu
-- [x] Fix DPD Client — SOAP API (generateSpedLabelsV4 + getEventsForWaybillV1)
-- [ ] Google Analytics / GTM
+- [x] Fix DPD Client — SOAP API
 - [ ] Base URL: zmienić z IP na dopaliwa.pl po DNS
 - [ ] Sitemap → Google Search Console (po domenie)
+- [ ] 515 produktów bez zdjęć (PIM)
+- [ ] 504 produkty bez opisów (PIM)
