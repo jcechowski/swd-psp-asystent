@@ -45,7 +45,7 @@
         <!-- Copyright -->
         <referenceBlock name="copyright">
             <arguments>
-                <argument name="copyright" xsi:type="string">© 2026 dopaliwa.pl — TECHTOR Jakub Cechowski. Wszelkie prawa zastrzeżone.</argument>
+                <argument name="copyright" xsi:type="string">© 2026 dopaliwa.pl — TECHTOR Jarosław Cechowski. Wszelkie prawa zastrzeżone.</argument>
             </arguments>
         </referenceBlock>
     </body>

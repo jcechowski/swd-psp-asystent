@@ -2,7 +2,7 @@
 
 ## Projekt
 Sklep internetowy na Magento 2.4.7-p3 Open Source — sprzęt do dystrybucji paliw, olejów, smarów i płynów.
-Domena: dopaliwa.pl | Firma: TECHTOR Jakub Cechowski
+Domena: dopaliwa.pl | Firma: TECHTOR Jarosław Cechowski
 
 ## Serwer produkcyjny
 - **IP**: 72.62.1.240
