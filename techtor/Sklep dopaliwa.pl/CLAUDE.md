@@ -80,14 +80,32 @@ sudo -u www-data php bin/magento cache:flush
 - [x] Product JSON-LD schema (rich snippets: cena, dostępność, marka, EAN)
 - [x] Organization JSON-LD sitewide
 
+## Wykonane (2026-06-20 — tłumaczenia, dane, SEO)
+- [x] Paczka językowa Techtor pl_PL: 3776 tłumaczeń (admin + frontend)
+- [x] Theme i18n pl_PL.csv: 195 tłumaczeń frontend
+- [x] Fix submenu nawigacji — biały tekst na białym tle
+- [x] Przycisk "Dodaj do koszyka" — prostokątny, qty+button w jednej linii
+- [x] Etykiety "netto" / "brutto" przy cenach (CSS ::after)
+- [x] JSON-LD: BreadcrumbList, realna stawka wysyłki, telephone
+- [x] CMS: Regulamin sklepu (adaptacja z techtor.pl)
+- [x] CMS: Polityka prywatności RODO/GDPR
+- [x] NIP (8792283040) + REGON (340511303) na stronach O nas i Kontakt
+- [x] Adres poprawiony wszędzie: ul. Szczecińska 28, 87-100 Toruń
+- [x] Telefon poprawiony wszędzie: +48 736 133 817
+- [x] Sitemap.xml wygenerowany (1111 URL-i)
+- [x] robots.txt (blokuje /checkout, /customer, /techtor_admin)
+- [x] Tax: algorytm ROW_BASE_CALCULATION (fix zaokrąglania)
+- [x] 2FA wyłączone (moduł disabled)
+- [x] SKU bez "#", wiersz stock/SKU wyśrodkowany
+
 ## TODO
 - [ ] Domena: transfer dopaliwa.pl w toku (Hostinger, status: pending_verification), DNS A → 72.62.1.240, SSL certbot
 - [ ] Przelewy24: pobrać moduł z panel.przelewy24.pl, zainstalować
 - [ ] InPost: wpisać API token ShipX w admin + dodać Geowidget do checkout
 - [ ] Import produktów z Firmao/BaseLinker
-- [ ] Regulamin + Polityka prywatności — zlecić prawnikowi
-- [ ] 2FA: włączyć Magento_TwoFactorAuth ПОСЛЕ SSL
+- [ ] 2FA: włączyć Magento_TwoFactorAuth po SSL
 - [ ] Numer konta bankowego w instrukcjach przelewu
-- [ ] NIP firmy uzupełnić na stronie O nas
 - [x] Fix DPD Client — SOAP API (generateSpedLabelsV4 + getEventsForWaybillV1)
-- [ ] Sitemap.xml → Google Search Console
+- [ ] Google Analytics / GTM
+- [ ] Base URL: zmienić z IP na dopaliwa.pl po DNS
+- [ ] Sitemap → Google Search Console (po domenie)
