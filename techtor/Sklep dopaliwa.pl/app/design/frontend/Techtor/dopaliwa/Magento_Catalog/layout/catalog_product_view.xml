@@ -27,6 +27,14 @@
             </arguments>
         </referenceBlock>
 
+        <!-- Brand/manufacturer logo -->
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View"
+                   name="product.brand.logo"
+                   template="Magento_Catalog::product/brand-logo.phtml"
+                   before="-"/>
+        </referenceContainer>
+
         <!-- Product JSON-LD structured data (Schema.org) -->
         <referenceContainer name="before.body.end">
             <block class="Magento\Catalog\Block\Product\View"

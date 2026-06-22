@@ -1,0 +1,64 @@
+<?php
+/**
+ * Brand/manufacturer logo on product page
+ * dopaliwa.pl — TECHTOR
+ *
+ * @var \Magento\Catalog\Block\Product\View $block
+ */
+
+$product = $block->getProduct();
+if (!$product) {
+    return;
+}
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+// Load manufacturer value directly from DB — product object may not have it loaded
+$resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+$manufacturerId = $resource->getAttributeRawValue($product->getId(), 'manufacturer', $product->getStoreId());
+
+if (!$manufacturerId) {
+    return;
+}
+
+$attribute = $objectManager->get(\Magento\Eav\Model\Config::class)
+    ->getAttribute('catalog_product', 'manufacturer');
+$brand = $attribute->getSource()->getOptionText($manufacturerId);
+
+if (!$brand) {
+    return;
+}
+
+$slugMap = [
+    'PIUSI' => 'piusi',
+    'RAASM' => 'raasm',
+    'FMT' => 'fmt',
+    'Adam Pumps' => 'adam-pumps',
+    'HIFI FILTER' => 'hifi-filter',
+    'GAITER' => 'gaiter',
+];
+
+$slug = $slugMap[$brand] ?? strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', $brand));
+
+// Try SVG, PNG, JPG in order
+$hasLogo = false;
+$logoPath = '';
+foreach (['svg', 'png', 'jpg'] as $ext) {
+    $testPath = "/media/brand-logos/{$slug}.{$ext}";
+    if (file_exists(BP . "/pub{$testPath}")) {
+        $logoPath = $testPath;
+        $hasLogo = true;
+        break;
+    }
+}
+?>
+<div class="dp-brand-logo">
+    <?php if ($hasLogo): ?>
+        <img src="<?= $escaper->escapeUrl($logoPath) ?>"
+             alt="<?= $escaper->escapeHtmlAttr($brand) ?>"
+             width="120" height="38"
+             loading="lazy">
+    <?php else: ?>
+        <span class="dp-brand-name"><?= $escaper->escapeHtml($brand) ?></span>
+    <?php endif; ?>
+</div>
