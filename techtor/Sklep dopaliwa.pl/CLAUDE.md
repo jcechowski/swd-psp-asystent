@@ -49,12 +49,15 @@ sudo -u www-data php bin/magento cache:flush
 ## Konfiguracja sklepu
 - Język: pl_PL, Waluta: PLN, Timezone: Europe/Warsaw
 - VAT: 23% (PL-VAT-23), ceny brutto
-- Kategorie: 9 L1 + 44 L2 (podział wg typu produktu)
+- Kategorie: 14 L2 + podkategorie (reorganizacja 2026-06-22)
 - Atrybuty filtrów: medium, zasilanie, producent, wydajność, średnica przyłączy, materiał, średnica węża, ciśnienie robocze
-- Płatności: przelew bankowy, za pobraniem (Przelewy24 do dodania)
+- Producenci: PIUSI, RAASM, FMT, Adam Pumps, HIFI FILTER, GAITER (770 produktów przypisanych)
+- Płatności: przelew bankowy, za pobraniem, Autopay/Tpay/PayU (do konfiguracji)
 - Wysyłka: darmowa >2000zł, InPost 12.99zł, kurier DPD/DHL 19.99zł
 - 2FA: wyłączone (włączyć przed go-live!)
 - Moduł InPost: smartmage/inpost (wymaga API token ShipX)
+- Checkout agreements: 3 obowiązkowe checkboxy (regulamin, RODO, odstąpienie)
+- VAT ID: pole NIP widoczne w formularzu (opcjonalne, B2B)
 
 ## Znane problemy / workaroundy
 - Magento 2.4.7 + ES8 = niekompatybilne → zamienione na OpenSearch 2.19
@@ -114,6 +117,29 @@ sudo -u www-data php bin/magento cache:flush
 - [x] NIP/REGON/adres/telefon poprawione na wszystkich stronach CMS
 - [x] Jarosław Cechowski (nie Jakub) wszędzie
 
+## Wykonane (2026-06-22 — kategorie, UX, loga producentów)
+- [x] Nowe kategorie L2: Smarowanie, Urządzenia warsztatowe (Warsztat), Osprzęt olejowy (Oleje i osprzęt), Płyny eksploatacyjne (Płyny)
+- [x] Reorganizacja kategorii: przeniesione wysysarki/ściekarki/oczyszczarki/myjki z Filtry, zestawy smarowe/olejowe z Części zamienne
+- [x] Skrócone nazwy kategorii w menu (Armatura, Liczniki, Pistolety, Zbiorniki, Części zamienne)
+- [x] Nawigacja: font 12px, padding 12px (kompaktowe menu w 2 rzędach)
+- [x] Karty produktów: flexbox wyrównuje ceny i przyciski na jednym poziomie
+- [x] Opisy produktów: text-align:left (naprawiono 499 opisów z justify w bazie)
+- [x] Product page layout: galeria 50% / info 50% (było ~65/35)
+- [x] Logo producenta na stronie produktu (6 marek, oryginalne loga z oficjalnych stron)
+- [x] Przypisano manufacturer do 770 produktów na podstawie nazwy
+
+## Wykonane (2026-06-23 — zgodność prawna)
+- [x] GPSR: zakładka "Bezpieczeństwo (GPSR)" z danymi 6 producentów (EU 2023/988)
+- [x] CMS: Dostawa i płatności (tabele z kosztami, metody, dane do przelewu)
+- [x] CMS: Odstąpienie od umowy (wzór formularza, procedura, wyjątki)
+- [x] CMS: Reklamacje i gwarancja (rękojmia 2 lata, procedura, ODR)
+- [x] CMS: Oświadczenie o dostępności (EAA, EU 2019/882)
+- [x] Checkout: 3 obowiązkowe checkboxy (regulamin, polityka prywatności, odstąpienie)
+- [x] Pole NIP/VAT ID w formularzu zamówienia (opcjonalne, B2B)
+- [x] Link do platformy ODR w stopce
+- [x] Footer: 3 kolumny (Informacje/Zakupy/Kontakt), NIP+REGON, nowe linki prawne
+- [x] Loga brand-logos: pub/media/brand-logos/ (piusi.svg, raasm.jpg, fmt.png, adam-pumps.jpg, hifi-filter.jpg, gaiter.png)
+
 ## TODO
 - [ ] Domena: transfer dopaliwa.pl w toku (Hostinger), DNS A → 72.62.1.240, SSL certbot
 - [ ] Konfiguracja płatności: wpisać klucze API Autopay/Tpay/PayU w admin
@@ -127,3 +153,6 @@ sudo -u www-data php bin/magento cache:flush
 - [ ] Sitemap → Google Search Console (po domenie)
 - [ ] 515 produktów bez zdjęć (PIM)
 - [ ] 504 produkty bez opisów (PIM)
+- [ ] Moduł Omnibus (najniższa cena 30 dni) — potrzebny przy pierwszej promocji
+- [ ] Przycisk "Odstąp od umowy" w panelu klienta (obowiązkowe od 19.06.2026)
+- [ ] Double opt-in newsletter
