@@ -157,10 +157,10 @@ a {
         > .level-top {
             color: @dp-white;
             font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 0.3px;
+            font-size: 12px;
+            letter-spacing: 0.2px;
             text-transform: uppercase;
-            padding: 12px 20px;
+            padding: 10px 12px;
             line-height: 1.4;
             transition: @dp-transition;
 
@@ -342,7 +342,7 @@ a {
             width: 33.33%;
             padding: 10px;
             margin-left: 0; // override Luma's margin-left: 2%
-            display: block;
+            display: flex;
             float: none;
 
             @media (min-width: 1200px) {
@@ -394,6 +394,9 @@ a {
         padding: 15px;
         transition: @dp-transition;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
 
         &:hover {
             box-shadow: @dp-shadow-hover;
@@ -416,13 +419,19 @@ a {
         transform: scale(1.03);
     }
 
+    // Details wrapper — flex-grow pushes actions to bottom
+    .product-item-details {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
     // Product name
     .product-item-name {
         font-size: 14px;
         font-weight: 600;
         line-height: 1.4;
         margin-bottom: 8px;
-        min-height: 40px;
 
         a {
             color: @dp-navy;
@@ -433,9 +442,17 @@ a {
         }
     }
 
+    // SKU display
+    .product-item-sku {
+        font-size: 11px;
+        color: @dp-text-light;
+        margin-bottom: 5px;
+    }
+
     // Price — netto główna, brutto mała
     .price-box {
         margin: 10px 0;
+        margin-top: auto; // push price+button to bottom
 
         .price {
             font-size: 18px;
@@ -468,13 +485,6 @@ a {
             font-weight: 400;
             color: #999;
         }
-    }
-
-    // SKU display
-    .product-item-sku {
-        font-size: 11px;
-        color: @dp-text-light;
-        margin-bottom: 5px;
     }
 
     // Actions
@@ -877,6 +887,7 @@ a {
         font-size: 14px;
         line-height: 1.7;
         color: #555;
+        text-align: left !important;
     }
 
     // Opis pełny w zakładce
@@ -884,8 +895,9 @@ a {
         font-size: 14px;
         line-height: 1.8;
         color: @dp-text;
+        text-align: left !important;
 
-        p { margin-bottom: 12px; }
+        p { margin-bottom: 12px; text-align: left !important; }
         ul, ol { margin: 12px 0 12px 20px; }
         li { margin-bottom: 6px; }
     }
