@@ -128,32 +128,30 @@
 }
 </style>
 
-<div id=dp-newsletter-overlay role=dialog aria-modal=true aria-labelledby=dp-nl-title>
-    <div id=dp-newsletter-popup>
-        <button class=dp-nl-close id=dp-nl-close-btn aria-label=Zamknij>&times;</button>
-        <div class=dp-nl-header>
-            <h2 id=dp-nl-title>Zapisz się do newslettera</h2>
+<div id="dp-newsletter-overlay" role="dialog" aria-modal="true" aria-labelledby="dp-nl-title">
+    <div id="dp-newsletter-popup">
+        <button class="dp-nl-close" id="dp-nl-close-btn" aria-label="Zamknij">&times;</button>
+        <div class="dp-nl-header">
+            <h2 id="dp-nl-title">Zapisz się do newslettera</h2>
             <p>Otrzymuj informacje o nowościach i promocjach</p>
         </div>
-        <div class=dp-nl-accent></div>
-        <div class=dp-nl-body>
-            <form class=dp-nl-form id=dp-nl-form method=POST action=/newsletter/subscriber/new/>
-                <input type=hidden name=form_key id=dp-nl-form-key value=>
+        <div class="dp-nl-accent"></div>
+        <div class="dp-nl-body">
+            <form class="dp-nl-form" id="dp-nl-form" method="POST" action="/newsletter/subscriber/new/">
+                <input type="hidden" name="form_key" id="dp-nl-form-key" value="">
                 <input
-                    type=email
-                    name=email
-                    class=dp-nl-input
-                    id=dp-nl-email
-                    placeholder=Twój adres e-mail
+                    type="email"
+                    name="email"
+                    class="dp-nl-input"
+                    id="dp-nl-email"
+                    placeholder="Twój adres e-mail"
                     required
-                    autocomplete=email
-                    aria-label=Adres e-mail>
-                <button type=submit class=dp-nl-submit>Zapisz się</button>
+                    autocomplete="email"
+                    aria-label="Adres e-mail">
+                <button type="submit" class="dp-nl-submit">Zapisz się</button>
             </form>
-            <div class=dp-nl-success id=dp-nl-success>
-                Dziękujemy za zapisanie się do newslettera!
-            </div>
-            <p class=dp-nl-disclaimer>Nie wysyłamy spamu. Możesz zrezygnować w każdej chwili.</p>
+            <div class="dp-nl-success" id="dp-nl-success"></div>
+            <p class="dp-nl-disclaimer">Nie wysyłamy spamu. Możesz zrezygnować w każdej chwili.</p>
         </div>
     </div>
 </div>
@@ -207,13 +205,21 @@
             headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
             body: body.toString(),
             credentials: 'same-origin'
-        }).finally(function () {
+        }).then(function (response) {
+            if (response.ok) {
+                document.getElementById('dp-nl-success').textContent = 'Dziękujemy za zapisanie się do newslettera!';
+            } else {
+                document.getElementById('dp-nl-success').textContent = 'Wystąpił błąd. Spróbuj ponownie później.';
+            }
             document.getElementById('dp-nl-form').style.display = 'none';
             document.getElementById('dp-nl-success').style.display = 'block';
             localStorage.setItem(LS_KEY, '1');
-            setTimeout(function () {
-                document.getElementById('dp-newsletter-overlay').classList.remove('dp-nl-visible');
-            }, 2500);
+            setTimeout(dismiss, 2500);
+        }).catch(function () {
+            document.getElementById('dp-nl-success').textContent = 'Brak połączenia. Spróbuj ponownie później.';
+            document.getElementById('dp-nl-form').style.display = 'none';
+            document.getElementById('dp-nl-success').style.display = 'block';
+            setTimeout(dismiss, 3000);
         });
     });
 })();
