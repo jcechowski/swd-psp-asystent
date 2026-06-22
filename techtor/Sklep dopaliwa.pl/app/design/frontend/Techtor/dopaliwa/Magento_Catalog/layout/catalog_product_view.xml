@@ -27,6 +27,19 @@
             </arguments>
         </referenceBlock>
 
+        <!-- GPSR tab (EU 2023/988 Product Safety) -->
+        <referenceBlock name="product.info.details">
+            <block class="Magento\Catalog\Block\Product\View"
+                   name="product.info.gpsr"
+                   template="Magento_Catalog::product/gpsr.phtml"
+                   group="detailed_info">
+                <arguments>
+                    <argument name="title" translate="true" xsi:type="string">Bezpieczeństwo (GPSR)</argument>
+                    <argument name="sort_order" xsi:type="string">40</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
         <!-- Brand/manufacturer logo -->
         <referenceContainer name="product.info.main">
             <block class="Magento\Catalog\Block\Product\View"

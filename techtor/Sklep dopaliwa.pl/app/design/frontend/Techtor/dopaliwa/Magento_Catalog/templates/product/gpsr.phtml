@@ -1,0 +1,190 @@
+<?php
+/**
+ * GPSR (General Product Safety Regulation) tab — EU 2023/988
+ * Displays manufacturer info, CE marking, safety warnings
+ * dopaliwa.pl — TECHTOR
+ *
+ * @var \Magento\Catalog\Block\Product\View $block
+ */
+
+$product = $block->getProduct();
+if (!$product) {
+    return;
+}
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+$manufacturerId = $resource->getAttributeRawValue($product->getId(), 'manufacturer', $product->getStoreId());
+
+if (!$manufacturerId) {
+    return;
+}
+
+$attribute = $objectManager->get(\Magento\Eav\Model\Config::class)
+    ->getAttribute('catalog_product', 'manufacturer');
+$brand = $attribute->getSource()->getOptionText($manufacturerId);
+
+if (!$brand) {
+    return;
+}
+
+// Manufacturer GPSR data
+$manufacturers = [
+    'PIUSI' => [
+        'name' => 'PIUSI S.p.A.',
+        'address' => 'Via Pacinotti 16/A, 46029 Suzzara (MN)',
+        'country' => 'Włochy',
+        'phone' => '+39 0376 534 561',
+        'email' => 'piusi@piusi.com',
+        'website' => 'www.piusi.com',
+        'ce' => true,
+        'eu' => true,
+    ],
+    'RAASM' => [
+        'name' => 'RAASM S.p.A.',
+        'address' => 'Via Marangoni 33, 36022 San Zeno di Cassola (VI)',
+        'country' => 'Włochy',
+        'phone' => '+39 0424 571 111',
+        'email' => 'info@raasm.com',
+        'website' => 'www.raasm.com',
+        'ce' => true,
+        'eu' => true,
+    ],
+    'FMT' => [
+        'name' => 'FMT Swiss AG',
+        'address' => 'Gewerbestrasse 6, 6330 Cham',
+        'country' => 'Szwajcaria',
+        'phone' => '+41 41 712 05 37',
+        'email' => 'info@fmtag.com',
+        'website' => 'www.fmtag.com',
+        'ce' => true,
+        'eu' => false,
+        'eu_responsible' => 'TECHTOR Jarosław Cechowski, ul. Szczecińska 28, 87-100 Toruń, Polska, +48 736 133 817',
+    ],
+    'Adam Pumps' => [
+        'name' => 'Adam Pumps S.p.A.',
+        'address' => 'Via della Resistenza 46/48, 41011 Campogalliano (MO)',
+        'country' => 'Włochy',
+        'phone' => '+39 059 528 128',
+        'email' => 'info@adampumps.com',
+        'website' => 'www.adampumps.it',
+        'ce' => true,
+        'eu' => true,
+    ],
+    'HIFI FILTER' => [
+        'name' => 'HIFI FILTER France SAS',
+        'address' => '18 rue Pierre Dechanet, BP 239, 25300 Pontarlier',
+        'country' => 'Francja',
+        'phone' => '+33 3 81 38 86 86',
+        'email' => 'client@hifi-filter.fr',
+        'website' => 'www.hifi-filter.com',
+        'ce' => false,
+        'eu' => true,
+    ],
+    'GAITER' => [
+        'name' => 'GAITER Sp. z o.o.',
+        'address' => 'ul. Stawowa 9, 95-030 Rzgów',
+        'country' => 'Polska',
+        'phone' => '+48 690 991 909',
+        'email' => 'kontakt@gaiter.pl',
+        'website' => 'www.gaiter.pl',
+        'ce' => false,
+        'eu' => true,
+    ],
+];
+
+$mfr = $manufacturers[$brand] ?? null;
+if (!$mfr) {
+    return;
+}
+
+$logoSlugMap = [
+    'PIUSI' => 'piusi', 'RAASM' => 'raasm', 'FMT' => 'fmt',
+    'Adam Pumps' => 'adam-pumps', 'HIFI FILTER' => 'hifi-filter', 'GAITER' => 'gaiter',
+];
+$slug = $logoSlugMap[$brand] ?? '';
+$logoPath = '';
+foreach (['svg', 'png', 'jpg'] as $ext) {
+    $testPath = "/media/brand-logos/{$slug}.{$ext}";
+    if (file_exists(BP . "/pub{$testPath}")) {
+        $logoPath = $testPath;
+        break;
+    }
+}
+?>
+<div class="dp-gpsr">
+    <div class="dp-gpsr-header">
+        <?php if ($logoPath): ?>
+            <img src="<?= $escaper->escapeUrl($logoPath) ?>"
+                 alt="<?= $escaper->escapeHtmlAttr($brand) ?>"
+                 class="dp-gpsr-logo" loading="lazy">
+        <?php endif; ?>
+        <h3 class="dp-gpsr-title">Producent</h3>
+    </div>
+
+    <div class="dp-gpsr-grid">
+        <div class="dp-gpsr-card">
+            <div class="dp-gpsr-card-icon">&#127970;</div>
+            <div class="dp-gpsr-card-content">
+                <strong><?= $escaper->escapeHtml($mfr['name']) ?></strong><br>
+                <?= $escaper->escapeHtml($mfr['address']) ?><br>
+                <?= $escaper->escapeHtml($mfr['country']) ?>
+            </div>
+        </div>
+
+        <div class="dp-gpsr-card">
+            <div class="dp-gpsr-card-icon">&#128222;</div>
+            <div class="dp-gpsr-card-content">
+                <strong>Kontakt</strong><br>
+                <a href="tel:<?= $escaper->escapeHtmlAttr(str_replace(' ', '', $mfr['phone'])) ?>"><?= $escaper->escapeHtml($mfr['phone']) ?></a><br>
+                <a href="mailto:<?= $escaper->escapeHtmlAttr($mfr['email']) ?>"><?= $escaper->escapeHtml($mfr['email']) ?></a><br>
+                <a href="https://<?= $escaper->escapeHtmlAttr($mfr['website']) ?>" target="_blank" rel="noopener"><?= $escaper->escapeHtml($mfr['website']) ?></a>
+            </div>
+        </div>
+
+        <?php if (!empty($mfr['ce'])): ?>
+        <div class="dp-gpsr-card">
+            <div class="dp-gpsr-card-icon dp-gpsr-ce">CE</div>
+            <div class="dp-gpsr-card-content">
+                <strong>Oznaczenie CE</strong><br>
+                Produkt posiada oznaczenie CE potwierdzające zgodność z normami Unii Europejskiej.
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <?php if (empty($mfr['eu']) && !empty($mfr['eu_responsible'])): ?>
+        <div class="dp-gpsr-card">
+            <div class="dp-gpsr-card-icon">&#127466;&#127482;</div>
+            <div class="dp-gpsr-card-content">
+                <strong>Osoba odpowiedzialna w UE</strong><br>
+                <?= $escaper->escapeHtml($mfr['eu_responsible']) ?>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <div class="dp-gpsr-safety">
+        <h4>Ostrzeżenia bezpieczeństwa</h4>
+        <ul>
+            <li>Przed użyciem zapoznaj się z instrukcją obsługi dostarczoną przez producenta.</li>
+            <li>Produkt przeznaczony wyłącznie do użytku zgodnego z jego przeznaczeniem.</li>
+            <li>Instalację i serwis powinien wykonywać wykwalifikowany personel.</li>
+            <li>Przestrzegaj obowiązujących przepisów BHP i ochrony środowiska.</li>
+        </ul>
+    </div>
+
+    <div class="dp-gpsr-importer">
+        <h4>Importer / Dystrybutor w Polsce</h4>
+        <p>
+            <strong>TECHTOR Jarosław Cechowski</strong><br>
+            ul. Szczecińska 28, 87-100 Toruń, Polska<br>
+            Tel: <a href="tel:+48736133817">+48 736 133 817</a><br>
+            E-mail: <a href="mailto:biuro@techtor.pl">biuro@techtor.pl</a><br>
+            NIP: 8792283040 | REGON: 340511303
+        </p>
+    </div>
+
+    <p class="dp-gpsr-regulation">
+        Informacje zgodne z Rozporządzeniem UE 2023/988 (GPSR) dotyczącym ogólnego bezpieczeństwa produktów.
+    </p>
+</div>

@@ -929,6 +929,115 @@ a {
         li { margin-bottom: 6px; }
     }
 
+    // GPSR tab
+    .dp-gpsr {
+        font-size: 14px;
+        line-height: 1.6;
+        color: @dp-text;
+    }
+    .dp-gpsr-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid @dp-border;
+    }
+    .dp-gpsr-logo {
+        height: 40px;
+        width: auto;
+    }
+    .dp-gpsr-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: @dp-navy;
+        margin: 0;
+    }
+    .dp-gpsr-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .dp-gpsr-card {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: @dp-bg;
+        border: 1px solid @dp-border;
+        border-radius: @dp-radius;
+    }
+    .dp-gpsr-card-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+        width: 36px;
+        text-align: center;
+    }
+    .dp-gpsr-ce {
+        font-weight: 900;
+        font-size: 20px;
+        color: @dp-navy;
+        border: 2px solid @dp-navy;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        line-height: 32px;
+        text-align: center;
+    }
+    .dp-gpsr-card-content {
+        font-size: 13px;
+        line-height: 1.5;
+        a {
+            color: @dp-orange;
+            &:hover { text-decoration: underline; }
+        }
+    }
+    .dp-gpsr-safety {
+        margin-bottom: 20px;
+        h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: @dp-navy;
+            margin: 0 0 10px;
+        }
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+    }
+    .dp-gpsr-importer {
+        background: @dp-bg;
+        border: 1px solid @dp-border;
+        border-radius: @dp-radius;
+        padding: 16px;
+        margin-bottom: 16px;
+        h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: @dp-navy;
+            margin: 0 0 10px;
+        }
+        p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        a {
+            color: @dp-orange;
+            &:hover { text-decoration: underline; }
+        }
+    }
+    .dp-gpsr-regulation {
+        font-size: 11px;
+        color: #999;
+        margin: 0;
+        font-style: italic;
+    }
+
     // Review form styling
     .review-add {
         .block-title strong {
