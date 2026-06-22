@@ -13,27 +13,49 @@ $store    = $storeManager->getStore();
 $baseUrl  = rtrim($store->getBaseUrl(), '/');
 $mediaUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 
-// Current URL
+// Current URL — strip ?___store= tracking parameter
 $currentUrl = $store->getCurrentUrl(false);
+$currentUrl = preg_replace('/[?&]___store=[^&]*/', '', $currentUrl);
+$currentUrl = rtrim($currentUrl, '?&');
 
 // Page title from head block
 $headBlock = $block->getLayout()->getBlock('head');
-$pageTitle = $headBlock ? strip_tags((string)$headBlock->getTitle()) : 'dopaliwa.pl — TECHTOR';
-$pageTitle = $pageTitle ?: 'dopaliwa.pl — TECHTOR';
+$pageTitle = $headBlock ? strip_tags((string)$headBlock->getTitle()) : 'dopaliwa.pl — Sprzęt paliwowy';
+$pageTitle = $pageTitle ?: 'dopaliwa.pl — Sprzęt paliwowy';
 
 // Meta description
 $metaDescription = $headBlock ? $headBlock->getDescription() : '';
 $metaDescription = $metaDescription ?: 'Sprzęt do dystrybucji paliw, olejów, smarów i płynów. Pompy, węże, złączki i akcesoria — dopaliwa.pl';
 
-// Default OG image: store logo
-$ogImage = $mediaUrl . 'logo/default/logo.svg';
+// Default OG image: store logo (PNG for FB/Twitter compatibility, SVG not supported)
+$ogImage = $baseUrl . '/media/logo/stores/1/logo.svg';
+$ogImageType = 'image/svg+xml';
 $ogType  = 'website';
 
-// Product page: use product image and type "product"
+// Product / category context
 $registry = $objectManager->get(\Magento\Framework\Registry::class);
 $product  = $registry->registry('current_product');
+$category = $registry->registry('current_category');
+
+// Product page: use product name/description and product image
 if ($product && $product->getId()) {
     $ogType = 'product';
+
+    // Product-specific title
+    $pageTitle = $product->getName() . ' — dopaliwa.pl';
+
+    // Product-specific description: meta description → short description → fallback
+    $productMeta = $product->getMetaDescription();
+    if ($productMeta) {
+        $metaDescription = $productMeta;
+    } else {
+        $shortDesc = strip_tags($product->getShortDescription() ?: '');
+        if ($shortDesc) {
+            $metaDescription = mb_substr($shortDesc, 0, 200);
+        }
+    }
+
+    // Product image
     try {
         $imageHelper = $objectManager->get(\Magento\Catalog\Helper\Image::class);
         $productImage = $imageHelper->init($product, 'product_page_image_large')
@@ -41,9 +63,17 @@ if ($product && $product->getId()) {
             ->getUrl();
         if ($productImage && strpos($productImage, 'placeholder') === false) {
             $ogImage = $productImage;
+            $ogImageType = 'image/jpeg';
         }
     } catch (\Exception $e) {
         // keep default logo
+    }
+} elseif ($category && $category->getId()) {
+    // Category page: use category name/description
+    $pageTitle = $category->getName() . ' — dopaliwa.pl';
+    $catMeta = $category->getMetaDescription();
+    if ($catMeta) {
+        $metaDescription = $catMeta;
     }
 }
 ?>
@@ -57,7 +87,7 @@ if ($product && $product->getId()) {
 <?php endif; ?>
 <meta property="og:url" content="<?= $block->escapeUrl($currentUrl) ?>"/>
 <meta property="og:image" content="<?= $block->escapeUrl($ogImage) ?>"/>
-<meta property="og:image:type" content="image/svg+xml"/>
+<meta property="og:image:type" content="<?= $block->escapeHtmlAttr($ogImageType) ?>"/>
 <?php /* Twitter Card */ ?>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="<?= $block->escapeHtmlAttr($pageTitle) ?>"/>

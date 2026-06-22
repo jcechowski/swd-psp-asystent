@@ -453,10 +453,6 @@ a {
         }
     }
 
-    .price-container {
-        display: flex;
-        flex-direction: column-reverse;
-    }
     .price-excluding-tax {
         display: block;
         .price {
@@ -1633,6 +1629,28 @@ select {
     }
     .price-including-tax:after {
         font-size: 13px !important;
+    }
+}
+
+// =============================================================================
+// ACCESSIBILITY — focus-visible
+// =============================================================================
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.action:focus-visible {
+    outline: 2px solid @dp-orange;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
