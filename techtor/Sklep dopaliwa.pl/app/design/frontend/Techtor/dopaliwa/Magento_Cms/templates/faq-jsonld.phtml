@@ -1,0 +1,70 @@
+<?php
+/**
+ * FAQPage JSON-LD structured data (Schema.org)
+ * dopaliwa.pl — TECHTOR
+ *
+ * 10 FAQ items matching the /faq CMS page accordion
+ */
+
+$faqItems = [
+    [
+        'question' => 'Jakie metody płatności akceptujecie?',
+        'answer' => 'Akceptujemy przelewy bankowe, płatność za pobraniem oraz płatności online (BLIK, karty płatnicze, szybkie przelewy) za pośrednictwem Autopay, Tpay i PayU.',
+    ],
+    [
+        'question' => 'Ile kosztuje dostawa?',
+        'answer' => 'Przesyłka InPost Paczkomaty kosztuje 12,99 zł, kurier DPD lub DHL — 19,99 zł. Przy zamówieniach powyżej 2000 zł dostawa jest darmowa.',
+    ],
+    [
+        'question' => 'Czy mogę zwrócić towar?',
+        'answer' => 'Tak, masz prawo do zwrotu towaru w ciągu 14 dni od otrzymania przesyłki bez podania przyczyny. Towar musi być nieużywany i w oryginalnym opakowaniu. Koszt przesyłki zwrotnej pokrywa kupujący.',
+    ],
+    [
+        'question' => 'Jak złożyć reklamację?',
+        'answer' => 'Reklamację można złożyć mailowo na adres biuro@techtor.pl lub telefonicznie pod numerem +48 736 133 817. Prosimy o podanie numeru zamówienia, opisu wady oraz zdjęć produktu. Reklamację rozpatrzymy w ciągu 14 dni roboczych.',
+    ],
+    [
+        'question' => 'Czy wystawiacie faktury VAT?',
+        'answer' => 'Tak, do każdego zamówienia wystawiamy fakturę VAT. Aby otrzymać fakturę na firmę, podaj dane firmy (NIP, nazwa, adres) podczas składania zamówienia.',
+    ],
+    [
+        'question' => 'Jaki jest czas dostawy?',
+        'answer' => 'Zamówienia złożone do godziny 14:00 wysyłamy tego samego dnia roboczego. Standardowy czas dostawy to 1–3 dni robocze. Produkty na zamówienie mogą mieć dłuższy czas realizacji — informacja znajduje się na karcie produktu.',
+    ],
+    [
+        'question' => 'Czy oferujecie darmową dostawę?',
+        'answer' => 'Tak, dostawa jest darmowa przy zamówieniach o wartości powyżej 2000 zł brutto. Dotyczy to wszystkich metod wysyłki na terenie Polski.',
+    ],
+    [
+        'question' => 'Czy produkty mają gwarancję?',
+        'answer' => 'Tak, wszystkie produkty objęte są gwarancją producenta. Okres gwarancji zależy od producenta i jest podany na karcie produktu. Dodatkowo przysługuje Ci 2-letnia rękojmia zgodnie z przepisami prawa.',
+    ],
+    [
+        'question' => 'Jak mogę śledzić przesyłkę?',
+        'answer' => 'Po nadaniu przesyłki otrzymasz e-mail z numerem śledzenia. Możesz śledzić status przesyłki na stronie przewoźnika (InPost, DPD lub DHL) lub w panelu klienta w naszym sklepie.',
+    ],
+    [
+        'question' => 'Czy sprzedajecie hurtowo?',
+        'answer' => 'Tak, oferujemy sprzedaż hurtową z indywidualnymi rabatami. Skontaktuj się z nami mailowo na biuro@techtor.pl lub telefonicznie +48 736 133 817, aby uzyskać ofertę hurtową dopasowaną do Twoich potrzeb.',
+    ],
+];
+
+$mainEntity = [];
+foreach ($faqItems as $item) {
+    $mainEntity[] = [
+        '@type' => 'Question',
+        'name' => $item['question'],
+        'acceptedAnswer' => [
+            '@type' => 'Answer',
+            'text' => $item['answer'],
+        ],
+    ];
+}
+
+$schema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'FAQPage',
+    'mainEntity' => $mainEntity,
+];
+?>
+<script type="application/ld+json"><?= /* @noEscape */ json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_HEX_TAG) ?></script>

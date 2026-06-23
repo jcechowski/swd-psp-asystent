@@ -1,21 +1,135 @@
 <?php
 /**
  * Cookie consent banner — GDPR/RODO compliance
+ * Granular cookie control, equal button prominence
  * dopaliwa.pl — TECHTOR
  */
 ?>
 <div id="cookie-consent" class="cookie-consent" role="dialog" aria-label="<?= $escaper->escapeHtmlAttr(__('Zgoda na pliki cookies')) ?>" style="display:none;">
     <div class="cookie-consent-inner">
         <p class="cookie-consent-text">
-            Strona używa cookies.
-            <a href="/polityka-prywatnosci">Więcej</a>
+            Używamy plików cookies w celu zapewnienia prawidłowego działania strony, analizy ruchu oraz personalizacji treści.
+            <a href="/polityka-prywatnosci">Polityka prywatności</a>
         </p>
         <div class="cookie-consent-actions">
-            <button id="cookie-accept" class="action primary cookie-accept" type="button">OK</button>
-            <button id="cookie-reject" class="action secondary cookie-reject" type="button">Odrzuć</button>
+            <button id="cookie-accept" class="action primary cookie-btn" type="button">Akceptuj wszystkie</button>
+            <button id="cookie-reject" class="action primary cookie-btn" type="button">Odrzuć opcjonalne</button>
+            <button id="cookie-settings-toggle" class="action cookie-btn cookie-settings-toggle" type="button">Ustawienia</button>
+        </div>
+        <div id="cookie-settings" class="cookie-settings" style="display:none;">
+            <label class="cookie-option">
+                <input type="checkbox" checked disabled> Niezbędne <span class="cookie-hint">(zawsze aktywne)</span>
+            </label>
+            <label class="cookie-option">
+                <input type="checkbox" id="cookie-analytics" value="analytics"> Analityczne
+                <span class="cookie-hint">— pomagają zrozumieć, jak korzystasz ze strony</span>
+            </label>
+            <label class="cookie-option">
+                <input type="checkbox" id="cookie-marketing" value="marketing"> Marketingowe
+                <span class="cookie-hint">— umożliwiają wyświetlanie dopasowanych reklam</span>
+            </label>
+            <button id="cookie-save" class="action primary cookie-btn" type="button">Zapisz preferencje</button>
         </div>
     </div>
 </div>
+<style>
+.cookie-consent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1a2332;
+    color: #fff;
+    padding: 16px 24px;
+    z-index: 9999;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+}
+.cookie-consent-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.cookie-consent-text {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 12px;
+    color: #ccd6e0;
+}
+.cookie-consent-text a {
+    color: #e67e22;
+    text-decoration: underline;
+}
+.cookie-consent-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.cookie-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+#cookie-accept {
+    background: #e67e22;
+    color: #fff;
+}
+#cookie-reject {
+    background: #e67e22;
+    color: #fff;
+}
+#cookie-accept:hover, #cookie-reject:hover {
+    background: #cf6d17;
+}
+.cookie-settings-toggle {
+    background: transparent;
+    color: #ccd6e0;
+    border: 1px solid #3a5068;
+    padding: 10px 20px;
+}
+.cookie-settings-toggle:hover {
+    background: rgba(255,255,255,0.08);
+}
+.cookie-settings {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #2c3e50;
+}
+.cookie-option {
+    display: block;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #ccd6e0;
+    cursor: pointer;
+}
+.cookie-option input {
+    margin-right: 8px;
+    accent-color: #e67e22;
+}
+.cookie-hint {
+    font-size: 12px;
+    color: #7f8c9b;
+}
+#cookie-save {
+    margin-top: 12px;
+    background: #e67e22;
+    color: #fff;
+}
+#cookie-save:hover {
+    background: #cf6d17;
+}
+@media (max-width: 600px) {
+    .cookie-consent-actions {
+        flex-direction: column;
+    }
+    .cookie-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
 <script>
 (function() {
     var COOKIE_NAME = 'dp_cookie_consent';
@@ -34,7 +148,27 @@
         banner.style.display = 'none';
     }
 
-    document.getElementById('cookie-accept').addEventListener('click', function() { setCookie('all'); });
-    document.getElementById('cookie-reject').addEventListener('click', function() { setCookie('essential'); });
+    document.getElementById('cookie-accept').addEventListener('click', function() {
+        setCookie('all');
+    });
+
+    document.getElementById('cookie-reject').addEventListener('click', function() {
+        setCookie('essential');
+    });
+
+    document.getElementById('cookie-settings-toggle').addEventListener('click', function() {
+        var settings = document.getElementById('cookie-settings');
+        settings.style.display = settings.style.display === 'none' ? '' : 'none';
+    });
+
+    document.getElementById('cookie-save').addEventListener('click', function() {
+        var analytics = document.getElementById('cookie-analytics').checked;
+        var marketing = document.getElementById('cookie-marketing').checked;
+        var val = 'essential';
+        if (analytics && marketing) val = 'all';
+        else if (analytics) val = 'analytics';
+        else if (marketing) val = 'marketing';
+        setCookie(val);
+    });
 })();
 </script>

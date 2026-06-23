@@ -46,8 +46,17 @@ if ($isInStock) {
     }
 }
 
-// Brand/manufacturer
-$brand = $product->getAttributeText('manufacturer') ?: 'TECHTOR';
+// Brand/manufacturer (load via resource model — attribute not on product object)
+$manufacturerId = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class)
+    ->getAttributeRawValue($product->getId(), 'manufacturer', $product->getStoreId());
+if ($manufacturerId) {
+    $brand = $objectManager->get(\Magento\Eav\Model\Config::class)
+        ->getAttribute('catalog_product', 'manufacturer')
+        ->getSource()->getOptionText($manufacturerId);
+}
+if (empty($brand)) {
+    $brand = 'TECHTOR';
+}
 
 // EAN/GTIN
 $ean = $product->getData('ean');

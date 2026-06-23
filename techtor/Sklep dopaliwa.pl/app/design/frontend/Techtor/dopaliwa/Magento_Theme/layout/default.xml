@@ -2,6 +2,14 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <!-- Skip navigation (a11y) -->
+        <referenceContainer name="page.wrapper">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="skip.nav"
+                   template="Magento_Theme::html/skip-nav.phtml"
+                   before="-"/>
+        </referenceContainer>
+
         <!-- Logo -->
         <referenceBlock name="logo">
             <arguments>

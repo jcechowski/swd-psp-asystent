@@ -2006,3 +2006,26 @@ textarea:focus-visible,
         &:hover { border-color: @dp-white; }
     }
 }
+
+// --- Skip navigation link (a11y) ---
+.dp-skip-nav {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    background: @dp-navy;
+    color: @dp-white;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 @dp-radius @dp-radius;
+    transition: top 0.2s ease;
+
+    &:focus {
+        top: 0;
+        outline: 2px solid @dp-orange;
+        outline-offset: 2px;
+    }
+}
