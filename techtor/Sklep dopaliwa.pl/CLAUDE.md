@@ -140,19 +140,76 @@ sudo -u www-data php bin/magento cache:flush
 - [x] Footer: 3 kolumny (Informacje/Zakupy/Kontakt), NIP+REGON, nowe linki prawne
 - [x] Loga brand-logos: pub/media/brand-logos/ (piusi.svg, raasm.jpg, fmt.png, adam-pumps.jpg, hifi-filter.jpg, gaiter.png)
 
+## Wykonane (2026-06-23 — pełny audyt 6 agentów + naprawy)
+Audyt: HTML/SEO, CSS/UX, Serwer/Wydajność, Prawo/Compliance, Checkout/Koszyk, Katalog/Dane
+
+### Serwer
+- [x] Braintree: wyłączony moduł (7 modułów PayPal_Braintree* disabled)
+- [x] TLS: wyłączone 1.0/1.1, tylko TLSv1.2 i TLSv1.3
+- [x] Logrotate: konfiguracja /etc/logrotate.d/magento (daily, 7 rotacji, compress)
+- [x] Logi: truncate cron.log (81MB), debug.log (31MB), system.log
+- [x] OpenSearch: replicas=0 na dopaliwa_product_1_v19 → cluster GREEN
+- [x] Cron: wyczyszczone stare errory/missed z cron_schedule
+- [x] US tax rates: usunięte legacy dane (US-CA, US-NY)
+- [x] Newsletter: double opt-in włączony (newsletter/subscription/confirm = 1)
+
+### SEO
+- [x] JSON-LD Product: brand ładowany z atrybutu manufacturer (nie hardcoded "TECHTOR")
+- [x] FAQPage JSON-LD: 10 pytań na /faq (Google rich results)
+- [x] Tytuł strony głównej: fix podwójnego "dopaliwa.pl" (default_title zmieniony)
+- [x] CMS page titles: usunięty duplikat sufiksu " | dopaliwa.pl"
+- [x] Blog meta title: usunięty duplikat "dopaliwa.pl"
+
+### Prawo/RODO
+- [x] Cookie banner: równa prominencja przycisków (oba "action primary")
+- [x] Cookie banner: granularna kontrola (warstwa preferencji: niezbędne/analityczne/marketingowe)
+- [x] Cookie banner: rozbudowany tekst informujący o celach
+- [x] Polityka prywatności: dodany paragraf o profilowaniu (art. 13 ust. 2 lit. f RODO)
+- [x] Adres CMS: fix "Bielsko-Biała" → "Toruń" na /o-nas i /kontakt
+
+### Accessibility
+- [x] Skip-nav link: "Przejdź do treści" ukryty, widoczny na focus (WCAG 2.4.1)
+- [x] Kategorie L2: anchor=1 na 14 kategoriach (wyświetlają produkty z podkategorii)
+
+### Wyniki audytu (statystyki)
+- Wydajność: homepage 81ms, kategoria 54ms, produkt 35ms (localhost)
+- Produkty: 1006 (100% aktywnych, 100% in stock, 100% z ceną)
+- Producenci: 770/1006 przypisanych (PIUSI 266, RAASM 338, FMT 35, Adam Pumps 7, HIFI FILTER 83, GAITER 41)
+- Baza: ~7 MB, backup OK (5 plików, Jun 18-22)
+- RAM: 4.1/7.8 GB, Disk: 11/96 GB, Load: 0.84
+
 ## TODO
-- [ ] Domena: transfer dopaliwa.pl w toku (Hostinger), DNS A → 72.62.1.240, SSL certbot
-- [ ] Konfiguracja płatności: wpisać klucze API Autopay/Tpay/PayU w admin
-- [ ] InPost: wpisać API token ShipX w admin
-- [ ] GTM/GA4: wpisać Container ID i Measurement ID w admin
-- [ ] reCAPTCHA: wpisać Site key + Secret key
-- [ ] Import produktów z PIM TECHTOR (techtor-platform)
-- [ ] 2FA: włączyć Magento_TwoFactorAuth po SSL
-- [x] Fix DPD Client — SOAP API
+### Blokowane przez DNS/domenę
+- [ ] Domena: transfer dopaliwa.pl w toku (Hostinger), DNS A → 72.62.1.240
+- [ ] SSL certbot (po DNS)
 - [ ] Base URL: zmienić z IP na dopaliwa.pl po DNS
+- [ ] 2FA: włączyć Magento_TwoFactorAuth po SSL
 - [ ] Sitemap → Google Search Console (po domenie)
-- [ ] 515 produktów bez zdjęć (PIM)
-- [ ] 504 produkty bez opisów (PIM)
+- [ ] HSTS header (po SSL)
+
+### Blokowane przez klucze API
+- [ ] Konfiguracja płatności: wpisać klucze API Autopay/Tpay/PayU w admin
+- [ ] InPost: wpisać API token ShipX w admin (cron inpost_sync_shipments_cron failuje)
+- [ ] GTM/GA4: wpisać Container ID i Measurement ID w admin
+- [ ] reCAPTCHA: wpisać Site key + Secret key (formularze bez ochrony!)
+- [ ] SMTP relay: skonfigurować (maile via mail() pójdą do spamu)
+
+### Blokowane przez PIM TECHTOR
+- [ ] 515 produktów bez zdjęć (51%)
+- [ ] 504 produkty bez opisów (50%)
+- [ ] 0/1006 EAN-ów (blokuje Google Shopping)
+- [ ] 0/1006 meta descriptions na produktach
+- [ ] 236 produktów bez producenta
+- [ ] 448 produktów bez wagi (shipping calculations)
+- [ ] 0/1006 delivery_time ustawionych
+
+### Do zrobienia (bez blokad)
+- [x] Fix DPD Client — SOAP API
 - [ ] Moduł Omnibus (najniższa cena 30 dni) — potrzebny przy pierwszej promocji
 - [ ] Przycisk "Odstąp od umowy" w panelu klienta (obowiązkowe od 19.06.2026)
-- [ ] Double opt-in newsletter
+- [ ] OG image: PNG/JPG fallback zamiast SVG (social media)
+- [ ] Usunąć legacy linki Magento z footera (Wyszukiwane frazy, Zaawansowane wyszukiwanie)
+- [ ] CSP headers (Content-Security-Policy)
+- [ ] 5 produktów bez URL rewrite (duplicate names: entity IDs 229, 268, 447, 475, 577)
+- [ ] 2 produkty bez kategorii (orphans)
+- [ ] 13 duplikatów nazw produktów
