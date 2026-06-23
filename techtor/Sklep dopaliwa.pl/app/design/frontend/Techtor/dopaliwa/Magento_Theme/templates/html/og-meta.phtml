@@ -27,9 +27,9 @@ $pageTitle = $pageTitle ?: 'dopaliwa.pl — Sprzęt paliwowy';
 $metaDescription = $headBlock ? $headBlock->getDescription() : '';
 $metaDescription = $metaDescription ?: 'Sprzęt do dystrybucji paliw, olejów, smarów i płynów. Pompy, węże, złączki i akcesoria — dopaliwa.pl';
 
-// Default OG image: store logo (PNG for FB/Twitter compatibility, SVG not supported)
-$ogImage = $baseUrl . '/media/logo/stores/1/logo.svg';
-$ogImageType = 'image/svg+xml';
+// Default OG image: PNG for FB/Twitter compatibility (SVG not supported by social media)
+$ogImage = $baseUrl . '/media/og-image.png';
+$ogImageType = 'image/png';
 $ogType  = 'website';
 
 // Product / category context

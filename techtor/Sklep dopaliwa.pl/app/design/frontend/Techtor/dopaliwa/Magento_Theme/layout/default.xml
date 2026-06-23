@@ -57,6 +57,11 @@
                    template="Magento_Theme::html/cookie-consent.phtml"/>
         </referenceContainer>
 
+        <!-- Remove legacy Magento footer links -->
+        <referenceBlock name="footer_links" remove="true"/>
+        <referenceBlock name="catalog.search.advanced" remove="true"/>
+        <referenceBlock name="sales.guest.form" remove="true"/>
+
         <!-- Copyright -->
         <referenceBlock name="copyright">
             <arguments>
