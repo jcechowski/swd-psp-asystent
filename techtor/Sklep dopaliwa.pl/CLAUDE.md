@@ -203,13 +203,13 @@ Audyt: HTML/SEO, CSS/UX, Serwer/Wydajność, Prawo/Compliance, Checkout/Koszyk, 
 - [ ] 448 produktów bez wagi (shipping calculations)
 - [ ] 0/1006 delivery_time ustawionych
 
-### Do zrobienia (bez blokad)
+### Zrobione (bez blokad) — 2026-06-23
 - [x] Fix DPD Client — SOAP API
-- [ ] Moduł Omnibus (najniższa cena 30 dni) — potrzebny przy pierwszej promocji
-- [ ] Przycisk "Odstąp od umowy" w panelu klienta (obowiązkowe od 19.06.2026)
-- [ ] OG image: PNG/JPG fallback zamiast SVG (social media)
-- [ ] Usunąć legacy linki Magento z footera (Wyszukiwane frazy, Zaawansowane wyszukiwanie)
-- [ ] CSP headers (Content-Security-Policy)
-- [ ] 5 produktów bez URL rewrite (duplicate names: entity IDs 229, 268, 447, 475, 577)
-- [ ] 2 produkty bez kategorii (orphans)
-- [ ] 13 duplikatów nazw produktów
+- [x] Moduł Omnibus — tabela dp_price_history + cron codzienny (0 1 * * *), 1006 cen zapisanych
+- [x] Przycisk "Odstąp od umowy" w panelu klienta (sales_order_view + sales_order_history)
+- [x] OG image: PNG 1200x630 (pub/media/og-image.png) zamiast SVG
+- [x] Usunięte legacy linki Magento z footera (footer_links remove="true")
+- [x] CSP headers w nginx (default-src 'self', script/style unsafe-inline, stock.techtor.pl)
+- [x] 13 duplikatów nazw produktów — unikalne (dodany SKU do nazwy)
+- [x] 5 produktów bez URL rewrite — zregenerowane po fix duplikatów
+- [x] 2 orphan produkty — przypisane do kategorii Części zamienne
